@@ -1,4 +1,4 @@
-F1Npc = {
+f1npc = {
 	click = async(function(player, npc)
 		local t = {
 			graphic = convertGraphic(npc.look, "monster"),
@@ -320,7 +320,7 @@ F1Npc = {
 				end
 			end
 		elseif choice == "Choose a path" then
-			F1Npc.level5popupDialog(player)
+			f1npc.level5popupDialog(player)
 		elseif choice == "Recover Death Pile" then
 			local deathPileFound = 0
 			local deathPile = player:getObjectsInArea(BL_ITEM)
