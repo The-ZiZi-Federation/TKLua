@@ -3060,7 +3060,7 @@ end
 
 logWrite = function(player)
 	
-	local dir, text = "../mornalua/History/"..player.name.."_log.txt", ""
+	local dir, text = "../rtklua/History/"..player.name.."_log.txt", ""
 	local file = io.open(dir, "a+")
 	
 	text =       "==== [LOG] ==================================================================\n"
@@ -3074,7 +3074,7 @@ logWrite = function(player)
 	print ([[  ========================= [Character Log Test] =========================]])
 	print ([[  =                                                                         =]])
 	print ([[  =           Added changed status information and details to :             =]])
-	print ([[  =        ('/root/Morna/mornalua/History/log_test.txt')             =]])
+	print ([[  =        ('rtklua/History/log_test.txt')             =]])
 	print ([[  =                                                                         =]])
 	print ([[  ===========================================================================]])
 	player:sendMinitext("Done!!")

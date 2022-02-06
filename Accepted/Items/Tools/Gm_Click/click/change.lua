@@ -173,7 +173,7 @@ end
 
 historyWrite = function(player, target, stats, value, type)
 	
-	local dir, text = "../mornalua/History/status_changed.txt", ""
+	local dir, text = "../rtklua/History/status_changed.txt", ""
 	local file = io.open(dir, "a+")
 	local class = {"level", "vita", "mana", "might", "will", "grace", "armor", "exp", "gold", "speed", "gmLevel", "PP", "EP", "BP", "FP"}
 	local change = {target.level, target.baseHealth, target.baseMagic, target.might, target.will, target.grace, target.exp, target.money, target.speed, target.gmLevel, target.pp, target.ep, target.bp, target.fp}
@@ -258,7 +258,7 @@ historyWrite = function(player, target, stats, value, type)
 		print ([[  ========================= [Character status edit] =========================]])
 		print ([[  =                                                                         =]])
 		print ([[  =           Added changed status information and details to :             =]])
-		print ([[  =        ('/root/Morna/mornalua/History/status_changed.txt')              =]])
+		print ([[  =        ('/rtklua/History/status_changed.txt')              =]])
 		print ([[  =                                                                         =]])
 		print ([[  ===========================================================================]])
 		

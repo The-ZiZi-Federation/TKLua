@@ -11,7 +11,7 @@ bossKillLog = function(boss, player)
 
 	local items = player:getObjectsInCell(boss.m, boss.x, boss.y, BL_ITEM)
 	local names = {}
-	local dir, text = "../mornalua/History/logs/boss_kills/boss_kill_log_"..os.date("%m.%d.%Y")..".txt", ""
+	local dir, text = "../rtklua/History/logs/boss_kills/boss_kill_log_"..os.date("%m.%d.%Y")..".txt", ""
 	local file = io.open(dir, "a+")
 
 	if #items > 0 then
@@ -32,7 +32,7 @@ divineLightDailyTotal = function()
 
 	local amount = core.gameRegistry["divine_light_lapis_daily"]
 
-	local dir, text = "../mornalua/History/logs/divine_light/divineLightLog_"..os.date("%m.%d.%Y")..".txt", ""
+	local dir, text = "../rtklua/History/logs/divine_light/divineLightLog_"..os.date("%m.%d.%Y")..".txt", ""
 	local file = io.open(dir, "a+")
 	
 	text = text.."<"..os.date("%m.%d.%Y").."> Total Lapis Lazuli spent on Divine Light: "..amount.."\n"
@@ -44,7 +44,7 @@ end,
 
 divineLight = function(player, amount)
 
-	local dir, text = "../mornalua/History/logs/divine_light/divineLightLog_"..os.date("%m.%d.%Y")..".txt", ""
+	local dir, text = "../rtklua/History/logs/divine_light/divineLightLog_"..os.date("%m.%d.%Y")..".txt", ""
 	local file = io.open(dir, "a+")
 	
 	text = text.."<"..os.date().."> "..player.name.."("..player.ID..") spent "..amount.." Lapis Lazuli on Divine Light | @"..player.mapTitle.." ("..player.m..")\n"
@@ -56,7 +56,7 @@ end,
 
 localChat = function(player, speech)
 
-	local dir, text = "../mornalua/History/logs/chatlogs/chatLog_full_"..os.date("%m.%d.%Y")..".txt", ""
+	local dir, text = "../rtklua/History/logs/chatlogs/chatLog_full_"..os.date("%m.%d.%Y")..".txt", ""
 	local file = io.open(dir, "a+")
 	
 	text = text.."<"..os.date().."> "..player.name.."("..player.ID.."): '"..speech.."' | @"..player.mapTitle.." ("..player.m..")\n"
@@ -69,7 +69,7 @@ end,
 
 gmSpeechWrite = function(player, speech)
 
-	local dir, text = "../mornalua/History/logs/gm_character_chat/chatLog_"..player.name.."_"..os.date("%m.%d.%Y")..".txt", ""
+	local dir, text = "../rtklua/History/logs/gm_character_chat/chatLog_"..player.name.."_"..os.date("%m.%d.%Y")..".txt", ""
 	local file = io.open(dir, "a+")
 	
 	text = text.."<"..os.date().."> "..player.name.."("..player.ID.."): '"..speech.."' | @"..player.mapTitle.." ("..player.m..")\n"
@@ -86,7 +86,7 @@ end,
 
 speechWrite = function(player, speech)
 
-	local dir, text = "../mornalua/History/logs/chatlogs/chatLog_"..player.name.."_"..os.date("%m.%d.%Y")..".txt", ""
+	local dir, text = "../rtklua/History/logs/chatlogs/chatLog_"..player.name.."_"..os.date("%m.%d.%Y")..".txt", ""
 	local file = io.open(dir, "a+")
 	
 	text = text.."Date & Time     : "..os.date().."\n"
@@ -100,7 +100,7 @@ end,
 
 xpWrite = function(player, xp)
 
-	local dir, text = "../mornalua/History/logs/log_"..player.name.."_"..os.date("%m.%d.%Y")..".txt", ""
+	local dir, text = "../rtklua/History/logs/log_"..player.name.."_"..os.date("%m.%d.%Y")..".txt", ""
 	local file = io.open(dir, "a+")
 	
 	text =       "==== [EXP Gain] ==================================================================\n"
@@ -115,7 +115,7 @@ xpWrite = function(player, xp)
 end,
 
 spellDamageLog = function(player, target, damage)
-	local dir, text = "../mornalua/History/logs/spell_log_"..player.name.."_"..os.date("%m.%d.%Y")..".txt", ""
+	local dir, text = "../rtklua/History/logs/spell_log_"..player.name.."_"..os.date("%m.%d.%Y")..".txt", ""
 	local file = io.open(dir, "a+")
 	
 	text =       "-[Damage Out]-\n"
@@ -129,7 +129,7 @@ end,
 
 swingDamageLog = function(player, target, damage)
 
-	local dir, text = "../mornalua/History/logs/swing_log_"..player.name.."_"..os.date("%m.%d.%Y")..".txt", ""
+	local dir, text = "../rtklua/History/logs/swing_log_"..player.name.."_"..os.date("%m.%d.%Y")..".txt", ""
 	local file = io.open(dir, "a+")
 	
 	text =       "-[Damage Out]-\n"
@@ -145,7 +145,7 @@ end,
 
 addGoldWrite = function(player, money)
 
-	local dir, text = "../mornalua/History/logs/log_"..player.name.."_"..os.date("%m.%d.%Y")..".txt", ""
+	local dir, text = "../rtklua/History/logs/log_"..player.name.."_"..os.date("%m.%d.%Y")..".txt", ""
 	local file = io.open(dir, "a+")
 	
 	text = text.."<"..os.date().."> ADDED GOLD: "..format_number(money).."  TOTAL GOLD: "..player.money.." | @"..player.mapTitle.." ("..player.m..")\n"
@@ -164,7 +164,7 @@ end,
 removeGoldWrite = function(player, money)
 
 
-	local dir, text = "../mornalua/History/logs/log_"..player.name.."_"..os.date("%m.%d.%Y")..".txt", ""
+	local dir, text = "../rtklua/History/logs/log_"..player.name.."_"..os.date("%m.%d.%Y")..".txt", ""
 	local file = io.open(dir, "a+")
 	
 	
@@ -183,7 +183,7 @@ end,
 
 levelUpWrite = function(player, level)
 
-	local dir, text = "../mornalua/History/logs/log_"..player.name.."_"..os.date("%m.%d.%Y")..".txt", ""
+	local dir, text = "../rtklua/History/logs/log_"..player.name.."_"..os.date("%m.%d.%Y")..".txt", ""
 	local file = io.open(dir, "a+")
 	
 	text = text.."<"..os.date().."> LEVELED UP TO: "..player.level.." | @"..player.mapTitle.." ("..player.m..")\n"
@@ -202,7 +202,7 @@ pickUpWrite = function(player, item, amount)
 
 	local pickup = ""
 
-	local dir, text = "../mornalua/History/logs/log_"..player.name.."_"..os.date("%m.%d.%Y")..".txt", ""
+	local dir, text = "../rtklua/History/logs/log_"..player.name.."_"..os.date("%m.%d.%Y")..".txt", ""
 	local file = io.open(dir, "a+")
 	
 	if player.pickUpType == 0 then
@@ -230,7 +230,7 @@ end,
 
 dropWrite = function(player, item)
 
-	local dir, text = "../mornalua/History/logs/log_"..player.name.."_"..os.date("%m.%d.%Y")..".txt", ""
+	local dir, text = "../rtklua/History/logs/log_"..player.name.."_"..os.date("%m.%d.%Y")..".txt", ""
 	local file = io.open(dir, "a+")
 
 	text = text.."<"..os.date().."> DROPPED: "..item.amount.." "..item.name.." | @"..player.mapTitle.." ("..player.m..")\n"
@@ -250,7 +250,7 @@ end,
 deathPileLog = function(player)
 
 
-	local dir, text = "../mornalua/History/logs/death/deathpile_log_"..os.date("%m.%d.%Y")..".txt", ""
+	local dir, text = "../rtklua/History/logs/death/deathpile_log_"..os.date("%m.%d.%Y")..".txt", ""
 	local file = io.open(dir, "a+")
 
 	text =       "\n==== [Death Pile] ==================================================================\n"
@@ -287,7 +287,7 @@ end,
 
 lapisLogs = function(player, item, amount)
 
-	local dir, text = "../mornalua/History/logs/lapis/lapis_log_"..player.name.."_"..os.date("%m.%d.%Y")..".txt", ""
+	local dir, text = "../rtklua/History/logs/lapis/lapis_log_"..player.name.."_"..os.date("%m.%d.%Y")..".txt", ""
 	local file = io.open(dir, "a+")
 
 	text =       "==== [Lapis Purchase] ==================================================================\n"

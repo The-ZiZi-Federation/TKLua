@@ -43,8 +43,8 @@ getFreeInstance = function(maps)
 end
 
 loadInstance = function(map, instanceName)
-	local mapFile = "../mithiamaps/Accepted/"
-	local warpFile = "../mithiamaps/Accepted/instances/"
+	local mapFile = "../rtkmaps/Accepted/"
+	local warpFile = "../rtkmaps/Accepted/instances/"
 
 	if (instanceName == "ruins") then
 		setMap(
