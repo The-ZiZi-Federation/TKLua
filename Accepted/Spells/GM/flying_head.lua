@@ -29,6 +29,8 @@ flying_head = {
 		end
 	end,
 	while_cast_250 = function(player)
+		player:sendAnimation(115)
+
 		player.gfxCrown = 410
 		player.gfxCrownC = 25
 		player.gfxHelm = 255

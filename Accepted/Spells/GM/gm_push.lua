@@ -36,6 +36,7 @@ gm_push = {
 	end,
 	while_cast_fast = function(player)
 		player:sendAnimationXY(397, player.x, player.y)
+
 		--	player:sendAnimationXY(15, player.x, player.y)
 		player:sendAnimationXY(86, player.x, player.y)
 		player:playSound(94)
@@ -78,7 +79,7 @@ gm_push = {
 			end
 		end
 	end,
-	while_cast_125 = function(player)
+	while_cast_250 = function(player)
 		gm_push.while_cast_fast(player)
 	end,
 	uncast = function(player)

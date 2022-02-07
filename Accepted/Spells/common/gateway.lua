@@ -1,31 +1,13 @@
 gateway = {
-	on_learn = function(player)
-		player.registry["learned_gateway"] = 1
-	end,
-	on_forget = function(player)
-		player.registry["learned_gateway"] = 0
-	end,
 	cast = function(player, question)
 		local q = string.lower(player.question)
 		local m = player.m
 		local x
 		local y
-		local aether = 1000
-		local mob = player:getObjectsInMap(m, BL_MOB)
 
-		if player:hasDuration("dre_locs_drain") then
-			player:sendMinitext("You can't even think, Dre Loc's magic is overwhelming you.")
-			return
-		end
-
-		if #mob > 0 then
-			for i = 1, #mob do
-				if mob[i].yname == "angry_blue_chick" then
-					player:sendMinitext("Someone has angered a God. Your magic won't work now.")
-					return
-				end
-			end
-		end
+		local map = 0
+		local city = ""
+		local gate = ""
 
 		if player.health <= 0 then
 			player:sendMinitext("Spirits cannot use Gateway")
@@ -34,100 +16,146 @@ gateway = {
 		if not player:canCast(1, 1, 0) then
 			return
 		end
-		if player.warpOut > 0 then
+		if player.warpOut == 0 then
 			player:sendAnimation(246)
 			player:sendMinitext("It doesn't work here")
 			return
 		end
 
-		if player.region == 1 then -- Hon by the Sea
-			if string.sub(q, 1, 1) == "n" then
-				x = math.random(73, 75)
-				y = math.random(22, 24)
-				player:sendAnimationXY(16, player.x, player.y)
-				player:warp(1000, x, y)
-				player:sendMinitext("You arrived at North Gate of Hon by the Sea")
-			elseif string.sub(q, 1, 1) == "e" then
-				x = math.random(133, 136)
-				y = math.random(88, 90)
-				player:sendAnimationXY(16, player.x, player.y)
-				player:warp(1000, x, y)
-				player:sendMinitext("You arrived at East Gate of Hon by the Sea")
-			elseif string.sub(q, 1, 1) == "w" then
-				x = math.random(7, 9)
-				y = math.random(90, 92)
-				player:sendAnimationXY(16, player.x, player.y)
-				player:warp(1000, x, y)
-				player:sendMinitext("You arrived at West Gate of Hon by the Sea")
-			elseif string.sub(q, 1, 1) == "s" then
-				x = math.random(73, 75)
-				y = math.random(144, 147)
-				player:sendAnimationXY(16, player.x, player.y)
-				player:warp(1000, x, y)
-				player:sendMinitext("You arrived at South Gate of Hon by the Sea")
-			end
-		elseif player.region == 2 then -- Woods North of Hon
-			if string.sub(q, 1, 1) == "n" then
-				x = math.random(11, 17)
-				y = math.random(6, 10)
-				player:sendAnimationXY(16, player.x, player.y)
-				player:warp(2000, x, y)
-				player:sendMinitext("You arrived at the Northern Gate of the Woods North of Hon")
-			elseif string.sub(q, 1, 1) == "e" then
-				x = math.random(133, 137)
-				y = math.random(16, 19)
-				player:sendAnimationXY(16, player.x, player.y)
-				player:warp(2000, x, y)
-				player:sendMinitext("You arrived near the Western Grove of the Woods North of Hon")
-			elseif string.sub(q, 1, 1) == "w" then
-				x = math.random(3, 7)
-				y = math.random(34, 37)
-				player:sendAnimationXY(16, player.x, player.y)
-				player:warp(2000, x, y)
-				player:sendMinitext("You arrived near the Eastern Tonguspur Pass in the Woods North of Hon")
-			elseif string.sub(q, 1, 1) == "s" then
-				x = math.random(131, 136)
-				y = math.random(141, 144)
-				player:sendAnimationXY(16, player.x, player.y)
-				player:warp(2000, x, y)
-				player:sendMinitext("You arrived at the South Gate of the Woods North of Hon")
-			end
-		elseif player.region == 3 then -- Lortz Territory
-			if string.sub(q, 1, 1) == "n" then
-				x = math.random(29, 49)
-				y = math.random(1, 6)
-				player:sendAnimationXY(16, player.x, player.y)
-				player:warp(3000, x, y)
-				player:sendMinitext("You arrived at Northern Border of the Lortz Territory")
-			elseif string.sub(q, 1, 1) == "e" then
-				x = math.random(39, 46)
-				y = math.random(86, 93)
-				player:sendAnimationXY(16, player.x, player.y)
-				player:warp(3000, x, y)
-				player:sendMinitext("You arrived at the Ruined Gates of the Lortz Territory")
-			elseif string.sub(q, 1, 1) == "w" then
-				x = math.random(23, 30)
-				y = math.random(33, 38)
-				player:sendAnimationXY(16, player.x, player.y)
-				player:warp(3000, x, y)
-				player:sendMinitext("You arrived at Lortz Shops in the Lortz Territory")
-			elseif string.sub(q, 1, 1) == "s" then
-				x = math.random(32, 40)
-				y = math.random(120, 144)
-				player:sendAnimationXY(16, player.x, player.y)
-				player:warp(3000, x, y)
-				player:sendMinitext("You arrived at Southern Tip of the Lortz Territory")
-			end
-		else
-			anim(player)
+		if player.region >= 6 then
 			player:sendMinitext("Cannot find any gates!")
 			return
 		end
 
+		if player.region == 0 then
+			-- 0: Koguryo (Kugnae)   1: Buya   2: mythic 3: nagnang 4: vortex	5: instance
+			map = 0
+			city = "Kugnae"
+
+			if string.sub(q, 1, 1) == "n" then
+				x = math.random(104, 116)
+				y = math.random(13, 17)
+				player:sendAnimationXY(16, player.x, player.y)
+				gate = "North"
+			elseif string.sub(q, 1, 1) == "e" then
+				x = math.random(201, 208)
+				y = math.random(105, 111)
+				gate = "East"
+			elseif string.sub(q, 1, 1) == "w" then
+				x = math.random(14, 19)
+				y = math.random(104, 111)
+				gate = "West"
+			elseif string.sub(q, 1, 1) == "s" then
+				x = math.random(104, 115)
+				y = math.random(207, 211)
+				gate = "South"
+			end
+		elseif player.region == 1 then
+			-- 0: Koguryo (Kugnae)   1: Buya   2: mythic 3: nagnang 4: vortex		5: instance
+			map = 330
+			city = "Buya"
+
+			if string.sub(q, 1, 1) == "n" then
+				x = math.random(71, 75)
+				y = math.random(22, 27)
+				gate = "North"
+			elseif string.sub(q, 1, 1) == "w" then
+				x = math.random(8, 12)
+				y = math.random(88, 92)
+				gate = "West"
+			elseif string.sub(q, 1, 1) == "e" then
+				x = math.random(132, 136)
+				y = math.random(86, 90)
+				gate = "East"
+			elseif string.sub(q, 1, 1) == "s" then
+				x = math.random(74, 78)
+				y = math.random(140, 145)
+				gate = "South"
+			end
+		elseif player.region == 2 then
+			-- 0: Koguryo (Kugnae)   1: Buya   2: mythic 3: nagnang 4: vortex		5: instance
+			map = 41
+			city = "Mythic"
+
+			if string.sub(q, 1, 1) == "n" then
+				x = math.random(27, 36)
+				y = math.random(10, 15)
+				gate = "North"
+			elseif string.sub(q, 1, 1) == "w" then
+				x = math.random(3, 5)
+				y = math.random(28, 33)
+				gate = "West"
+			elseif string.sub(q, 1, 1) == "e" then
+				x = math.random(54, 57)
+				y = math.random(28, 33)
+				gate = "East"
+			elseif string.sub(q, 1, 1) == "s" then
+				x = math.random(25, 33)
+				y = math.random(48, 53)
+				gate = "South"
+			end
+		elseif player.region == 3 then
+			-- 0: Koguryo (Kugnae)   1: Buya   2: mythic 3: nagnang 4: vortex		5: instance
+			map = 2500
+			city = "Nagnang"
+
+			if string.sub(q, 1, 1) == "n" then
+				x = math.random(37, 39)
+				y = math.random(23, 25)
+				gate = "North"
+			elseif string.sub(q, 1, 1) == "w" then
+				x = math.random(4, 6)
+				y = math.random(92, 94)
+				gate = "West"
+			elseif string.sub(q, 1, 1) == "e" then
+				x = math.random(138, 140)
+				y = math.random(86, 88)
+				gate = "East"
+			elseif string.sub(q, 1, 1) == "s" then
+				x = math.random(75, 77)
+				y = math.random(151, 153)
+				gate = "South"
+			end
+		elseif player.region == 5 then
+			map = 4259
+			city = "Mount Baekdu"
+
+			if string.sub(q, 1, 1) == "n" then
+				x = 15
+				y = 15
+				gate = "Mountain top"
+			elseif string.sub(q, 1, 1) == "w" then
+				x = 15
+				y = 15
+				gate = "Mountain top"
+			elseif string.sub(q, 1, 1) == "e" then
+				x = 15
+				y = 15
+				gate = "Mountain top"
+			elseif string.sub(q, 1, 1) == "s" then
+				x = 15
+				y = 15
+				gate = "Mountain top"
+			end
+		end
+
+		player:sendAnimationXY(16, player.x, player.y)
+		player:warp(map, x, y)
+		player:sendMinitext("You have arrived at " .. gate .. " Gate of " .. city)
 		player:playSound(29)
 		player:sendAnimation(16)
 		player:sendAction(6, 20)
-		player:setAether("gateway", aether)
-		player:sendMinitext("You cast Gateway")
+	end,
+	requirements = function(player)
+		local level = 5
+		local item = {"acorn", "rabbit_meat"}
+		local amounts = {10, 10}
+		local txt = "In order to learn this spell, you must bring me:\n\n"
+		for i = 1, #item do
+			txt = txt .. "" .. amounts[i] .. " " .. Item(item[i]).name .. "\n"
+		end
+
+		local desc = "This spell is used to get around the Kingdoms."
+		return level, item, amounts, desc
 	end
 }

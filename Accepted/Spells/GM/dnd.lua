@@ -1,6 +1,23 @@
 dnd = {
 	cast = function(player)
-		local armor = {318, 320, 329, 332, 338, 342, 10088, 10163, 10195, 10196, 10239, 10240, 10263, 10277, 10349, 10347}
+		local armor = {
+			318,
+			320,
+			329,
+			332,
+			338,
+			342,
+			10088,
+			10163,
+			10195,
+			10196,
+			10239,
+			10240,
+			10263,
+			10277,
+			10349,
+			10347
+		}
 
 		if player:hasDuration("dnd") then
 			player:setDuration("dnd", 0)
@@ -29,10 +46,6 @@ dnd = {
 			player:playSound(112)
 		end
 
-		if player.ID == 4 then
-			player:talk(2, "NOT  TAKING  QUESTIONS")
-		end
-
 		--420
 		player:sendAnimationXY(math.random(20, 21), player.x - 3, player.y - 1)
 		player:sendAnimationXY(math.random(20, 21), player.x - 2, player.y - 2)
@@ -47,6 +60,7 @@ dnd = {
 		player:sendAnimationXY(math.random(20, 21), player.x - 2, player.y + 2)
 		player:sendAnimationXY(math.random(20, 21), player.x - 3, player.y + 1)
 		player:sendAnimation(116)
+
 		--player:sendAnimation(366)
 		player:sendAnimation(376)
 
@@ -70,7 +84,7 @@ dnd = {
 		if #pc > 0 then
 			for i = 1, #pc do
 				if distanceSquare(player, pc[i], 3) then
-					if pc[i].ID ~= player.ID and pc[i].ID ~= 2 then
+					if pc[i].ID ~= player.ID and pc[i].gmLevel == 0 then
 						pc[i]:sendAnimation(143)
 						pushBack(pc[i])
 						pc[i]:sendMinitext("Sedang konsentrasi bertapa.")

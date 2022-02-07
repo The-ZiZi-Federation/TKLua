@@ -77,6 +77,7 @@ wind_walk = {
 		local same = {}
 		local pc = player:getObjectsInMap(player.m, BL_PC)
 		local mob = player:getObjectsInMap(player.m, BL_MOB)
+
 		--Player(4):talk(0,""..#mob)
 		if #mob > 0 then
 			for i = 1, #mob do
@@ -90,7 +91,7 @@ wind_walk = {
 			player:sendMinitext("Can't over than 20 clones in 1 map")
 			return false
 		end
-		player:spawn(58, player.x, player.y, 1)
+		player:spawn("wind_walk", player.x, player.y, 1)
 		get = player:getObjectsInCell(player.m, player.x, player.y, BL_MOB)
 		if #get > 0 then
 			for i = 1, #get do
@@ -111,7 +112,7 @@ wind_walk = {
 					get[i]:sendSide()
 					get[i].owner = player.ID
 					get[i]:setDuration("wind_walk", 60000, player.ID)
-					player.state = 2
+					player.state = 0
 					player:updateState()
 				end
 			end

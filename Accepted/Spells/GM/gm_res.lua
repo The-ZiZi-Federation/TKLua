@@ -15,9 +15,6 @@ gm_res = {
 			end
 		end
 
-		if not player.ID == 2 or not player.ID == 4 or not player.ID == 7 then
-			player:setAether("gm_res", 30000)
-		end
 		player:sendAction(6, 20)
 	end
 }

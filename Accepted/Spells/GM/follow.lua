@@ -1,36 +1,26 @@
 follow = {
-	cast = function(player)
-		local target = string.lower(player.question)
-
-		if player:hasDuration("follow") then
-			player:setDuration("follow", 0)
-			player.registry["follow_target"] = 0
-			return
-		else
-			if target ~= nil then
-				if Player(target) ~= nil then
-					player.registry["follow_target"] = Player(target).ID
-					player:setDuration("follow", 60000)
-				else
-					anim(player)
-					player:sendMinitext("user not found!")
-				end
-			end
-		end
+	cast = function(player, target)
+		target:setDuration("follow", 60000, player.ID)
+		player:sendMinitext("You force " .. target.name .. " to follow you.")
+		target:sendMinitext("" .. player.name .. " has forced you to follow them.")
 	end,
-	while_cast_fast = function(player)
-		local target = player.registry["follow_target"]
+	while_cast = function(player, caster)
+		local m, x, y = caster.m, caster.x, caster.y
 
-		if target > 0 then
-			if Player(target) ~= nil then
-				player:warp(Player(target).m, Player(target).x, Player(target).y)
-			else
-				player:setDuration("follow", 0)
-			end
+		if caster.side == 0 then
+			y = y + 1
+		elseif caster.side == 1 then
+			x = x - 1
+		elseif caster.side == 2 then
+			y = y - 1
+		elseif caster.side == 3 then
+			x = x + 1
 		end
+
+		player:warp(m, x, y)
 	end,
-	uncast = function(player)
-		player.registry["follow_target"] = 0
-		player:calcStat()
+	uncast = function(player, caster)
+		--player:talk(0,""..caster.name)
+		--caster:sendMinitext(""..player.name.." stops following you.")
 	end
 }

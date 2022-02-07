@@ -25,7 +25,7 @@ blade_crawl = {
 						player:playSound(88)
 						player:playSound(508)
 						player:sendAnimationXY(304, player.x, player.y)
-						player:addNPC("blade_crawl", player.m, player.x, player.y, 90, 2000, player.ID)
+						player:addNPC("blade_crawl", player.m, player.x, player.y, 2, 90, 2000, player.ID)
 						side = player:getObjectsInCell(player.m, player.x, player.y, BL_NPC)
 						if #side > 0 then
 							for i = 1, #side do
