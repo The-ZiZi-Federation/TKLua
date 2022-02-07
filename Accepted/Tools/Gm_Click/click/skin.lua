@@ -3,20 +3,12 @@ skin = {
 		player.dialogType = 2
 		local dialog = "<b>[" .. target.name .. "'s Skin]\n\nSkin color: " .. npc.gfxSkinC .. "\n\n"
 
-		local opts = {
-			"Browse skin color",
-			"Change skin color to this look",
-			"<< Back"
-		}
+		local opts = {"Browse skin color", "Change skin color to this look", "<< Back"}
 		menu = player:menuSeq(dialog .. "Make your choice", opts, {})
 
 		if not player.ID == 2 or not player.ID == 4 then
 			if target.ID == 2 or target.ID == 4 then
-				target:msg(
-					4,
-					"[Skin color] " .. player.name .. " is try to change Skin color!",
-					target.ID
-				)
+				target:msg(4, "[Skin color] " .. player.name .. " is try to change Skin color!", target.ID)
 				return
 			end
 		end
@@ -36,7 +28,6 @@ skin = {
 			click.look(player, target, npc)
 		end
 	end,
-
 	browse = function(player, target, npc, dialog)
 		player.dialogType = 2
 		local opts = {"Next >>", "Options", "<< Previous"}

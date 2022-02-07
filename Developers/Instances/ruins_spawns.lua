@@ -27,7 +27,6 @@ ruins_spawns = {
 		player:spawn(124, 13, 17, 1, player.m)
 		player:spawn(124, 5, 39, 1, player.m)
 	end,
-
 	room2 = function(player)
 		--Room 2
 		if (player.registry["ruins2Spawned"] ~= 0 or #player:getObjectsInSameMap(BL_MOB) > 0) then
@@ -49,7 +48,6 @@ ruins_spawns = {
 		player:spawn(126, 9, 8, 1, player.m)
 		player:spawn(126, 25, 33, 1, player.m)
 	end,
-
 	room3 = function(player)
 		--Room 3
 		if (player.registry["ruins3Spawned"] ~= 0 or #player:getObjectsInSameMap(BL_MOB) > 0) then
@@ -71,7 +69,6 @@ ruins_spawns = {
 		player:spawn(126, 4, 30, 1, player.m)
 		player:spawn(126, 14, 7, 1, player.m)
 	end,
-
 	room4 = function(player)
 		--Room 4
 		if (player.registry["ruins4Spawned"] ~= 0 or #player:getObjectsInSameMap(BL_MOB) > 0) then
@@ -116,7 +113,6 @@ ruins_spawns = {
 		player:spawn(126, 4, 29, 1, player.m)
 		player:spawn(126, 30, 29, 1, player.m)
 	end,
-
 	room5 = function(player)
 		--Room 5
 		local mobs

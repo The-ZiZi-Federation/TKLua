@@ -43,30 +43,14 @@ getFreeInstance = function(maps)
 end
 
 loadInstance = function(map, instanceName)
-	local mapFile = "../rtkmaps/Accepted/"
-	local warpFile = "../rtkmaps/Accepted/instances/"
+	local mapFile = "../mornamaps/Accepted/"
+	local warpFile = "../mornamaps/Accepted/instances/"
 
 	if (instanceName == "ruins") then
-		setMap(
-			map,
-			mapFile .. "region2/ruins/r2_ruins.map",
-			"Ruins",
-			113,
-			0,
-			1,
-			0,
-			0,
-			3600000,
-			0,
-			0,
-			2,
-			1,
-			0,
-			0
-		)
+		setMap(map, mapFile .. "instances/ruins/r2_ruins.map", "Ruins", 113, 0, 1, 0, 0, 3600000, 0, 0, 2, 1, 0, 0)
 		setMap(
 			map + 1,
-			mapFile .. "region2/ruins/r2_ruins_eastwing.map",
+			mapFile .. "instances/ruins/r2_ruins_eastwing.map",
 			"East Wing",
 			113,
 			0,
@@ -83,7 +67,7 @@ loadInstance = function(map, instanceName)
 		)
 		setMap(
 			map + 2,
-			mapFile .. "region2/ruins/r2_ruins_westwing.map",
+			mapFile .. "instances/ruins/r2_ruins_westwing.map",
 			"West Wing",
 			113,
 			0,
@@ -100,7 +84,7 @@ loadInstance = function(map, instanceName)
 		)
 		setMap(
 			map + 3,
-			mapFile .. "region2/ruins/r2_ruins_hall.map",
+			mapFile .. "instances/ruins/r2_ruins_hall.map",
 			"Hoary Hallway",
 			113,
 			0,
@@ -117,7 +101,7 @@ loadInstance = function(map, instanceName)
 		)
 		setMap(
 			map + 4,
-			mapFile .. "region2/ruins/r2_ruins_passage_nostairs.map",
+			mapFile .. "instances/ruins/r2_ruins_passage_nostairs.map",
 			"Precarious Passage",
 			113,
 			0,
@@ -136,7 +120,7 @@ loadInstance = function(map, instanceName)
 	elseif (instanceName == "canidae") then
 		setMap(
 			map,
-			mapFile .. "region2/canidae/r2_ce_merry.map",
+			mapFile .. "instances/canidae/r2_ce_merry.map",
 			"Merry Forest",
 			113,
 			0,
@@ -153,7 +137,7 @@ loadInstance = function(map, instanceName)
 		)
 		setMap(
 			map + 1,
-			mapFile .. "region2/canidae/r2_ce_cheerful.map",
+			mapFile .. "instances/canidae/r2_ce_cheerful.map",
 			"Cheerful Forest",
 			113,
 			0,
@@ -170,7 +154,7 @@ loadInstance = function(map, instanceName)
 		)
 		setMap(
 			map + 2,
-			mapFile .. "region2/canidae/r2_ce_joyous.map",
+			mapFile .. "instances/canidae/r2_ce_joyous.map",
 			"Joyous Forest",
 			113,
 			0,
@@ -185,26 +169,10 @@ loadInstance = function(map, instanceName)
 			0,
 			0
 		)
-		setMap(
-			map + 3,
-			mapFile .. "region2/canidae/r2_ce_glade.map",
-			"Glade",
-			113,
-			0,
-			1,
-			0,
-			0,
-			3600000,
-			0,
-			0,
-			2,
-			1,
-			0,
-			0
-		)
+		setMap(map + 3, mapFile .. "instances/canidae/r2_ce_glade.map", "Glade", 113, 0, 1, 0, 0, 3600000, 0, 0, 2, 1, 0, 0)
 		setMap(
 			map + 4,
-			mapFile .. "region2/canidae/r2_ce_twisting.map",
+			mapFile .. "instances/canidae/r2_ce_twisting.map",
 			"Twisting Pine",
 			113,
 			0,
@@ -221,7 +189,7 @@ loadInstance = function(map, instanceName)
 		)
 		setMap(
 			map + 5,
-			mapFile .. "region2/canidae/r2_ce_clearing.map",
+			mapFile .. "instances/canidae/r2_ce_clearing.map",
 			"Clearing",
 			113,
 			0,
@@ -237,6 +205,28 @@ loadInstance = function(map, instanceName)
 			0
 		)
 		warpFile = warpFile .. "region2/canidae.txt"
+	elseif (instanceName == "strengthTrial") then
+		setMap(
+			map,
+			mapFile .. "end/trials/trial_of_strength_and_wits.map",
+			"Trial of Strength and Wits",
+			160,
+			0,
+			1,
+			0,
+			0,
+			3600000,
+			0,
+			0,
+			66,
+			1,
+			0,
+			0
+		)
+		warpFile = warpFile .. "region2/canidae.txt"
+	elseif (instanceName == "sumoCourse") then
+		setMap(map, mapFile .. "games/sumo_war.map", "Sumo Course", 160, 0, 0, 0, 0, 3600000, 0, 0, 66, 1, 1, 0)
+		warpFile = warpFile .. "region2/canidae.txt"
 	end
 
 	if (setWarps(map, warpFile) ~= false) then
@@ -248,10 +238,9 @@ unloadInstance = function(map, maps)
 	local comparison = function(a, b)
 		return a < b
 	end
-
 	for i = 1, #instances do
 		if (instances[i] == map) then
-			for j = 1, maps do
+			for j = 1, 6 do
 				removeInstanceBlocks(map + j - 1)
 				table.remove(instances, i)
 			end

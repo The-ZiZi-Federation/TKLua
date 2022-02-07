@@ -1,12 +1,12 @@
 canidae_spawns = {
 	room1 = function(player)
 		--Room 1
-		local merry = 87
-		local cheerful = 88
-		local joyous = 89
-		local swift = 90
-		local striking = 91
-		local sly = 92
+		local merry = 5001
+		local cheerful = 5001
+		local joyous = 5002
+		local swift = 5003
+		local striking = 5004
+		local sly = 5004
 
 		local group = #player.group
 		if (group > 8) then
@@ -30,18 +30,17 @@ canidae_spawns = {
 			player:spawn(sly, 8, 22, math.floor(3 * group), player.m)
 		end
 	end,
-
 	room2 = function(player)
 		--Room 2
 		if (player.registry["canidae2Spawned"] ~= 0 or #player:getObjectsInSameMap(BL_MOB) > 0) then
 			return
 		end
-		local merry = 87
-		local cheerful = 88
-		local joyous = 89
-		local swift = 90
-		local striking = 91
-		local sly = 92
+		local merry = 5001
+		local cheerful = 5001
+		local joyous = 5002
+		local swift = 5003
+		local striking = 5004
+		local sly = 5004
 
 		local group = #player.group
 		if (group > 8) then
@@ -56,18 +55,17 @@ canidae_spawns = {
 		player:spawn(striking, 8, 22, math.floor(8 * group), player.m)
 		player:spawn(sly, 8, 22, math.floor(4 * group), player.m)
 	end,
-
 	room3 = function(player)
 		--Room 3
 		if (player.registry["canidae3Spawned"] ~= 0 or #player:getObjectsInSameMap(BL_MOB) > 0) then
 			return
 		end
-		local merry = 87
-		local cheerful = 88
-		local joyous = 89
-		local swift = 90
-		local striking = 91
-		local sly = 92
+		local merry = 5001
+		local cheerful = 5001
+		local joyous = 5002
+		local swift = 5003
+		local striking = 5004
+		local sly = 5004
 
 		local group = #player.group
 		if (group > 8) then
@@ -82,28 +80,26 @@ canidae_spawns = {
 		player:spawn(striking, 8, 22, math.floor(7 * group), player.m)
 		player:spawn(sly, 8, 22, math.floor(4 * group), player.m)
 	end,
-
 	room4 = function(player)
 		--Room 4
 		if (player.registry["canidae4Spawned"] ~= 0 or #player:getObjectsInSameMap(BL_MOB) > 0) then
 			return
 		end
-		local fake = 137
+		local fake = 5005
 		player:spawn(fake, 8, 6, 1, player.m)
 	end,
-
 	room5 = function(player)
 		--Room 5
 		if (player.registry["canidae5Spawned"] ~= 0 or #player:getObjectsInSameMap(BL_MOB) > 0) then
 			return
 		end
 
-		local merry = 87
-		local cheerful = 88
-		local joyous = 89
-		local swift = 90
-		local striking = 91
-		local sly = 92
+		local merry = 5001
+		local cheerful = 5001
+		local joyous = 5002
+		local swift = 5003
+		local striking = 5004
+		local sly = 5004
 
 		local group = #player.group
 		if (group > 8) then
@@ -118,7 +114,6 @@ canidae_spawns = {
 		player:spawn(striking, 8, 22, math.floor(9 * group), player.m)
 		player:spawn(sly, 8, 22, math.floor(4 * group), player.m)
 	end,
-
 	room6 = function(player)
 		--Room 6
 		if (#player:getObjectsInSameMap(BL_MOB) > 0) then
@@ -126,11 +121,11 @@ canidae_spawns = {
 		end
 
 		if (#player:getObjectsInSameMap(BL_MOB) == 0) then
-			player:spawn(138, 0, 7, 1, player.m)
+			player:spawn(2011, 0, 7, 1, player.m)
 		end
 
 		if (player.registry["canidae6Spawned"] == 0) then
-			local ninetails = 93
+			local ninetails = 5005
 			player:spawn(ninetails, 9, 9, 1, player.m)
 		end
 	end

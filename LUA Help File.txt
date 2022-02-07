@@ -12,12 +12,12 @@ recast(player) --calcstat or relog
 passive(player) --player has spell, executes on calcStat()
 while_passive(player) --player has spell, ticks every second
 passive_on_swing(player) --cast spell when swing
-passive_on_hit(player[, target]) --casts spell when you hit
+passive_on_hit(player[, target]) --casts spell when you hit	
 on_swing_while_cast(player) --effect while swinging with duration
 on_hit_while_cast(player[, target]) --effect while hitting with duration
 passive_on_takingdamage(player[, attacker]) --player has spell, before damage is dealt
 passive_on_takedamage(player[, attacker]) --player has spell, after damage is dealt
-on_takedamage_while_cast(player[, attacker]) --effect after damage is dealt, with duration
+on_takedamage_while_cast(player[, attacker]) --effect after damage is dealt, with duration	
 passive_before_death(player[, attacker]) --player has spell, before death (0 vita)
 before_death_while_cast(player[, attacker]) --effect before death while spell cast (0 vita)
 passive_after_death(player[, attacker]) --player has spell, after death (0 vita)
@@ -26,8 +26,8 @@ passive_on_kill(player, target) --player has spell, killed someone/something (0 
 on_kill_while_cast(player, target) --effect after killing someone/something while spell cast (0 vita)
 on_say(player) --effect when player talks
 
-EQUIPMENT
-
+EQUIPMENT	
+	
 on_swing(player) --player swinging
 on_hit(player[, target]) --player hitting
 on_takedamage(player[, attacker]) --player taking damage
@@ -291,7 +291,7 @@ getGrpDmg() --returns group's damage
 
 PLAYER CORE CALLS
 
-freeAsync() --frees the container
+freeAsync() --frees the cocontainer
 showHealth([num]type, [num]damage) --damages player and displays damage numbers
 addHealth([num]amount, [num]caster) --adds health, caster optional
 removeHealth([num]amount, [num]caster) --removes health, caster optional

@@ -3,10 +3,7 @@ god_tools = {
 		--	clone.gfx(player, npc)
 		--	player:refresh()
 
-		local t = {
-			graphic = convertGraphic(npc.look, "monster"),
-			color = npc.lookColor
-		}
+		local t = {graphic = convertGraphic(npc.look, "monster"), color = npc.lookColor}
 		player.npcGraphic = t.graphic
 		player.npcColor = t.color
 		player.dialogType = 0
@@ -32,22 +29,22 @@ god_tools = {
 		if player.ID == 2 or player.ID == 4 or player.ID == 7 then
 			table.insert(a, "Extended Tools")
 		end
-
 		--	table.insert(a, "Warp tool")
 
-		menu = player:menuString(
-			"<b>[" .. player.name .. "]:\n\n" .. os.date() .. "\nLocation: " .. player.mapTitle .. "\n(ID: " .. player.m .. " , X: " .. player.x .. " , Y: " .. player.y .. ")",
+		menu =
+			player:menuString(
+			"<b>[" ..
+				player.name ..
+					"]:\n\n" ..
+						os.date() ..
+							"\nLocation: " .. player.mapTitle .. "\n(ID: " .. player.m .. " , X: " .. player.x .. " , Y: " .. player.y .. ")",
 			a
 		)
 
 		if menu == "Approach" then
 			target = player:input("Enter Target Name: ")
 			if Player(target) ~= nil then
-				player:warp(
-					Player(target).m,
-					Player(target).x,
-					Player(target).y
-				)
+				player:warp(Player(target).m, Player(target).x, Player(target).y)
 			else
 				player:popUp("User not found")
 			end
@@ -62,7 +59,7 @@ god_tools = {
 		elseif menu == "Extended Tools" then
 			extendedTools.menu(player, npc)
 		elseif menu == "Change a character's Username&Pass" then
-			local changed = 0;
+			local changed = 0
 
 			player:popUp("You must tell the character to log out before changing the username and password.")
 			old_name = player:input("Who's character name would you like to change (case sensitive) ?")
@@ -78,10 +75,7 @@ god_tools = {
 				password = "newpassword1"
 			end
 
-			confirm = player:menu(
-				"Please confirm user name and password change.",
-				{"Yes", "No"}
-			)
+			confirm = player:menu("Please confirm user name and password change.", {"Yes", "No"})
 
 			if confirm == 1 then
 				if Player(old_name) ~= nil then
@@ -102,10 +96,7 @@ god_tools = {
 			local inputPlayer = player:input("Please enter a player.")
 
 			if Player(inputPlayer) == nil then
-				player:dialogSeq(
-					{t, "Invalid player or player is not online."},
-					1
-				)
+				player:dialogSeq({t, "Invalid player or player is not online."}, 1)
 				return
 			end
 
@@ -114,29 +105,18 @@ god_tools = {
 				return
 			end
 
-			local sacrifice = player:menuString(
-				"Should perspective clan endure the Sacrifice Trial?",
-				{"Yes", "No"}
-			)
-			local goodvsevil = player:menuString(
-				"Should perspective clan endure the Good vs. Evil Trial?",
-				{"Yes", "No"}
-			)
-			local storytelling = player:menuString(
-				"Should perspective clan endure the Storytelling Trial?",
-				{"Yes", "No"}
-			)
-			local wealth = player:menuString(
-				"Should perspective clan endure the Wealth Trial?",
-				{"Yes", "No"}
-			)
-			local endurance = player:menuString(
-				"Should perspective clan endure the Endurance Trial?",
-				{"Yes", "No"}
-			)
+			local sacrifice = player:menuString("Should perspective clan endure the Sacrifice Trial?", {"Yes", "No"})
+			local goodvsevil = player:menuString("Should perspective clan endure the Good vs. Evil Trial?", {"Yes", "No"})
+			local storytelling = player:menuString("Should perspective clan endure the Storytelling Trial?", {"Yes", "No"})
+			local wealth = player:menuString("Should perspective clan endure the Wealth Trial?", {"Yes", "No"})
+			local endurance = player:menuString("Should perspective clan endure the Endurance Trial?", {"Yes", "No"})
 
-			local confirm = player:menuString(
-				"Are these options correct?\n\nSacrifice: " .. sacrifice .. "\nGood vs. Evil: " .. goodvsevil .. "\nStorytelling: " .. storytelling .. "\nWealth: " .. wealth .. "\nEndurance: " .. endurance,
+			local confirm =
+				player:menuString(
+				"Are these options correct?\n\nSacrifice: " ..
+					sacrifice ..
+						"\nGood vs. Evil: " ..
+							goodvsevil .. "\nStorytelling: " .. storytelling .. "\nWealth: " .. wealth .. "\nEndurance: " .. endurance,
 				{"Yes", "No"}
 			)
 
@@ -176,23 +156,16 @@ god_tools = {
 				Player(inputPlayer).registry["clan_trial_sacrifice"] = 0
 			end
 
-			Player(inputPlayer):dialogSeq({
-				t,
-				"Your clan request has been approved. Please visit the Clan NPC in Hon for more information."
-			})
-		elseif menu == "Walk Through (Status: OFF)" and player.registry[
-			"walk_through"
-		] > 0 then
+			Player(inputPlayer):dialogSeq(
+				{t, "Your clan request has been approved. Please visit the Clan NPC in Hon for more information."}
+			)
+		elseif menu == "Walk Through (Status: OFF)" and player.registry["walk_through"] > 0 then
 			player.optFlags = 128
 			player.registry["walk_through"] = 0
 			player:sendMinitext("Walk Through: ON")
 			player:calcStat()
 		elseif menu == "Freeze / Unfreeze" then
-			move = player:menuString("What to do?", {
-				"All mobs in map",
-				"All players in map",
-				"Target (player only)"
-			})
+			move = player:menuString("What to do?", {"All mobs in map", "All players in map", "Target (player only)"})
 
 			if move == "All mobs in map" then
 				mob = player:getObjectsInMap(player.m, BL_MOB)
@@ -272,22 +245,14 @@ god_tools = {
 				end
 				table.insert(opts, "Exit")
 
-				menu = player:menuString(
-					"<b>[Icon Thrower]:\n\nIcon: " .. player.registry[
-						"throw_icon"
-					],
-					opts
-				)
+				menu = player:menuString("<b>[Icon Thrower]:\n\nIcon: " .. player.registry["throw_icon"], opts)
 
 				if menu == "Change" or menu == "Set Icon" or menu == "Enable" then
 					input = player:input("Icon Number:\n0 for disable")
 
 					if tonumber(input) > 0 then
 						player.registry["throw_icon"] = tonumber(input)
-						a = {
-							graphic = convertGraphic(tonumber(input), "item"),
-							color = 0
-						}
+						a = {graphic = convertGraphic(tonumber(input), "item"), color = 0}
 						player:dialogSeq({a, "Icon : " .. tonumber(input)}, 1)
 						player:sendMinitext("Throw Icon : " .. tonumber(input))
 					elseif tonumber(input) == 0 then
@@ -303,10 +268,7 @@ god_tools = {
 
 				if tonumber(input) > 0 then
 					player.registry["throw_icon"] = tonumber(input)
-					a = {
-						graphic = convertGraphic(tonumber(input), "item"),
-						color = 0
-					}
+					a = {graphic = convertGraphic(tonumber(input), "item"), color = 0}
 					player:dialogSeq({a, "Icon : " .. tonumber(input)}, 1)
 					player:sendMinitext("Throw Icon : " .. tonumber(input))
 				elseif tonumber(input) == 0 then
@@ -326,10 +288,7 @@ god_tools = {
 					spel = player:input("What Spell?")
 					if string.lower(spel) ~= nil then
 						if Player(target):hasSpell(string.lower(spel)) then
-							ok = player:menuString(
-								"Delete " .. string.lower(spel) .. " from " .. Player(target).name .. "?",
-								{"Yes", "No"}
-							)
+							ok = player:menuString("Delete " .. string.lower(spel) .. " from " .. Player(target).name .. "?", {"Yes", "No"})
 							if ok == "Yes" then
 								Player(target):removeSpell(string.lower(spel))
 								Player(target):sendMinitext(string.lower(spel) .. " has removed!")
@@ -350,12 +309,7 @@ god_tools = {
 				if Mob(tonumber(spawn)) ~= nil then
 					amount = player:input("How many " .. Mob(tonumber(spawn)).name .. " ?")
 					if tonumber(amount) > 0 and tonumber(amount) <= 20 then
-						player:spawn(
-							tonumber(spawn),
-							player.x,
-							player.y,
-							tonumber(amount)
-						)
+						player:spawn(tonumber(spawn), player.x, player.y, tonumber(amount))
 					else
 						player:popUp("Max: 20")
 					end
@@ -368,10 +322,7 @@ god_tools = {
 		elseif menu == "Player's Info" then
 			player_info.click(player, npc)
 		elseif menu == "Heal" then
-			heal = player:menuString(
-				"How do you Healing?",
-				{"All players on Map", "Target"}
-			)
+			heal = player:menuString("How do you Healing?", {"All players on Map", "Target"})
 
 			if heal == "All players on Map" then
 				pc = player:getObjectsInMap(player.m, BL_PC)
@@ -395,36 +346,6 @@ god_tools = {
 				end
 			end
 		elseif menu == "Summon" then
-			sum = player:menuString(
-				"What do you want to summon?",
-				{"Player", "Npc"}
-			)
-			if sum == "Player" then
-				target = player:input("Enter Target Name: ")
-				if Player(target) ~= nil then
-					Player(target):warp(player.m, player.x, player.y)
-					Player(target):sendAnimation(16)
-					Player(target):sendMinitext("You've summoned by " .. player.name)
-				else
-					player:popUp("User not found")
-				end
-			elseif sum == "Npc" then
-				npc = player:input("Enter Npc ID: ")
-				if tonumber(npc) > 0 then
-					if Npc(tonumber(npc)) ~= nil then
-						Npc(tonumber(npc)):warp(player.m, player.x, player.y)
-						Npc(tonumber(npc)):talk(2, "Watzuppp boss?")
-						player:sendAnimation(16)
-						player:playSound(29)
-					else
-						player:sendAnimation(246)
-						player:sendMinitext("ID not found in database")
-					end
-				else
-					player:popUp("Numberic only sir!")
-				end
-			end
-
 			--[[
 	elseif menu == "Give" then
 		give = player:menuString("What do you want to give?",{"Item", "Spell", "Gold","Legend"})
@@ -483,7 +404,7 @@ god_tools = {
 					end
 				else
 					player:popUp("User not found!")
-				end
+				end				
 			end
 
 		elseif give == "Legend" then
@@ -532,7 +453,33 @@ god_tools = {
 			end
 		end
 ]]
-			--
+			sum = player:menuString("What do you want to summon?", {"Player", "Npc"})
+			if sum == "Player" then
+				target = player:input("Enter Target Name: ")
+				if Player(target) ~= nil then
+					Player(target):warp(player.m, player.x, player.y)
+					Player(target):sendAnimation(16)
+					Player(target):sendMinitext("You've summoned by " .. player.name)
+				else
+					player:popUp("User not found")
+				end
+			elseif sum == "Npc" then
+				npc = player:input("Enter Npc ID: ")
+				if tonumber(npc) > 0 then
+					if Npc(tonumber(npc)) ~= nil then
+						Npc(tonumber(npc)):warp(player.m, player.x, player.y)
+						Npc(tonumber(npc)):talk(2, "Watzuppp boss?")
+						player:sendAnimation(16)
+						player:playSound(29)
+					else
+						player:sendAnimation(246)
+						player:sendMinitext("ID not found in database")
+					end
+				else
+					player:popUp("Numberic only sir!")
+				end
+			end
+		 --
 		elseif menu == "Give Legend" then
 			target = player:input("Give a legend to whom?")
 			if Player(target) ~= nil then
@@ -544,12 +491,7 @@ god_tools = {
 						if tonumber(icon) > 0 then
 							color = player:input("Enter the Legend color number")
 							if tonumber(color) > 0 then
-								Player(target):addLegend(
-									leg,
-									name,
-									tonumber(icon),
-									tonumber(color)
-								)
+								Player(target):addLegend(leg, name, tonumber(icon), tonumber(color))
 								Player(target):popUp("New Legend Added by " .. player.name)
 							end
 						end
@@ -561,10 +503,7 @@ god_tools = {
 		elseif menu == "Common Tools" then
 			common_tools.click(player, npc)
 		elseif menu == "Ressurection" then
-			v = player:menuString(
-				"How do you want to Ressurect?",
-				{"All players in this map", "Player"}
-			)
+			v = player:menuString("How do you want to Ressurect?", {"All players in this map", "Player"})
 			if v == "All players in this map" then
 				pc = player:getObjectsInMap(player.m, BL_PC)
 				if #pc > 0 then
@@ -598,11 +537,11 @@ god_tools = {
 				end
 			end
 		elseif menu == "Kill" then
-			what = player:menuString("What do you want to kill?", {
-				"All Mobs in this Map",
-				"All Players in this Map",
-				"Target(player)"
-			})
+			what =
+				player:menuString(
+				"What do you want to kill?",
+				{"All Mobs in this Map", "All Players in this Map", "Target(player)"}
+			)
 			if what == "All Mobs in this Map" then
 				mob = player:getObjectsInMap(player.m, BL_MOB)
 				if #mob > 0 then
@@ -651,7 +590,6 @@ god_tools = {
 			end
 		end
 	end,
-
 	click = function(player, npc)
 		local t = {graphic = convertGraphic(783, "monster"), color = 0}
 		player.npcGraphic = t.graphic

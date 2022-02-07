@@ -23,106 +23,78 @@ add_script = {
 			elseif q == "p" or tonumber(q) == 5 then
 				player:dropItem(Item("pink_script").id, 1)
 			else
-				player:msg(
-					4,
-					"===================== COMMANDS =====================",
-					player.ID
-				)
+				player:msg(4, "===================== COMMANDS =====================", player.ID)
 				player:msg(4, "'R' : put 'Red script' on ground", player.ID)
 				player:msg(4, "'B' : put 'Blue script' on ground", player.ID)
 				player:msg(4, "'G' : put 'Green script' on ground", player.ID)
 				player:msg(4, "'Y' : put 'Yellow script' on ground", player.ID)
 				player:msg(4, "'P' : put 'Pink script' on ground", player.ID)
-				player:msg(
-					4,
-					"'C' : to count total items in this map",
-					player.ID
-				)
-				player:msg(
-					4,
-					"'S' : Settings for each color of scripts",
-					player.ID
-				)
-				player:msg(
-					4,
-					"====================================================",
-					player.ID
-				)
+				player:msg(4, "'C' : to count total items in this map", player.ID)
+				player:msg(4, "'S' : Settings for each color of scripts", player.ID)
+				player:msg(4, "====================================================", player.ID)
 			end
 		end
 	end,
+	click = async(
+		function(player, npc)
+			local t = {graphic = convertGraphic(npc.look, "monster"), color = npc.lookColor}
+			clone.equip(player, npc)
+			player.npcGraphic = t.graphic
+			player.npcColor = t.color
+			player.dialogType = 2
 
-	click = async(function(player, npc)
-		local t = {
-			graphic = convertGraphic(npc.look, "monster"),
-			color = npc.lookColor
-		}
-		clone.equip(player, npc)
-		player.npcGraphic = t.graphic
-		player.npcColor = t.color
-		player.dialogType = 2
+			local red = player.registry["red_script"]
+			local blue = player.registry["blue_script"]
+			local green = player.registry["green_script"]
+			local yellow = player.registry["yellow_script"]
+			local pink = player.registry["pink_script"]
+			if red > 0 then
+				red_mob = Mob(red).name
+			else
+				red_mob = "None"
+			end
+			if blue > 0 then
+				blue_mob = Mob(blue).name
+			else
+				blue_mob = "None"
+			end
+			if green > 0 then
+				green_mob = Mob(green).name
+			else
+				green_mob = "None"
+			end
+			if yellow > 0 then
+				yellow_mob = Mob(yellow).name
+			else
+				yellow_mob = "None"
+			end
+			if pink > 0 then
+				pink_mob = Mob(pink).name
+			else
+				pink_mob = "None"
+			end
+			local opts = {}
+			table.insert(opts, "Red Script    : " .. red_mob .. "(" .. red .. ")")
+			table.insert(opts, "Blue Script   : " .. blue_mob .. "(" .. blue .. ")")
+			table.insert(opts, "Green Script  : " .. green_mob .. "(" .. green .. ")")
+			table.insert(opts, "Yellow Script : " .. yellow_mob .. "(" .. yellow .. ")")
+			table.insert(opts, "Pink Script   : " .. pink_mob .. "(" .. pink .. ")")
 
-		local red = player.registry["red_script"]
-		local blue = player.registry["blue_script"]
-		local green = player.registry["green_script"]
-		local yellow = player.registry["yellow_script"]
-		local pink = player.registry["pink_script"]
-		if red > 0 then
-			red_mob = Mob(red).name
-		else
-			red_mob = "None"
-		end
-		if blue > 0 then
-			blue_mob = Mob(blue).name
-		else
-			blue_mob = "None"
-		end
-		if green > 0 then
-			green_mob = Mob(green).name
-		else
-			green_mob = "None"
-		end
-		if yellow > 0 then
-			yellow_mob = Mob(yellow).name
-		else
-			yellow_mob = "None"
-		end
-		if pink > 0 then
-			pink_mob = Mob(pink).name
-		else
-			pink_mob = "None"
-		end
-		local opts = {}
-		table.insert(opts, "Red Script    : " .. red_mob .. "(" .. red .. ")")
-		table.insert(opts, "Blue Script   : " .. blue_mob .. "(" .. blue .. ")")
-		table.insert(
-			opts,
-			"Green Script  : " .. green_mob .. "(" .. green .. ")"
-		)
-		table.insert(
-			opts,
-			"Yellow Script : " .. yellow_mob .. "(" .. yellow .. ")"
-		)
-		table.insert(opts, "Pink Script   : " .. pink_mob .. "(" .. pink .. ")")
+			menu = player:menuString("\nEnter mob id / yname for each script to spawn on their coordinate later.", opts)
 
-		menu = player:menuString(
-			"\nEnter mob id / yname for each script to spawn on their coordinate later.",
-			opts
-		)
-
-		if menu == "Red Script    : " .. red_mob .. "(" .. red .. ")" then
-			add_script.inputMob(player, "red", npc)
-		elseif menu == "Blue Script   : " .. blue_mob .. "(" .. blue .. ")" then
-			add_script.inputMob(player, "blue", npc)
-		elseif menu == "Green Script  : " .. green_mob .. "(" .. green .. ")" then
-			add_script.inputMob(player, "green", npc)
-		elseif menu == "Yellow Script : " .. yellow_mob .. "(" .. yellow .. ")" then
-			add_script.inputMob(player, "yellow", npc)
-		elseif menu == "Pink Script   : " .. pink_mob .. "(" .. pink .. ")" then
-			add_script.inputMob(player, "pink", npc)
+			if menu == "Red Script    : " .. red_mob .. "(" .. red .. ")" then
+				add_script.inputMob(player, "red", npc)
+			elseif menu == "Blue Script   : " .. blue_mob .. "(" .. blue .. ")" then
+				add_script.inputMob(player, "blue", npc)
+			elseif menu == "Green Script  : " .. green_mob .. "(" .. green .. ")" then
+				add_script.inputMob(player, "green", npc)
+			elseif menu == "Yellow Script : " .. yellow_mob .. "(" .. yellow .. ")" then
+				add_script.inputMob(player, "yellow", npc)
+			elseif menu == "Pink Script   : " .. pink_mob .. "(" .. pink .. ")" then
+				add_script.inputMob(player, "pink", npc)
+			end
 		end
-	end),
-
+	),
 	inputMob = function(player, color, npc)
 		local mob
 		input = player:input("Enter mob id  :")
@@ -165,14 +137,13 @@ add_script = {
 		player:sendMinitext("Done!")
 		return add_script.click(player, npc)
 	end,
-
 	clone = function(player, npc)
 		local weap = player:getEquippedItem(EQ_WEAP)
 		local coat = player:getEquippedItem(EQ_COAT)
 		local armor = player:getEquippedItem(EQ_ARMOR)
 		local helm = player:getEquippedItem(EQ_HELM)
 		local crown = player:getEquippedItem(EQ_CROWN)
-		local mantle = player:getEquippedItem(EQ_MANTLE)
+		local cape = player:getEquippedItem(EQ_MANTLE)
 		local shield = player:getEquippedItem(EQ_SHIELD)
 		local boots = player:getEquippedItem(EQ_BOOTS)
 		local facea = player:getEquippedItem(EQ_FACEACC)
@@ -203,11 +174,11 @@ add_script = {
 		else
 			npc.gfxCrown = 65535
 		end
-		if mantle ~= nil then
-			npc.gfxMantle = mantle.look
-			npc.gfxMantleC = mantle.lookC
+		if cape ~= nil then
+			npc.gfxCape = cape.look
+			npc.gfxCapeC = cape.lookC
 		else
-			npc.gfxMantle = 65535
+			npc.gfxCape = 65535
 		end
 		if shield ~= nil then
 			npc.gfxShield = shield.look
