@@ -1,9 +1,8 @@
---??
 function Player.staff(player, str, int)
-	local loreTable = {charIDs = {2, 3, 4, 5, 6, 7}, charLevels = {99, 99, 99, 99, 99}}
-	local mapTable = {charIDs = {2, 3, 4, 5, 6, 7}, charLevels = {99, 99, 99, 99, 99}}
-	local scriptTable = {charIDs = {2, 3, 4, 5, 6, 7}, charLevels = {99, 99, 99, 99, 99}}
-	local projectManagerTable = {charIDs = {2, 3, 4, 5, 6, 7}, charLevels = {99, 99, 99, 99, 99}}
+	local loreTable = {charIDs = {1, 2, 3, 4, 5}, charLevels = {5, 1}}
+	local mapTable = {charIDs = {1, 2, 3, 4, 5}, charLevels = {3, 3, 3, 3, 3}}
+	local scriptTable = {charIDs = {1, 2, 3, 4, 5}, charLevels = {5, 3, 3, 5}}
+	local projectManagerTable = {charIDs = {1, 2, 3, 4, 5}, charLevels = {1, 1}}
 	local accessLevel = -1
 
 	if (str ~= nil) then
@@ -100,7 +99,6 @@ function Player.staff(player, str, int)
 
 	return accessLevel
 end
- --
 
 --[[
 unsafeLua = {"addGold", "sleep", "msleep", "getObjects", "getBlock", "delFromIDDB", "addPermanentSpawn", "dropItem", "sendParcel",
@@ -112,22 +110,32 @@ unsafeLua = {"addGold", "sleep", "msleep", "getObjects", "getBlock", "delFromIDD
 			"killedBy", "steps", "dmgDealt", "dmgTaken", "onlineTime", "lastHealth", "mute", "PK", "pvp", "Mob", "NPC", "Parcel", "Item",
 			"buyExtend", "sellExtend", "speak", "cast", "setDuration", "setAether", "passive", "flushDuration", "flushAether", "os.execute",
 			"luaReload"}
-			
+
 unsafeLuaPlus = {"setTile", "setObject"}
-]] canRunLuaTalk = function(
-	player)
+]]
+--
+
+broadcast2 = function(maps, message)
+	for z = 1, #maps do
+		broadcast(maps[z], "" .. message)
+	end
+end
+
+canRunLuaTalk = function(player)
 	checkLuaSafety(player, player.speech)
 end
+
 canRunLuaMail = function(player)
 	checkLuaSafety(player, player.mail)
 end
 
 checkLuaSafety = function(player, check)
-	local strCheck, checkCount = 0, 0
-	local id = {2, 3, 4, 5, 6, 7}
+	local strCheck = 0
+	local checkCount = 0
 
 	repeat
 		strCheck = string.find(check, "Player", strCheck + 1)
+
 		if (strCheck ~= nil) then
 			checkCount = checkCount + 1
 		end
@@ -138,45 +146,45 @@ checkLuaSafety = function(player, check)
 		return
 	end
 
-	--if (player:staff("script") >= 1)
-	for i = 1, #id do
-		if player.ID == id[i] then
-			if checkCount == 0 then
-				player.luaExec = 1
-			else
-				strCheck = 0
-				repeat
-					strCheck = string.find(check, "Player", strCheck + 1)
-					if (string.byte(check, strCheck + 7) == 34) then
-						strCheck = string.match(check, '("' .. player.name .. '")', strCheck + 6)
-						if (strCheck == nil) then
-							player.luaExec = 0
-						else
-							player.luaExec = 1
-						end
-					elseif (string.byte(check, strCheck + 7) == 39) then
-						strCheck = string.match(check, "('" .. player.name .. "')", strCheck + 6)
-						if (strCheck == nil) then
-							player.luaExec = 0
-						else
-							player.luaExec = 1
-						end
-					else
-						strCheck = string.match(check, "(" .. player.ID .. ")", strCheck + 6)
-						if (strCheck == nil) then
-							player.luaExec = 0
-						else
-							player.luaExec = 1
-						end
-					end
-					checkCount = checkCount - 1
-				until (checkCount == 0)
-			end
+	if (player:staff("script") >= 1) then
+		if (checkCount == 0) then
+			player.luaExec = 1
 		else
-			id[i]:msg(4, player.name .. " is try to coding from speech", id[i].ID)
+			strCheck = 0
+
+			repeat
+				strCheck = string.find(check, "Player", strCheck + 1)
+
+				if (string.byte(check, strCheck + 7) == 34) then
+					strCheck = string.match(check, '("' .. player.name .. '")', strCheck + 6)
+
+					if (strCheck == nil) then
+						player.luaExec = 0
+					else
+						player.luaExec = 1
+					end
+				elseif (string.byte(check, strCheck + 7) == 39) then
+					strCheck = string.match(check, "('" .. player.name .. "')", strCheck + 6)
+
+					if (strCheck == nil) then
+						player.luaExec = 0
+					else
+						player.luaExec = 1
+					end
+				else
+					strCheck = string.match(check, "(" .. player.ID .. ")", strCheck + 6)
+
+					if (strCheck == nil) then
+						player.luaExec = 0
+					else
+						player.luaExec = 1
+					end
+				end
+
+				checkCount = checkCount - 1
+			until (checkCount == 0)
 		end
 	end
-	return
 end
 
 Player.upgradeGear = function(player, start, multType)
