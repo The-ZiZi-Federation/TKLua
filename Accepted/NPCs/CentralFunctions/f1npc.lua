@@ -95,7 +95,7 @@ f1npc = {
 						player:menuString(
 						"Which Shaman would you like to visit?",
 						{
-						n Moo Priest, to the North side of the Wilderness",
+						    "Hyun Moo Priest, to the North side of the Wilderness",
 							"Ju Jak Priest, to the South side of the Wilderness",
 							"Baekho Priest, to the West side of the Wilderness",
 							"Chung ryong Priest, to the East side of the Wilderness"
