@@ -37,7 +37,10 @@ add_script = {
 	end,
 	click = async(
 		function(player, npc)
-			local t = {graphic = convertGraphic(npc.look, "monster"), color = npc.lookColor}
+			local t = {
+				graphic = convertGraphic(npc.look, "monster"),
+				color = npc.lookColor
+			}
 			clone.equip(player, npc)
 			player.npcGraphic = t.graphic
 			player.npcColor = t.color
@@ -143,7 +146,7 @@ add_script = {
 		local armor = player:getEquippedItem(EQ_ARMOR)
 		local helm = player:getEquippedItem(EQ_HELM)
 		local crown = player:getEquippedItem(EQ_CROWN)
-		local cape = player:getEquippedItem(EQ_MANTLE)
+		local mantle = player:getEquippedItem(EQ_MANTLE)
 		local shield = player:getEquippedItem(EQ_SHIELD)
 		local boots = player:getEquippedItem(EQ_BOOTS)
 		local facea = player:getEquippedItem(EQ_FACEACC)
@@ -174,11 +177,11 @@ add_script = {
 		else
 			npc.gfxCrown = 65535
 		end
-		if cape ~= nil then
-			npc.gfxCape = cape.look
-			npc.gfxCapeC = cape.lookC
+		if mantle ~= nil then
+			npc.gfxMantle = mantle.look
+			npc.gfxMantleC = mantle.lookC
 		else
-			npc.gfxCape = 65535
+			npc.gfxMantle = 65535
 		end
 		if shield ~= nil then
 			npc.gfxShield = shield.look

@@ -296,7 +296,7 @@ change = {
 }
 
 historyWrite = function(player, target, stats, value, type)
-	local dir, text = "../mornalua/History/status_changed.txt", ""
+	local dir, text = "../rtklua/History/status_changed.txt", ""
 	local file = io.open(dir, "a+")
 	local class = {
 		"level",
@@ -476,7 +476,7 @@ historyWrite = function(player, target, stats, value, type)
 		print([[  ========================= [Character status edit] =========================]])
 		print([[  =                                                                         =]])
 		print([[  =           Added changed status information and details to :             =]])
-		print([[  =        ('/root/Morna/mornalua/History/status_changed.txt')              =]])
+		print([[  =        ('/rtklua/History/status_changed.txt')              =]])
 		print([[  =                                                                         =]])
 		print([[  ===========================================================================]])
 

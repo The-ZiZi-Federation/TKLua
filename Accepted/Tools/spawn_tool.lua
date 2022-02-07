@@ -113,7 +113,7 @@ random_spawn_scrolls = {
 						if getObject(player.m, x, y) == 0 then
 							if #groundItem == 0 then
 								tries = 0
-								player:dropItemXY(Item("red_script").id, 1, player.m, x, y, player.ID)
+								player:dropItemXY("red_script", 1, 0, 0, player.m, x, y)
 								player.registry["red_script_num"] = player.registry["red_script_num"] - 1
 							else
 								return random_spawn_scrolls.placeRed(player, tries)
@@ -152,7 +152,7 @@ random_spawn_scrolls = {
 						if getObject(player.m, x, y) == 0 then
 							if #groundItem == 0 then
 								tries = 0
-								player:dropItemXY(Item("blue_script").id, 1, player.m, x, y, player.ID)
+								player:dropItemXY("blue_script", 1, 0, 0, player.m, x, y)
 								player.registry["blue_script_num"] = player.registry["blue_script_num"] - 1
 							else
 								return random_spawn_scrolls.placeBlue(player, tries)
@@ -191,7 +191,7 @@ random_spawn_scrolls = {
 						if getObject(player.m, x, y) == 0 then
 							if #groundItem == 0 then
 								tries = 0
-								player:dropItemXY(Item("green_script").id, 1, player.m, x, y, player.ID)
+								player:dropItemXY("green_script", 1, 0, 0, player.m, x, y)
 								player.registry["green_script_num"] = player.registry["green_script_num"] - 1
 							else
 								return random_spawn_scrolls.placeGreen(player, tries)
@@ -230,7 +230,7 @@ random_spawn_scrolls = {
 						if getObject(player.m, x, y) == 0 then
 							if #groundItem == 0 then
 								tries = 0
-								player:dropItemXY(Item("orange_script").id, 1, player.m, x, y, player.ID)
+								player:dropItemXY("orange_script", 1, 0, 0, player.m, x, y)
 								player.registry["orange_script_num"] = player.registry["orange_script_num"] - 1
 							else
 								return random_spawn_scrolls.placeOrange(player, tries)
@@ -269,7 +269,7 @@ random_spawn_scrolls = {
 						if getObject(player.m, x, y) == 0 then
 							if #groundItem == 0 then
 								tries = 0
-								player:dropItemXY(Item("yellow_script").id, 1, player.m, x, y, player.ID)
+								player:dropItemXY("yellow_script", 1, 0, 0, player.m, x, y)
 								player.registry["yellow_script_num"] = player.registry["yellow_script_num"] - 1
 							else
 								return random_spawn_scrolls.placeYellow(player, tries)
@@ -308,7 +308,7 @@ random_spawn_scrolls = {
 						if getObject(player.m, x, y) == 0 then
 							if #groundItem == 0 then
 								tries = 0
-								player:dropItemXY(Item("pink_script").id, 1, player.m, x, y, player.ID)
+								player:dropItemXY("pink_script", 1, 0, 0, player.m, x, y)
 								player.registry["pink_script_num"] = player.registry["pink_script_num"] - 1
 							else
 								return random_spawn_scrolls.placePink(player, tries)
@@ -409,6 +409,7 @@ spawn_tool = {
 					Item("pink_script").id,
 					Item("yellow_script").id
 				}
+
 				--player:talk(0,""..script[1])
 				item = player:getObjectsInMap(player.m, BL_ITEM)
 				if #item > 0 then
@@ -425,8 +426,10 @@ spawn_tool = {
 				spawn_tool.spawn(player)
 			elseif menu == "Get spell" then
 				player:addSpell("add_script")
+
 				--	player:addSpell("delete_spawn")
 				player:msg(4, "[INFO] 'Add script' spell added!", player.ID)
+
 				--	player:msg(4, "[INFO] 'Delete spawn' spell added!", player.ID)
 				spawn_tool.click(player, npc)
 			end
