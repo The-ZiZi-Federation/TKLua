@@ -4,7 +4,7 @@ illusionist = {
 			local name = "<b>[" .. npc.name .. "]\n\n"
 			local t = {graphic = convertGraphic(npc.look, "monster"), color = npc.lookColor}
 			local m = player.m
-			local map = 1038
+			local map = 4711
 			player.npcGraphic = t.graphic
 			player.npcColor = t.color
 			player.dialogType = 0
