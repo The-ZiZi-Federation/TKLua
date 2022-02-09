@@ -11,8 +11,7 @@ super_warp = {
 
         local m, x, y = player.m, player.x, player.y
         local luasql = require "luasql.mysql"
-        database_opts = require("database")
-
+        
         env = assert(luasql.mysql())
         db_connection = env:connect(DBNAME, DBUSER, DBPASS, DBHOST)
         query = "SELECT MapId, MapName FROM Test.Maps;"
