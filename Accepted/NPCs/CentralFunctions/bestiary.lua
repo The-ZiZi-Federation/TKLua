@@ -8,6 +8,7 @@ bestiary = {
 				player.npcColor = t.color
 				player.dialogType = 0
 				npc.look = monsterId
+				npc:updateState()
 				player.registry["beastiary"] = monsterId
 				player:sendMinitext("Set monster# " .. monsterId)
 				beastiary.browse_monster(player,npc)
