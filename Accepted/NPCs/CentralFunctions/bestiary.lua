@@ -14,22 +14,22 @@ bestiary = {
 			end
 		end),
     browse_monster = function(player, npc)
-		graphic = player.registry["beastiary"]
-		player:sendMinitext("Made it to browse ".. graphic)
-		local t = {graphic = convertGraphic(graphic, "monster"), color = npc.lookColor}
+		monsterId = player.registry["beastiary"]
+		player:talk(2, "Made it to browse ".. monsterId)
+		local t = {graphic = convertGraphic(monsterId, "monster")}
 		player.npcGraphic = t.graphic
 		player.npcColor = t.color
 		player.dialogType = 0
 		local stop = 0
 		local opts = {}
-		player:sendMinitext("Made it to opts")
+		player:talk(2, "Made it to opts")
 		table.insert(opts, "Next ->>")
 		table.insert(opts, "<<- Previous")
 
-		menu = player:menuSeq("\nThat was Monster #" .. graphic .. ", you like that shit?", opts)
+		menu = player:menuSeq("\nThat was Monster #" .. monsterId .. ", you like that shit?", opts)
 		if menu == "Next ->>" then
 			player.registry["beastiary"] = player.registry["beastiary"] + 1
-			return beastiary.browse_monster(player,npc)
+			return beastiary.browse_monster(player,npc, )
 		elseif menu == "<<- Previous" then
 			player.registry["beastiary"] = player.registry["beastiary"] - 1
 			return beastiary.browse_monster(player,npc)
