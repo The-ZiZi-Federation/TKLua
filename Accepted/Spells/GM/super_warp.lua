@@ -4,8 +4,10 @@ super_warp = {
         player.npcGraphic = t.graphic
         player.npcColor = t.color
         player.dialogType = 0
+        local spellName = "<b>[Super Warp!]\n\n"
         local mapList = {}
 
+        local choice = player:menuString(spellName .. "Where to Boss?", mapList)
         player:sendMinitext("Super WARP!!")
 
         -- local m, x, y = player.m, player.x, player.y
@@ -25,7 +27,6 @@ super_warp = {
         -- db_connection:close()
         -- env:close()
 
-        -- local choice = player:menuString(string, mapList, {})
         -- player:sendMinitext(choice)
     end
 }
