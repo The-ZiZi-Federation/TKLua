@@ -1,6 +1,6 @@
 super_warp = {
     cast = function(player)
-        local t = {graphic = convertGraphic(1, "monster"), color = npc.lookColor}
+        local t = {graphic = convertGraphic(1, "monster")}
         player.npcGraphic = t.graphic
         player.npcColor = t.color
         player.dialogType = 0
