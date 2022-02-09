@@ -11,18 +11,21 @@ super_warp = {
 
         local m, x, y = player.m, player.x, player.y
         local luasql = require "luasql.mysql"
-        
-        env = assert(luasql.mysql())
-        db_connection = env:connect(DBNAME, DBUSER, DBPASS, DBHOST)
-        query = "SELECT MapId, MapName FROM Test.Maps;"
 
-        cursor, errorString = db_connection:execute(query .. "")
-        row = cursor:fetch({}, "a")
-        while row do
-            table.insert(mapList, row)
-        end
-        db_connection:close()
-        env:close()
+        database_opts = require("database")
+        player:sendMinitext(database_opts)
+
+        -- env = assert(luasql.mysql())
+        -- db_connection = env:connect(DBNAME, DBUSER, DBPASS, DBHOST)
+        -- query = "SELECT MapId, MapName FROM Test.Maps;"
+
+        -- cursor, errorString = db_connection:execute(query .. "")
+        -- row = cursor:fetch({}, "a")
+        -- while row do
+        --     table.insert(mapList, row)
+        -- end
+        -- db_connection:close()
+        -- env:close()
 
         local choice = player:menuString(spellName .. "Where to Boss?", mapList)
         player:sendMinitext(choice)
