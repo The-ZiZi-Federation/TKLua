@@ -146,6 +146,7 @@ gateway = {
 		player:sendAnimation(16)
 		player:sendAction(6, 20)
 	end,
+
 	requirements = function(player)
 		local level = 5
 		local item = {"acorn", "rabbit_meat"}
