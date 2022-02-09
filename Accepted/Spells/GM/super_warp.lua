@@ -6,11 +6,12 @@ super_warp = {
         player.dialogType = 0
         local mapList = {}
 
+        player:sendMinitext("Super WARP!!")
+
         local m, x, y = player.m, player.x, player.y
         local luasql = require "luasql.mysql"
-
         database_opts = require("database")
-
+        player:sendMinitext(database_opts)
         env = assert(luasql.mysql())
         db_connection = env:connect(database_opts)
         query = "SELECT MapId, MapName FROM Test.Maps;"
