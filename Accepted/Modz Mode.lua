@@ -1,14 +1,16 @@
 modz_mode = {
 	cast = function(player)
-		disguise = player:inputNumberCheck(player:input("Pick a number?"))
+		local disguise = player:inputNumberCheck(player:input("Pick a number."))
 
 		local duration = 60000
 		local anim = 249
 		local sound = 36
 
-		if player:hasDuration("modz_mode") then
+		if player:hasDuration("modz_mode") or player.state == 4 then
 			player:setDuration("modz_mode", 0)
-			player.gfxClone = 0
+			player.disguise = 0
+			player.disguiseColor = 0
+			player.state = 0
 			player:updateState()
 			return
 		else
