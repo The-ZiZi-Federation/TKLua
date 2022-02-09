@@ -1,5 +1,10 @@
 modz_mode = {
 	cast = function(player)
+		player:freeAsync()
+		modz_mode.click(player, core)
+	end,
+	click = async(
+        function(player,npc)
 		local disguise = player:inputNumberCheck(player:input("Pick a number."))
 
 		player:talk(2, "You go into Modz Mode! " ..disguise)
@@ -25,7 +30,7 @@ modz_mode = {
 				player:setDuration("modz_mode", duration)
 			end
 		end
-	end,
+	end),
 	uncast = function(player)
 		local anim = 249
 		local sound = 36
