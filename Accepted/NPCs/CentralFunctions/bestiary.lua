@@ -8,8 +8,7 @@ bestiary = {
 				player.npcColor = t.color
 				player.dialogType = 2
 				player.registry["beastiary"] = monsterId
-				local opts = {"Next >>", "Options", "<< Previous"}
-				menu = player:menuSeq("Make your choice", opts, {})
+				beastiary.browse_monster(player,npc)
 			end
 		end),
     browse_monster = function(player, npc)
