@@ -664,3 +664,33 @@ god_tools = {
 		end
 	end
 }
+
+function Player.addGMSpells(player)
+
+	player:addSpell("alpha_sage")	--1 
+	player:addSpell("gateway2")		--2
+	player:addSpell("gm_res")		--3
+	player:addSpell("engrave_item") --4
+	player:addSpell("test_zone")	--5
+	player:addSpell("gm_dispell")	--6
+	player:addSpell("map_editor")	--7
+	player:addSpell("devils_kiss")	--8
+	player:addSpell("random_app")	--9
+	player:addSpell("gm_blink")		--0
+	player:addSpell("benign_transposition")
+	player:addSpell("spawn_tool")
+	player:addSpell("random_spawn_scrolls")
+	player:addSpell("minigame_remove_spell")
+	player:addSpell("dnd")
+	player:addSpell("gm_kick")
+	player:addSpell("super_saiyan")
+	player:addSpell("ninja_swap")
+	player:addSpell("ninja_disguise")
+	player:addSpell("room_hellfire")
+	player:addSpell("kiss_me")	
+	player:addSpell("open_tile_count")
+	player:addSpell("frog")
+	player:addSpell("follow")
+	player:addSpell("being_frank")
+	player:addSpell("wind_walk")
+end
