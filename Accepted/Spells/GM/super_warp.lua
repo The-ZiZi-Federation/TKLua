@@ -8,24 +8,24 @@ super_warp = {
 
         player:sendMinitext("Super WARP!!")
 
-        local m, x, y = player.m, player.x, player.y
-        local luasql = require "luasql.mysql"
-        database_opts = require("database")
-        player:sendMinitext(database_opts)
-        env = assert(luasql.mysql())
-        db_connection = env:connect(database_opts)
-        query = "SELECT MapId, MapName FROM Test.Maps;"
+        -- local m, x, y = player.m, player.x, player.y
+        -- local luasql = require "luasql.mysql"
+        -- database_opts = require("database")
 
-        cursor, errorString = db_connection:execute(query .. "")
-        row = cursor:fetch({}, "a")
-        while row do
-            table.insert(mapList, row)
-        end
-        db_connection:close()
-        env:close()
+        -- player:sendMinitext(database_opts)
+        -- env = assert(luasql.mysql())
+        -- db_connection = env:connect(database_opts)
+        -- query = "SELECT MapId, MapName FROM Test.Maps;"
 
-        local choice = player:menuString(string, mapList, {})
-        player:sendMinitext(choice)
+        -- cursor, errorString = db_connection:execute(query .. "")
+        -- row = cursor:fetch({}, "a")
+        -- while row do
+        --     table.insert(mapList, row)
+        -- end
+        -- db_connection:close()
+        -- env:close()
 
+        -- local choice = player:menuString(string, mapList, {})
+        -- player:sendMinitext(choice)
     end
 }
