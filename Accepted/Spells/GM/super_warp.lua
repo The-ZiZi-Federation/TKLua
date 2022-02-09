@@ -8,7 +8,6 @@ super_warp = {
         local mapList = {}
 
         player:sendMinitext("Super WARP!!")
-        database_opts = require("database")
         player:sendMinitext(database_opts)
 
         local m, x, y = player.m, player.x, player.y
