@@ -1,148 +1,140 @@
 change = {
 	status = function(player, target, npc, type)
-		if not player.ID == 2 and not player.ID == 4 and not player.ID == 7 then
-			player:popUp("You don't have a permission to change stats")
-			return false
+		local found, dialog, value, spouse, info, titlestats = 0, "", "", "", "", ""
+		local number = {
+			"level",
+			"vita",
+			"mana",
+			"might",
+			"will",
+			"grace",
+			"exp",
+			"gold",
+			"speed",
+			"gmLevel"
+		}
+		if player.gmLevel > 0 then
+			location = target.mapTitle .. "\n" .. target.m .. ", " .. target.x .. ", " .. target.y
+		end
+		if target.className == target:baseClassName(target.baseClass) then
+			subpath = "None"
 		else
-			local found, dialog, value, spouse, info, titlestats = 0, "", "", "", "", ""
-			local number = {"level", "vita", "mana", "might", "will", "grace", "exp", "gold", "speed", "gmLevel"}
-			if player.gmLevel > 0 then
-				location = target.mapTitle .. "\n" .. target.m .. ", " .. target.x .. ", " .. target.y
-			end
-			if target.className == target:baseClassName(target.baseClass) then
-				subpath = "None"
-			else
-				subpath = target.className
-			end
-			if target.spouse > 0 then
-				spouse = Player(target.spouse).name
-			else
-				spouse = "None"
-			end
-			if target.registry["show_title"] == 0 then
-				titlestats = "Hide"
-			else
-				titlestats = "Show"
-			end
-			info = "Totem   : " .. target:totemName(target.totem) .. "\n"
-			info = info .. "Partner : " .. spouse .. ""
-			local dialog =
-				"<b>[" ..
-				target.name ..
-					"'s Status]\n\nClass    : " ..
-						target:baseClassName(target.baseClass) ..
-							"\nTotem    : " .. target:totemName(target.totem) .. "\nSubpath  : " .. subpath
+			subpath = target.className
+		end
+		if target.spouse > 0 then
+			spouse = Player(target.spouse).name
+		else
+			spouse = "None"
+		end
+		if target.registry["show_title"] == 0 then
+			titlestats = "Hide"
+		else
+			titlestats = "Show"
+		end
+		info = "Totem   : " .. target:getTotemName(target.totem) .. "\n"
+		info = info .. "Partner : " .. spouse .. ""
+		local dialog = "<b>[" .. target.name .. "'s Status]\n\nClass    : " .. target:baseClassName(target.baseClass) .. "\nTotem    : " .. target:getTotemName(target.totem) .. "\nSubpath  : " .. subpath
 
-			for i = 1, #number do
-				if type == number[i] then
-					change.choice(player, target, npc, type)
+		for i = 1, #number do
+			if type == number[i] then
+				change.choice(player, target, npc, type)
+				return
+			end
+		end
+
+		if type == "title" then
+			titleC = {
+				"Title  : " .. target.title,
+				"Title Status (" .. titlestats .. ")"
+			}
+			titleM = player:menuString(
+				"<b>[" .. target.name .. "'s Title]\n\nWhat to do with target's title?",
+				titleC
+			)
+			if titleM == "Title  : " .. target.title then
+				title = player:input("<b>[" .. target.name .. "'s Title]\n\nType a new title for " .. target.name .. ":\n\n<b>Note:\nType 'empty' to clear/remove target's title")
+				if string.lower(title) == "empty" then
+					target.title = ""
+					target:sendStatus()
+					target:sendMinitext("Your title has changed!")
+					player:sendMinitext("Done!!")
+					gm_click.status(player, target, npc, dialog)
 					return
-				end
-			end
-
-			if player.ID ~= 2 and player.ID ~= 4 then
-				if target.ID == 2 or target.ID == 4 then
-					target:msg(4, "[Change Status] " .. player.name .. " is try to change your stats (" .. type .. ")!", target.ID)
-					return
-				end
-			end
-
-			if type == "title" then
-				titleC = {"Title  : " .. target.title, "Title Status (" .. titlestats .. ")"}
-				titleM = player:menuString("<b>[" .. target.name .. "'s Title]\n\nWhat to do with target's title?", titleC)
-				if titleM == "Title  : " .. target.title then
-					title =
-						player:input(
-						"<b>[" ..
-							target.name ..
-								"'s Title]\n\nType a new title for " ..
-									target.name .. ":\n\n<b>Note:\nType 'empty' to clear/remove target's title"
+				else
+					confirm = player:menuString(
+						"<b>[" .. target.name .. "'s Title]\n\nAre you sure to change " .. target.name .. "'s title to:\n'" .. title .. "' ?",
+						{"Yes", "No"}
 					)
-					if string.lower(title) == "empty" then
-						target.title = ""
+					if confirm == "Yes" then
+						target.title = title
 						target:sendStatus()
 						target:sendMinitext("Your title has changed!")
 						player:sendMinitext("Done!!")
-						click.status(player, target, npc, dialog)
-						return
-					else
-						confirm =
-							player:menuString(
-							"<b>[" ..
-								target.name .. "'s Title]\n\nAre you sure to change " .. target.name .. "'s title to:\n'" .. title .. "' ?",
-							{"Yes", "No"}
-						)
-						if confirm == "Yes" then
-							target.title = title
-							target:sendStatus()
-							target:sendMinitext("Your title has changed!")
-							player:sendMinitext("Done!!")
-							click.status(player, target, npc, dialog)
-						end
+						gm_click.status(player, target, npc, dialog)
 					end
-				elseif titleM == "Title Status (" .. titlestats .. ")" then
-					if target.registry["show_title"] == 0 then
-						target.registry["show_title"] = 1
-						target:sendMinitext("Show title : ON")
-					else
-						target.registry["show_title"] = 0
-						target:sendMinitext("Show title : OFF")
-					end
-					target:updateState()
-					player:sendMinitext("Done!!")
-					click.status(player, target, npc, dialog)
 				end
-				return
-			end
-
-			if type == "country" then
-				menu =
-					player:menuString(
-					"<b>[" ..
-						target.name ..
-							"'s Country]\n\nCountry : " ..
-								target:countryName(target.country) .. "\n\nChange " .. target.name .. "'s country to?",
-					{"Buya", "Kugnae"}
-				)
-				if menu ~= nil then
-					if menu == "Buya" then
-						target.country = 2
-					elseif menu == "Kugnae" then
-						target.country = 1
-					end
-					target:calcStat()
-					target:sendMinitext("Country changed to " .. target:countryName(target.country) .. "!")
-					player:sendMinitext("Done!!")
-					click.status(player, target, npc, dialog)
-				end
-				return
-			end
-
-			if type == "clan" then
-				local clan
-				if target.clan > 0 then
-					clan = target.clanName
+			elseif titleM == "Title Status (" .. titlestats .. ")" then
+				if target.registry["show_title"] == 0 then
+					target.registry["show_title"] = 1
+					target:sendMinitext("Show title : ON")
 				else
-					clan = "None"
+					target.registry["show_title"] = 0
+					target:sendMinitext("Show title : OFF")
 				end
-				local clanC = {}
-				if target.clan > 0 and target.clanName ~= nil then
-					table.insert(clanC, "Clan info")
+				target:updateState()
+				player:sendMinitext("Done!!")
+				gm_click.status(player, target, npc, dialog)
+			end
+			return
+		end
+
+		if type == "country" then
+			menu = player:menuString(
+				"<b>[" .. target.name .. "'s Country]\n\nCountry : " .. target:countryName(target.country) .. "\n\nChange " .. target.name .. "'s country to?",
+				{"Buya", "Kugnae"}
+			)
+			if menu ~= nil then
+				if menu == "Buya" then
+					target.country = 2
+				elseif menu == "Kugnae" then
+					target.country = 1
 				end
-				table.insert(clanC, "Move " .. target.name .. " to specified clan")
-				table.insert(clanC, "Clan title : " .. target.clanTitle)
-				menu = player:menuString("<b>[" .. target.name .. "'s Clan]\n\nClan : " .. clan .. "\n\nWhat to do?", clanC)
-				if menu ~= nil then
-					if menu == "Clan info" then
-					elseif menu == "Move " .. target.name .. " to specified clan" then
-					elseif menu == "Clan title : " .. target.clanTitle then
-					end
-					player:popUp("Not implemented yet!")
-					return
+				target:calcStat()
+				target:sendMinitext("Country changed to " .. target:countryName(target.country) .. "!")
+				player:sendMinitext("Done!!")
+				gm_click.status(player, target, npc, dialog)
+			end
+			return
+		end
+
+		if type == "clan" then
+			local clan
+			if target.clan > 0 then
+				clan = target.clanName
+			else
+				clan = "None"
+			end
+			local clanC = {}
+			if target.clan > 0 and target.clanName ~= nil then
+				table.insert(clanC, "Clan info")
+			end
+			table.insert(clanC, "Move " .. target.name .. " to specified clan")
+			table.insert(clanC, "Clan title : " .. target.clanTitle)
+			menu = player:menuString(
+				"<b>[" .. target.name .. "'s Clan]\n\nClan : " .. clan .. "\n\nWhat to do?",
+				clanC
+			)
+			if menu ~= nil then
+				if menu == "Clan info" then
+				elseif menu == "Move " .. target.name .. " to specified clan" then
+				elseif menu == "Clan title : " .. target.clanTitle then
 				end
+				player:popUp("Not implemented yet!")
+				return
 			end
 		end
 	end,
+
 	choice = function(player, target, npc, type)
 		if not player.ID == 2 and not player.ID == 4 and not player.ID == 7 then
 			player:popUp("You don't have a permission to change stats")
@@ -174,7 +166,7 @@ change = {
 			if type == "exp" then
 				value = target.exp
 			end
-			--if type == "lapis" then value = target.pp end
+
 			if type == "gold" then
 				value = target.money
 			end
@@ -184,29 +176,16 @@ change = {
 			if type == "fury" then
 				value = target.fury
 			end
-			--if type == "gmLevel" and player.ID == 2 or player.ID == 4 or player.ID == 7 then value = target.gmLevel end
 
 			local opts = {"Add/Increase", "Remove/Decrease", "Change value"}
 			local confirmC = {"Confirm", "Cancel"}
-			how =
-				player:menuSeq(
-				dialog ..
-					"" ..
-						type .. ": " .. format_number(value) .. "\n\nHow do you to want change " .. target.name .. "'s " .. type .. "?",
+			how = player:menuSeq(
+				dialog .. "" .. type .. ": " .. Tools.formatNumber(value) .. "\n\nHow do you to want change " .. target.name .. "'s " .. type .. "?",
 				opts,
 				{}
 			)
 			if how == 1 then
-				increase =
-					tonumber(
-					math.floor(
-						player:input(
-							dialog ..
-								"Current : " ..
-									format_number(value) .. "\n\nHow much of " .. type .. " should be added to " .. target.name .. "?"
-						)
-					)
-				)
+				increase = tonumber(math.floor(player:input(dialog .. "Current : " .. Tools.formatNumber(value) .. "\n\nHow much of " .. type .. " should be added to " .. target.name .. "?")))
 				if value + increase > 4294967295 then
 					anim(player)
 					player:sendMinitext("Error value!")
@@ -218,14 +197,8 @@ change = {
 					click.status(player, target, npc, dialog)
 					return
 				elseif increase > 0 then
-					confirm =
-						player:menuString(
-						dialog ..
-							"Before   : " ..
-								format_number(value) ..
-									"\nIncrease : " ..
-										format_number(increase) ..
-											"\n------------------ +\nAfter >> " .. format_number(value + increase) .. "\nConfirm your choice",
+					confirm = player:menuString(
+						dialog .. "Before   : " .. Tools.formatNumber(value) .. "\nIncrease : " .. Tools.formatNumber(increase) .. "\n------------------ +\nAfter >> " .. Tools.formatNumber(value + increase) .. "\nConfirm your choice",
 						confirmC
 					)
 					if confirm == "Confirm" then
@@ -235,16 +208,7 @@ change = {
 					end
 				end
 			elseif how == 2 then
-				decrease =
-					tonumber(
-					math.floor(
-						player:input(
-							dialog ..
-								"Current : " ..
-									format_number(value) .. "\nHow much of " .. type .. " should be decreased from " .. target.name .. "?"
-						)
-					)
-				)
+				decrease = tonumber(math.floor(player:input(dialog .. "Current : " .. Tools.formatNumber(value) .. "\nHow much of " .. type .. " should be decreased from " .. target.name .. "?")))
 				if value - decrease <= 0 then
 					if type == "vita" or type == "mana" or type == "level" then
 						anim(player)
@@ -253,14 +217,8 @@ change = {
 					end
 					return
 				else
-					confirm =
-						player:menuString(
-						dialog ..
-							"Before   : " ..
-								format_number(value) ..
-									"\nDecrease : " ..
-										format_number(decrease) ..
-											"\n------------------ -\nAfter >> " .. format_number(value - decrease) .. "\nConfirm your choice",
+					confirm = player:menuString(
+						dialog .. "Before   : " .. Tools.formatNumber(value) .. "\nDecrease : " .. Tools.formatNumber(decrease) .. "\n------------------ -\nAfter >> " .. Tools.formatNumber(value - decrease) .. "\nConfirm your choice",
 						confirmC
 					)
 					if confirm == "Confirm" then
@@ -270,19 +228,10 @@ change = {
 					end
 				end
 			elseif how == 3 then
-				input =
-					tonumber(
-					math.floor(
-						player:input(
-							dialog .. "Current : " .. format_number(value) .. "\n\nChange " .. target.name .. "'s " .. type .. " to: "
-						)
-					)
-				)
+				input = tonumber(math.floor(player:input(dialog .. "Current : " .. Tools.formatNumber(value) .. "\n\nChange " .. target.name .. "'s " .. type .. " to: ")))
 				if input >= 0 then
-					confirm =
-						player:menuString(
-						dialog ..
-							"Before : " .. format_number(value) .. "\nChange to : " .. format_number(input) .. "\n\nConfirm your choice",
+					confirm = player:menuString(
+						dialog .. "Before : " .. Tools.formatNumber(value) .. "\nChange to : " .. Tools.formatNumber(input) .. "\n\nConfirm your choice",
 						confirmC
 					)
 					if confirm == "Confirm" then
@@ -296,7 +245,7 @@ change = {
 }
 
 historyWrite = function(player, target, stats, value, type)
-	local dir, text = "../rtklua/History/status_changed.txt", ""
+	local dir, text = "../mornalua/History/status_changed.txt", ""
 	local file = io.open(dir, "a+")
 	local class = {
 		"level",
@@ -360,14 +309,10 @@ historyWrite = function(player, target, stats, value, type)
 				if change[x] + value > core.ID then
 					player:msg(
 						4,
-						"[Error] " ..
-							player.name .. " -> Target: " .. target.name .. " (Max " .. stats .. ": " .. core.ID .. ") " .. os.date(),
+						"[Error] " .. player.name .. " -> Target: " .. target.name .. " (Max " .. stats .. ": " .. core.ID .. ") " .. os.date(),
 						player.ID
 					)
-					print(
-						"[Error] " ..
-							player.name .. " -> Target: " .. target.name .. " (Max " .. stats .. ": " .. core.ID .. ") " .. os.date()
-					)
+					print("[Error] " .. player.name .. " -> Target: " .. target.name .. " (Max " .. stats .. ": " .. core.ID .. ") " .. os.date())
 					return
 				else
 					change[x] = change[x] + value
@@ -454,21 +399,15 @@ historyWrite = function(player, target, stats, value, type)
 		target:sendStatus()
 		target:updateState()
 
-		text =
-			"--- [" ..
-			string.upper(stats) .. " CHANGE] --------------------------------------------------------- >> " .. os.date() .. "\n"
+		text = "--- [" .. string.upper(stats) .. " CHANGE] --------------------------------------------------------- >> " .. os.date() .. "\n"
 		text = text .. "Target : " .. target.name .. " =======> (changed by : " .. player.name .. ")\n"
-		text =
-			text .. "" .. string.upper(stats) .. " Before  : " .. format_number(target.registry[stats .. "_before"]) .. "\n"
-		text = text .. "" .. string.upper(stats) .. " After   : " .. format_number(change[x]) .. "\n\n"
+		text = text .. "" .. string.upper(stats) .. " Before  : " .. Tools.formatNumber(target.registry[stats .. "_before"]) .. "\n"
+		text = text .. "" .. string.upper(stats) .. " After   : " .. Tools.formatNumber(change[x]) .. "\n\n"
 
-		text =
-			"==== [" ..
-			stats ..
-				" change] ================================================================[ by: " .. player.name .. " ]===\n"
+		text = "==== [" .. stats .. " change] ================================================================[ by: " .. player.name .. " ]===\n"
 		text = text .. "Target          : " .. target.name .. "\n"
-		text = text .. "" .. stats .. " before      : " .. format_number(target.registry[stats .. "_before"]) .. "\n"
-		text = text .. "" .. stats .. " after       : " .. format_number(change[x]) .. "\n"
+		text = text .. "" .. stats .. " before      : " .. Tools.formatNumber(target.registry[stats .. "_before"]) .. "\n"
+		text = text .. "" .. stats .. " after       : " .. Tools.formatNumber(change[x]) .. "\n"
 		text = text .. "Date & Time     : " .. os.date() .. "\n\n"
 
 		file:write(text .. "")
@@ -476,19 +415,20 @@ historyWrite = function(player, target, stats, value, type)
 		print([[  ========================= [Character status edit] =========================]])
 		print([[  =                                                                         =]])
 		print([[  =           Added changed status information and details to :             =]])
-		print([[  =        ('/rtklua/History/status_changed.txt')              =]])
+		print([[  =        ('/root/Morna/mornalua/History/status_changed.txt')              =]])
 		print([[  =                                                                         =]])
 		print([[  ===========================================================================]])
 
 		if Player(2) ~= nil then
 			god = Player(2)
-			god:msg(4, "[Status Edit] " .. player.name .. " just change " .. target.name .. "'s " .. stats .. "!", god.ID)
 			god:msg(
 				4,
-				target.name ..
-					"'s " ..
-						stats ..
-							" before(" .. format_number(target.registry[stats .. "_before"]) .. ") ~> (" .. format_number(change[x]) .. ")",
+				"[Status Edit] " .. player.name .. " just change " .. target.name .. "'s " .. stats .. "!",
+				god.ID
+			)
+			god:msg(
+				4,
+				target.name .. "'s " .. stats .. " before(" .. Tools.formatNumber(target.registry[stats .. "_before"]) .. ") ~> (" .. Tools.formatNumber(change[x]) .. ")",
 				god.ID
 			)
 		end

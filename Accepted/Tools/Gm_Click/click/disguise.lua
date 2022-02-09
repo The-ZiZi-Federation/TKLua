@@ -1,24 +1,24 @@
 disguisee = {
 	option = function(player, target)
-		player.npcGraphic = convertGraphic(player.registry["gfx_dis"], "monster")
+		player.npcGraphic = convertGraphic(
+			player.registry["gfx_dis"],
+			"monster"
+		)
 		player.npcColor = player.registry["gfx_disC"]
 		player.dialogType = 0
-		local dis, text, dialog =
-			"",
-			"",
-			"<b>[" ..
-				target.name ..
-					"'s Disguised]\n\nState    : " ..
-						target.state ..
-							" (" ..
-								getStateInfo(target) ..
-									")\nDisguise : " .. player.registry["gfx_dis"] .. "\nColor    : " .. player.registry["gfx_disC"] .. "\n"
+		local dis, text, dialog = "", "", "<b>[" .. target.name .. "'s Disguised]\n\nState    : " .. target.state .. " (" .. getStateInfo(target) .. ")\nDisguise : " .. player.registry[
+			"gfx_dis"
+		] .. "\nColor    : " .. player.registry["gfx_disC"] .. "\n"
 		if target.state ~= 4 then
 			dis = "OFF"
 		else
 			dis = "ON"
 		end
-		local opts = {"Browse Disguised look", "Browse Disguised Color", "Change Id and color to this look"}
+		local opts = {
+			"Browse Disguised look",
+			"Browse Disguised Color",
+			"Change Id and color to this look"
+		}
 		if target.state ~= 4 then
 			table.insert(opts, "Transform target to monster")
 		end
@@ -26,12 +26,6 @@ disguisee = {
 		option = player:menuString(dialog .. "Make your choice", opts)
 
 		if option == "Transform target to monster" then
-			if not player.ID == 2 or not player.ID == 4 or not player.ID == 7 then
-				if target.ID == 2 or target.ID == 4 or target.ID == 7 then
-					target:msg(4, "[Disguise] " .. player.name .. " is try to transfrom you to monsters!", target.ID)
-					return
-				end
-			end
 			target.state = 4
 			target:updateState()
 			target:sendMinitext("Transformed to monster!")
@@ -60,26 +54,18 @@ disguisee = {
 			click.look(player, target, NPC(66))
 		end
 	end,
+
 	browse = function(player, target)
 		local name = "<b>[" .. target.name .. "'s disguise]\n\n"
-		local dialog =
-			"<b>[" ..
-			target.name ..
-				"'s Disguised]\n\nState    : " ..
-					target.state ..
-						" (" ..
-							getStateInfo(target) ..
-								")\nDisguise : " .. player.registry["gfx_dis"] .. "\nColor    : " .. player.registry["gfx_disC"] .. "\n"
-		player.npcGraphic = convertGraphic(player.registry["gfx_dis"], "monster")
+		local dialog = "<b>[" .. target.name .. "'s Disguised]\n\nState    : " .. target.state .. " (" .. getStateInfo(target) .. ")\nDisguise : " .. player.registry[
+			"gfx_dis"
+		] .. "\nColor    : " .. player.registry["gfx_disC"] .. "\n"
+		player.npcGraphic = convertGraphic(
+			player.registry["gfx_dis"],
+			"monster"
+		)
 		player.npcColor = player.registry["gfx_disC"]
 		player.dialogType = 0
-
-		if not player.ID == 2 or not player.ID == 4 or not player.ID == 7 then
-			if target.ID == 2 or target.ID == 4 or target.ID == 7 then
-				target:msg(4, "[Disguise] " .. player.name .. " is try to change your disguised look!", target.ID)
-				return
-			end
-		end
 
 		local opts = {"Next >>", "Options", "To number", "<< Previous"}
 		menu = player:menuSeq(dialog, opts, {})
@@ -95,7 +81,9 @@ disguisee = {
 						player.registry["gfx_dis"] = player.registry["gfx_dis"] + 1
 					end
 				end
-			elseif player.registry["browse_dis"] == 0 and player.registry["browse_disC"] == 1 then
+			elseif player.registry["browse_dis"] == 0 and player.registry[
+				"browse_disC"
+			] == 1 then
 				if player.registry["gfx_disC"] > 255 then
 					player.registry["gfx_disC"] = 0
 				else
@@ -106,7 +94,10 @@ disguisee = {
 		elseif menu == 2 then
 			disguisee.option(player, target, dialog)
 		elseif menu == 3 then
-			ton = player:menuString(name .. "What do you want to change from target?", {"Disguise look", "Disguise Color"})
+			ton = player:menuString(
+				name .. "What do you want to change from target?",
+				{"Disguise look", "Disguise Color"}
+			)
 			if ton ~= nil then
 				if ton == "Disguise look" then
 					player.registry["dis_num"] = 1
@@ -117,18 +108,27 @@ disguisee = {
 				end
 				if player.registry["dis_num"] == 1 and player.registry["disC_num"] == 0 then
 					temp = " look"
-				elseif player.registry["dis_num"] == 0 and player.registry["disC_num"] == 1 then
+				elseif player.registry["dis_num"] == 0 and player.registry[
+					"disC_num"
+				] == 1 then
 					temp = " color"
 				end
 				num = math.abs(tonumber(math.ceil(player:input(name .. "Enter disguise" .. temp .. " number\nMax: " .. tempp))))
 				if num > 0 then
 					if player.registry["dis_num"] == 1 and player.registry["disC_num"] == 0 then
 						if num > 1449 then
-							player:dialogSeq({name .. "Invalid disguise look number!\n(Max: 1449)"}, 1)
+							player:dialogSeq(
+								{
+									name .. "Invalid disguise look number!\n(Max: 1449)"
+								},
+								1
+							)
 							disguisee.browse(player, target)
 						elseif num == 1341 or num == 1393 then
 							player:dialogSeq(
-								{name .. "Invalid disguise number!\nNote:\n1341 and 1393 disguise number cause crash on server!"},
+								{
+									name .. "Invalid disguise number!\nNote:\n1341 and 1393 disguise number cause crash on server!"
+								},
 								1
 							)
 							disguisee.browse(player, target)
@@ -137,9 +137,16 @@ disguisee = {
 							player:sendMinitext("Changed look!")
 							disguisee.option(player, target)
 						end
-					elseif player.registry["dis_num"] == 0 and player.registry["disC_num"] == 1 then
+					elseif player.registry["dis_num"] == 0 and player.registry[
+						"disC_num"
+					] == 1 then
 						if num > 255 then
-							player:dialogSeq({name .. "Invalid disguise" .. temp .. " number!\n(Max: " .. tempp .. ")"}, 1)
+							player:dialogSeq(
+								{
+									name .. "Invalid disguise" .. temp .. " number!\n(Max: " .. tempp .. ")"
+								},
+								1
+							)
 							disguisee.browse(player, target)
 						end
 					end
@@ -157,7 +164,9 @@ disguisee = {
 						player.registry["gfx_dis"] = player.registry["gfx_dis"] - 1
 					end
 				end
-			elseif player.registry["browse_dis"] == 0 and player.registry["browse_disC"] == 1 then
+			elseif player.registry["browse_dis"] == 0 and player.registry[
+				"browse_disC"
+			] == 1 then
 				if player.registry["gfx_disC"] < 0 then
 					player.registry["gfx_disC"] = 255
 				else

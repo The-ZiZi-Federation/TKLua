@@ -1,14 +1,22 @@
 face = {
 	option = function(player, target, npc)
 		player.dialogType = 2
-		local opts = {"Browse face look", "Browse eye color", "Change face and color to this look", "<< Back"}
-		local dialog =
-			"<b>[" .. target.name .. "'s face]\n\nFace  : " .. npc.gfxFace .. "\nColor : " .. npc.gfxFaceC .. "\n\n"
+		local opts = {
+			"Browse face look",
+			"Browse eye color",
+			"Change face and color to this look",
+			"<< Back"
+		}
+		local dialog = "<b>[" .. target.name .. "'s face]\n\nFace  : " .. npc.gfxFace .. "\nColor : " .. npc.gfxFaceC .. "\n\n"
 		option = player:menuSeq(dialog .. "Make your choice", opts, {})
 
 		if not player.ID == 2 or not player.ID == 4 then
 			if target.ID == 2 or target.ID == 4 then
-				target:msg(4, "[Face Look] " .. player.name .. " is try to change your Face Look!", target.ID)
+				target:msg(
+					4,
+					"[Face Look] " .. player.name .. " is try to change your Face Look!",
+					target.ID
+				)
 				return
 			end
 		end
@@ -27,9 +35,9 @@ face = {
 			click.look(player, target, npc)
 		end
 	end,
+
 	browse = function(player, target, npc)
-		local dialog =
-			"<b>[" .. target.name .. "'s face]\n\nFace  : " .. npc.gfxFace .. "\nColor : " .. npc.gfxFaceC .. "\n\n"
+		local dialog = "<b>[" .. target.name .. "'s face]\n\nFace  : " .. npc.gfxFace .. "\nColor : " .. npc.gfxFaceC .. "\n\n"
 		player.dialogType = 2
 		local opts = {"Next >>", "Option", "<< Previous"}
 		menu = player:menuSeq(dialog .. "Make your choice", opts, {})
@@ -41,7 +49,9 @@ face = {
 				else
 					npc.gfxFace = npc.gfxFace + 1
 				end
-			elseif player.registry["face_style"] == 0 and player.registry["face_color"] == 1 then
+			elseif player.registry["face_style"] == 0 and player.registry[
+				"face_color"
+			] == 1 then
 				if npc.gfxFaceC > 255 then
 					npc.gfxFaceC = 0
 				else
@@ -58,7 +68,9 @@ face = {
 				else
 					npc.gfxFace = npc.gfxFace - 1
 				end
-			elseif player.registry["face_style"] == 0 and player.registry["face_color"] == 1 then
+			elseif player.registry["face_style"] == 0 and player.registry[
+				"face_color"
+			] == 1 then
 				if npc.gfxFaceC < 0 then
 					npc.gfxFaceC = 255
 				else
@@ -68,15 +80,27 @@ face = {
 			face.browse(player, target, npc, dialog)
 		end
 	end,
+
 	confirmation = function(player, target, npc, dialog)
 		player.dialogType = 2
-		local opts = {"Yes, Change to this look", "Browse another look", "<< Back"}
-		menu =
-			player:menuSeq(dialog .. "Are you sure to change " .. target.name .. "'s face look and eye color to this?", opts, {})
+		local opts = {
+			"Yes, Change to this look",
+			"Browse another look",
+			"<< Back"
+		}
+		menu = player:menuSeq(
+			dialog .. "Are you sure to change " .. target.name .. "'s face look and eye color to this?",
+			opts,
+			{}
+		)
 
 		if menu == 1 then
 			if player.ID ~= 2 and target.ID == 2 then
-				target:msg(4, "[INFO] " .. player.name .. " is trying to change your face look", target.ID)
+				target:msg(
+					4,
+					"[INFO] " .. player.name .. " is trying to change your face look",
+					target.ID
+				)
 				return
 			end
 			target.face = npc.gfxFace

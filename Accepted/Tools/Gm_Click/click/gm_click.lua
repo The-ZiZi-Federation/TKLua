@@ -1,119 +1,217 @@
-click = {
-	menu = async(
-		function(player, target, npc)
-			local gm = ""
-			if target.gmLevel > 0 then
-				gm = "GM - "
+gm_click = {
+	menu = async(function(player, target, npc)
+		local gm = ""
+		if target.gmLevel > 0 then
+			gm = "GM - "
+		end
+
+		--player.dialogType = 0
+
+		local t = {graphic = convertGraphic(0, "monster"), color = 0}
+		player.npcGraphic = 0
+		player.npcColor = 0
+		player.dialogType = 0
+		player.lastClick = 0
+
+		if target.PK == 1 then
+			PK = "ON"
+		else
+			PK = "OFF"
+		end
+		local name = "<b>[" .. gm .. "" .. target.name .. "] (Id: " .. target.ID .. ")\n" .. target.classNameMark .. " (" .. target.className .. " mark: " .. target.mark .. ")\n(Lvl: " .. target.level .. ") | IP Address: " .. target.ipaddress .. "\n<b>------------------------"
+		local location = "Location: " .. target.mapTitle .. "\n(ID: " .. target.m .. ", X:" .. target.x .. ", Y:" .. target.y .. ")"
+		local info = "State : " .. target.state .. "   |   PK : " .. PK
+		local dialog = name .. "\n" .. location .. "\n" .. info
+
+		local opts = {}
+		table.insert(opts, "Character's Status")
+
+		-- 1
+		table.insert(opts, "Path and Specialization")
+
+		-- 2
+		table.insert(opts, "Character's Look")
+
+		-- 3
+		table.insert(opts, "Equipments")
+
+		-- 4
+		table.insert(opts, "Inventory")
+
+		-- 5
+		table.insert(opts, "Bank")
+
+		-- 6
+		table.insert(opts, "Spell Book")
+
+		-- 7
+		table.insert(opts, "Send a message")
+
+		-- 8
+		table.insert(opts, "Recognition / Rewards")
+
+		-- 9
+		table.insert(opts, "Justice")
+
+		-- 10
+
+		menu = player:menuString(dialog, opts)
+
+		if menu ~= nil then
+			if menu == "Character's Status" then
+				gm_click.status(player, target, npc, dialog)
+				return
 			end
-			player.dialogType = 0
-			if target.PK == 1 then
-				stats = "ON"
-			else
-				stats = "OFF"
+			if menu == "Path and Specialization" then
+				gm_click.totem_subpath_grade(player, target, npc)
+				return
 			end
-			local name =
-				"<b>[" ..
-				gm ..
-					"" ..
-						target.name ..
-							"] (Id: " ..
-								target.ID .. ")\n<b>" .. target.className .. " (Lv: " .. target.level .. ")\n<b>------------------------"
-			local location =
-				"Location: " .. target.mapTitle .. "\n(ID: " .. target.m .. ", X:" .. target.x .. ", Y:" .. target.y .. ")"
-			local info = "State : " .. target.state .. "   |   PK : " .. stats
-			local dialog = name .. "\n" .. location .. "\n" .. info
-
-			local opts = {}
-			table.insert(opts, "Character's Status") -- 1
-			table.insert(opts, "Path and Specialization") -- 2
-			table.insert(opts, "Character's Look") -- 3
-			table.insert(opts, "Equipments") -- 4
-			table.insert(opts, "Inventory") -- 5
-			table.insert(opts, "Spell Book") -- 6
-			--	table.insert(opts, "Bank & Wardrobe")       	-- 7
-			table.insert(opts, "Send a message") -- 8
-			table.insert(opts, "Recognition / Rewards") -- 9
-			table.insert(opts, "Justice") -- 10
-
-			menu = player:menuString(dialog, opts)
-
-			if menu ~= nil then
-				if menu == "Character's Status" then
-					click.status(player, target, npc, dialog)
-					return
-				end
-				if menu == "Path and Specialization" then
-					click.totem_subpath_grade(player, target, npc)
-					return
-				end
-				if menu == "Character's Look" then
-					click.look(player, target, npc)
-					return
-				end
-				if menu == "Equipments" then
-					equipment.items(player, target, npc)
-					return
-				end
-				if menu == "Inventory" then
-					click.inventory(player, target, npc)
-					return
-				end
-				if menu == "Spell Book" then
-					spell_book.menu(player, target, npc)
-					return
-				end
-				if menu == "Bank & Wardrobe" then
-					bank.click(player, target, npc)
-					return
-				end
-				if menu == "Send a message" then
-					click.message(player, target)
-					return
-				end
-				if menu == "Justice" then
-					click.justice(player, target, npc)
-					return
-				end
-				if menu == "Recognition / Rewards" then
-					click.rewards(player, target, npc)
-					return
-				end
+			if menu == "Character's Look" then
+				gm_click.look(player, target, npc)
+				return
+			end
+			if menu == "Equipments" then
+				equipment.items(player, target, npc)
+				return
+			end
+			if menu == "Inventory" then
+				gm_click.inventory(player, target, npc)
+				return
+			end
+			if menu == "Spell Book" then
+				spell_book.menu(player, target, npc)
+				return
+			end
+			if menu == "Bank" then
+				bank.gm_click(player, target, npc)
+				return
+			end
+			if menu == "Send a message" then
+				gm_click.message(player, target)
+				return
+			end
+			if menu == "Justice" then
+				gm_click.justice(player, target, npc)
+				return
+			end
+			if menu == "Recognition / Rewards" then
+				gm_click.rewards(player, target, npc)
+				return
 			end
 		end
-	),
+	end),
+
 	totem_subpath_grade = function(player, target, npc)
 		local change, choice = 0, 0
 		local opts = {}
-		local name, text = "<b>[" .. target.name .. "'s Path & Specialization]\n\n", ""
+		local name, text = "<b>[" .. target.name .. "'s Path/Subpath]\n", ""
 		player.dialogType = 0
 
-		text = text .. "Path   : " .. target.classNameMark .. " (Id: " .. target.class .. ")\n"
-		text = text .. "Totem   : " .. target:totemName(player.totem) .. " (Id: " .. target.totem .. ")\n"
-		text = text .. "Specialization : " .. target.classNameMark .. " (Id: " .. target.class .. ")\n"
+		text = text .. "Base path : " .. target.baseClassName .. " (Id: " .. target.baseClass .. ")\n"
+		text = text .. "Sub path  : " .. target.classNameMark .. " (Id: " .. target.class .. ")\n"
+		text = text .. "Mark:     : " .. target.mark .. "\n"
+		text = text .. "Totem     : " .. target:getTotemName(player.totem) .. " (Id: " .. target.totem .. ")\n"
 
-		table.insert(opts, "Path   : " .. target.classNameMark .. " (Id: " .. target.class .. ")")
-		table.insert(opts, "Totem   : " .. target:totemName(target.totem) .. " (Id: " .. target.totem .. ")")
-		table.insert(opts, "Specialization : " .. target.classNameMark .. " (Id: " .. target.class .. ")")
+		table.insert(
+			opts,
+			"Base path   : " .. target.baseClassName .. " (Id: " .. target.baseClass .. ")"
+		)
+		table.insert(
+			opts,
+			"Sub path : " .. target.className .. " (Id: " .. target.class .. ")"
+		)
+		table.insert(opts, "Mark : " .. target.mark)
+		table.insert(
+			opts,
+			"Totem   : " .. target:getTotemName(target.totem) .. " (Id: " .. target.totem .. ")"
+		)
 
-		menu = player:menuSeq(name .. "" .. text .. "\nWhat do you wish to change?", opts, {})
+		menu = player:menuSeq(
+			name .. "" .. text .. "\nWhat do you wish to change?",
+			opts,
+			{}
+		)
 
 		if menu == 1 then
-			path = {"Peasant", "Fighter", "Scoundrel", "Wizard", "Priest"}
-			pathchoice = player:menuSeq("<b>[" .. target.name .. "'s Path]\n\nChange Path to what?", path, {})
-			if pathchoice == 1 then
-				target.class = 0
+			path = {"Peasant", "Warrior", "Rogue", "Mage", "Poet"}
+			pathchoice = player:menuSeq(
+				"<b>[" .. target.name .. "'s Path]\n\nChange Path to what?",
+				path,
+				{}
+			)
+
+			target:updatePath(pathchoice - 1)
+			target:status()
+			target:sendMinitext("Path changed to " .. target.classNameMark .. "")
+			player:sendMinitext("Done!!")
+		elseif menu == 2 then
+			-- Specialization
+			if target.baseClass == 1 then
+				spec = {"None", "Chung ryong", "Barbarian", "Chongun", "Do"}
+			end
+			if target.baseClass == 2 then
+				spec = {"None", "Baekho", "Merchant", "Ranger", "Spy"}
+			end
+			if target.baseClass == 3 then
+				spec = {"None", "Ju jak", "Diviner", "Geomancer", "Shaman"}
+			end
+			if target.baseClass == 4 then
+				spec = {"None", "Hyun moo", "Druid", "Monk", "Muse"}
+			end
+			specchoice = player:menuSeq(
+				"<b>[" .. target.name .. "'s Specialization]\nChange Sub path to what?",
+				spec,
+				{}
+			)
+			if specchoice == 1 then
+				--target.class = target.baseClass
+				target:updatePath(target.baseClass, target.mark)
 				target:status()
 				target:sendMinitext("Path changed to " .. target.classNameMark .. "")
 				player:sendMinitext("Done!!")
-			elseif pathchoice >= 2 then
-				target.class = pathchoice + 29
+			elseif specchoice == 2 then
+				target:updatePath(target.baseClass + 5, target.mark)
+				target:status()
+				target:sendMinitext("Path changed to " .. target.classNameMark .. "")
+				player:sendMinitext("Done!!")
+			elseif specchoice == 3 then
+				target:updatePath(target.baseClass + 9, target.mark)
+				target:status()
+				target:sendMinitext("Path changed to " .. target.classNameMark .. "")
+				player:sendMinitext("Done!!")
+			elseif specchoice == 4 then
+				target:updatePath(target.baseClass + 13, target.mark)
+				target:status()
+				target:sendMinitext("Path changed to " .. target.classNameMark .. "")
+				player:sendMinitext("Done!!")
+			elseif specchoice == 5 then
+				target:updatePath(target.baseClass + 17, target.mark)
 				target:status()
 				target:sendMinitext("Path changed to " .. target.classNameMark .. "")
 				player:sendMinitext("Done!!")
 			end
-		elseif menu == 2 then -- Totem
+		elseif menu == 3 then
+			-- Mark
+			markChoice = {"base", "Il san", "Ee san", "Sam san", "Sa san"}
+			markMenu = player:menuSeq(
+				"<b>[" .. target.name .. "'s Mark]\n\nChange mark to?",
+				markChoice,
+				{}
+			)
+			if markMenu > 0 then
+				target:updatePath(target.class, markMenu - 1)
+				target:sendStatus()
+				target:sendMinitext("Mark changed to " .. markChoice[markMenu] .. "!")
+				player:sendMinitext("Done!!")
+			end
+		elseif menu == 4 then
+			-- Totem
 			totemChoice = {"Jujak", "Baekho", "Hyunmoo", "Chungryong"}
-			totemMenu = player:menuSeq("<b>[" .. target.name .. "'s Totem]\n\nChange totem to?", totemChoice, {})
+			totemMenu = player:menuSeq(
+				"<b>[" .. target.name .. "'s Totem]\n\nChange totem to?",
+				totemChoice,
+				{}
+			)
 			if totemMenu > 0 then
 				target.totem = totemMenu - 1
 				target:sendStatus()
@@ -121,51 +219,27 @@ click = {
 				player:sendMinitext("Done!!")
 				click.totem_subpath_grade(player, target, npc)
 			end
-		elseif menu == 3 then -- Specialization
-			if target.baseClass == 1 then
-				spec = {"None", "Paladin", "Samurai", "Dark Knight"}
-			end
-			if target.baseClass == 2 then
-				spec = {"None", "Swashbuckler", "Mercenary", "Assassin"}
-			end
-			if target.baseClass == 3 then
-				spec = {"None", "Sorcerer", "Elementalist", "Necromancer"}
-			end
-			if target.baseClass == 4 then
-				spec = {"None", "Crusader", "Cleric", "Fallen"}
-			end
-			specchoice =
-				player:menuSeq("<b>[" .. target.name .. "'s Specialization]\n\nChange Specialization to what?", spec, {})
-			if specchoice == 1 then
-				target.class = (target.baseClass + 30)
-				target:status()
-				target:sendMinitext("Path changed to " .. target.classNameMark .. "")
-				player:sendMinitext("Done!!")
-			elseif specchoice == 2 then
-				target.class = (target.baseClass + 35)
-				target:status()
-				target:sendMinitext("Path changed to " .. target.classNameMark .. "")
-				player:sendMinitext("Done!!")
-			elseif specchoice == 3 then
-				target.class = (target.baseClass + 40)
-				target:status()
-				target:sendMinitext("Path changed to " .. target.classNameMark .. "")
-				player:sendMinitext("Done!!")
-			elseif specchoice == 4 then
-				target.class = (target.baseClass + 45)
-				target:status()
-				target:sendMinitext("Path changed to " .. target.classNameMark .. "")
-				player:sendMinitext("Done!!")
-			end
 		end
 	end,
+
 	message = function(player, target)
 		local types = ""
 		local name = "<b>[Send Message]\n\n"
 		player.dialogType = 0
 
-		local opts = {"Minitext", "PopUp", "Blue (Whisper)", "Yellow (System)", "Orange (Advice)", "Grey (Sage)"}
-		menu = player:menuSeq(name .. "What type of message would you send to target?", opts, {})
+		local opts = {
+			"Minitext",
+			"PopUp",
+			"Blue (Whisper)",
+			"Yellow (System)",
+			"Orange (Advice)",
+			"Grey (Sage)"
+		}
+		menu = player:menuSeq(
+			name .. "What type of message would you send to target?",
+			opts,
+			{}
+		)
 		player.registry["message_type"] = menu
 		if player.registry["message_type"] == 1 then
 			types = "Minitext"
@@ -203,6 +277,7 @@ click = {
 		player:sendMinitext("Done!!")
 		click.message(player, target)
 	end,
+
 	-- JUSTICE ------------------------------------------------------------------------------------------------------------------------------
 
 	justice = function(player, target, npc)
@@ -224,81 +299,100 @@ click = {
 			table.insert(opts, "Lock")
 		end
 		table.insert(opts, "Ban")
+		table.insert(opts, "Minigame Ban")
 
-		menu = player:menuString(name .. "What punishment would you give to target?", opts)
+		menu = player:menuString(
+			name .. "What punishment would you give to target?",
+			opts
+		)
 
 		if menu ~= nil then
-			if target.ID == player.ID then
-				return
-			else
-				if player.gmLevel > 0 and target.gmLevel > 0 then
-					target:msg(4, "[Judgements] " .. player.name .. " is trying to punish you via 'GM Click'!", target.ID)
-					player:dialogSeq({name .. "Invalid target!"})
-					return
-				else --
-					--[[
-				if target.ID == 2 or target.ID == 4 then return else
-					if player.ID ~= 2 or player.ID ~= 4 then
-						target:msg(4, "[Judgements] "..player.name.." is trying to punish you via 'GM Click'!", target.ID)
-					end
-				return end
-				]] if
-						menu == "Bot Check"
-					 then
-						bot.check(target)
-					elseif menu == "Silence" and target.mute == false then
-						target.mute = true
-						target:sendMinitext("You has been silenced!")
-						broadcast(-1, "[Judgements] " .. target.name .. " has been silenced!")
-						player:sendMinitext("Done!!")
-					elseif menu == "Unmute/unsilence" and target.mute == true then
-						target.mute = false
-						player:sendMinitext("Done!!")
-					elseif menu == "Jail" then
-						target:warp(666, math.random(9, 10), math.random(6, 7))
-						broadcast(-1, "*** " .. target.name .. " has been jailed! ***")
-						player:sendMinitext("Done!!")
-					elseif menu == "Kick/disconnect" then
-						player:speak("/kill " .. target.name, 0)
+			if menu == "Bot Check" then
+				botcheck.init(target)
+			elseif menu == "Silence" and target.mute == false then
+				target.mute = true
+				target:sendMinitext("You has been silenced!")
+				broadcast(
+					-1,
+					"[Judgements] " .. target.name .. " has been silenced!"
+				)
+				player:sendMinitext("Done!!")
+			elseif menu == "Unmute/unsilence" and target.mute == true then
+				target.mute = false
+				player:sendMinitext("Done!!")
+			elseif menu == "Jail" then
+				local cell = math.random(1, 4)
 
-						player:popUp("" .. target.name .. " has been disconnected.")
-					elseif menu == "Unlock" then
-						target.registry["lock"] = 0
-						target:unlock()
-						target:msg(4, "[Judgements] Character unlocked!!", target.ID)
-						player:sendMinitext("Done!!")
-					elseif menu == "Lock" then
-						if target.ID == 2 or target.ID == 4 then
-							target:msg(4, "[Judgements] " .. player.name .. " is trying to lock your character via GM click!", target.ID)
-							return
-						else
-							target.registry["lock"] = 1
-							target:lock()
-							for i = 1, 3 do
-								target:msg(4, "[Judgements] Your character has locked by GM - " .. player.name .. "!!", target.ID)
-							end
-							player:sendMinitext("Done!!")
-						end
-					elseif menu == "Ban" then
-						--player:popUp("...")
-						confirm =
-							player:menuString(
-							"Are you sure you want to permanently ban " .. target.name .. "?",
-							{"Yes! Ban the bum!", "No, they deserve another chance"}
-						)
-						if confirm == "Yes! Ban the bum!" then
-							if target.ID >= 250 then
-								player:speak("/ban " .. target.name, 0)
-								player:popUp("You have banned " .. target.name .. " from the game.")
-							else
-								player:popUp("You can't ban a GM with this tool. Talk it out or try another method.")
-							end
-						end
-					end
+				if cell == 1 then
+					target:warp(666, math.random(1, 5), math.random(3, 5))
+				elseif cell == 2 then
+					target:warp(666, math.random(1, 5), math.random(10, 13))
+				elseif cell == 3 then
+					target:warp(666, math.random(11, 15), math.random(4, 6))
+				elseif cell == 4 then
+					target:warp(666, math.random(11, 15), math.random(10, 12))
+				end
+
+				gmbroadcast(
+					-1,
+					"*** " .. target.name .. " has been jailed! ***"
+				)
+				player:sendMinitext("Done!!")
+			elseif menu == "Kick/disconnect" then
+				player:speak("/kill " .. target.name, 0)
+				player:popUp("" .. target.name .. " has been disconnected.")
+			elseif menu == "Unlock" then
+				target.registry["lock"] = 0
+				target:unlock()
+				target:msg(4, "[Judgements] Character unlocked!!", target.ID)
+				player:sendMinitext("Done!!")
+			elseif menu == "Lock" then
+				target.registry["lock"] = 1
+				target:lock()
+				target:msg(
+					4,
+					"[Judgements] Your character has locked by GM - " .. player.name .. "!!",
+					target.ID
+				)
+				player:sendMinitext("Done!!")
+			elseif menu == "Ban" then
+				local confirm = player:menuString(
+					"Which type of ban?",
+					{"Char ban", "Account ban"}
+				)
+
+				if confirm == "Char ban" then
+					player:speak("/ban " .. target.name, 0)
+					player:popUp("You have banned " .. target.name .. " from the game.")
+				elseif confirm == "Account ban" then
+					target:setAccountBan(1)
+
+					-- disconnects character along with all account chars (if applicable). sets to banned all chars
+					player:popUp("You have banned " .. target.name .. " and their account from the game.")
+				end
+			elseif menu == "Minigame Ban" then
+				local confirm = player:menuString(
+					"How long for the minigame ban?",
+					{"1 week", "2 weeks"},
+					{}
+				)
+				if confirm == 1 then
+					-- 1 week
+					target.registry["minigameBan"] = os.time() + 604800
+					target:popUp("You have been banned from minigames for 1 week.")
+				elseif confirm == 2 then
+					-- 2 weeks
+					target.registry["minigameBan"] = os.time() + 1209600
+					target:popUp("You have been banned from minigames for 2 weeks.")
+				end
+
+				if confirm ~= 0 then
+					player:sendMinitext("Done!!")
 				end
 			end
 		end
 	end,
+
 	--REWARDS------------------------------------------------------------------------------------------------------------------
 
 	rewards = function(player, target, npc)
@@ -310,15 +404,19 @@ click = {
 		table.insert(opts, "Bug Finder Legend")
 		table.insert(opts, "GM Assist Legend")
 
-		menu = player:menuString(name .. "What reward would you give to target?", opts)
+		menu = player:menuString(
+			name .. "What reward would you give to target?",
+			opts
+		)
 
 		if menu == "Bug Finder Legend" then
-			click.bug_legend(target)
+			gm_click.bug_legend(target, player)
 		elseif menu == "GM Assist Legend" then
-			click.gmassist_legend(target)
+			gm_click.gmassist_legend(target, player)
 		end
 	end,
-	bug_legend = function(player)
+
+	bug_legend = function(player, gm)
 		local reg = player.registry["bugs_found"]
 
 		finishedQuest(player)
@@ -329,17 +427,29 @@ click = {
 		if reg > 0 then
 			player.registry["bugs_found"] = player.registry["bugs_found"] + 1
 			player:addLegend(
-				"Has found " .. player.registry["bugs_found"] .. " bugs in the world of Morna",
+				"Recognized for finding " .. player.registry["bugs_found"] .. " bugs in TK",
 				"bugfinder",
 				213,
 				244
 			)
 		else
 			player.registry["bugs_found"] = 1
-			player:addLegend("Has found 1 bug in the world of Morna", "bugfinder", 213, 244)
+			player:addLegend(
+				"Recognized for finding 1 bug in TK",
+				"bugfinder",
+				213,
+				244
+			)
 		end
+
+		player:msg(
+			0,
+			"<GM> " .. gm.name .. " has rewarded you with a bugfinder legend mark!",
+			player.ID
+		)
 	end,
-	gmassist_legend = function(player)
+
+	gmassist_legend = function(player, gm)
 		local reg = player.registry["gm_assist"]
 
 		finishedQuest(player)
@@ -349,12 +459,29 @@ click = {
 
 		if reg > 0 then
 			player.registry["gm_assist"] = player.registry["gm_assist"] + 1
-			player:addLegend("Assisted the Morna GMs " .. player.registry["gm_assist"] .. " times", "gmassist", 145, 226)
+			player:addLegend(
+				"Assisted the TK GMs " .. player.registry["gm_assist"] .. " times",
+				"gmassist",
+				145,
+				226
+			)
 		else
 			player.registry["gm_assist"] = 1
-			player:addLegend("Assisted the Morna GMs 1 time", "gmassist", 145, 226)
+			player:addLegend(
+				"Assisted the TK GMs 1 time",
+				"gmassist",
+				145,
+				226
+			)
 		end
+
+		player:msg(
+			0,
+			"<GM> " .. gm.name .. " has rewarded you with a GM assist legend mark!",
+			player.ID
+		)
 	end,
+
 	--------------------------------------------------------------------------------------------------------------------------------
 
 	inventory = function(player, target, npc)
@@ -364,15 +491,10 @@ click = {
 		player.npcColor = t.color
 		player.dialogType = 0
 
-		local items, amount, itemName = {}, {}, {}
+		local items, amount, itemName, itemEngrave, itemDura, itemOwner, itemTime = {}, {}, {}, {}, {}, {}, {}
 		local id, info, found
 
-		info =
-			"   Gold  : " ..
-			format_number(target.money) ..
-				"\n   Bank  : " ..
-					format_number(target.bankMoney) ..
-						"\n\n<b>-> Total : " .. format_number(target.money + target.bankMoney) .. " coins\n"
+		info = "   Gold  : " .. Tools.formatNumber(target.money) .. "\n   Bank  : " .. Tools.formatNumber(target.bankMoney) .. "\n\n<b>-> Total : " .. Tools.formatNumber(target.money + target.bankMoney) .. " coins\n"
 
 		for i = 0, target.maxInv do
 			id = target:getInventoryItem(i)
@@ -380,104 +502,118 @@ click = {
 				table.insert(items, id.id)
 				table.insert(amount, id.amount)
 				table.insert(itemName, id.name)
+				table.insert(itemEngrave, id.realName)
+				table.insert(itemDura, id.dura)
+				table.insert(itemOwner, id.owner)
+				table.insert(itemTime, id.time)
 			end
 		end
 
 		if #items == 0 then
-			player:dialogSeq({name .. "Target's inventory is currently empty!"}, 1)
+			player:dialogSeq(
+				{name .. "Target's inventory is currently empty!"},
+				1
+			)
 			player:freeAsync()
-			click.menu(player, target, npc)
+			gm_click.menu(player, target, npc)
 			return
 		else
-			menu = player:buy(name .. "" .. info, items, amount, itemName, {}, {}, {})
+			menu = player:buy(
+				name .. "" .. info,
+				items,
+				amount,
+				itemName,
+				{},
+				{},
+				{},
+				{}
+			)
 			if menu ~= nil then
 				for i = 1, #items do
-					if items[i] == menu then
+					if itemName[i] == menu then
 						found = i
 						break
 					end
 				end
-				local icon = {graphic = Item(items[found]).icon, color = Item(items[found]).iconC}
+
+				local icon = {
+					graphic = Item(items[found]).icon,
+					color = Item(items[found]).iconC
+				}
 				player.npcGraphic = icon.graphic
 				player.npcColor = icon.color
 				player.dialogType = 0
 
 				info = "Item name: " .. Item(items[found]).name .. "\n"
 				info = info .. "Amount   : " .. amount[found] .. "\n"
-				info = "Type     : " .. Item(items[found]).type .. "(" .. getItemType(items[found]) .. ")\n"
+
+				--info =       "Type     : "..Item(items[found]).type.."("..getItemType(items[found])..")\n"
 
 				test = {"Take item", "Delete item", "<< Back"}
 				choice = player:menuSeq(name .. "" .. info, test, {})
 
 				if choice == 1 then
-					if target.ID == 2 or target.ID == 18 then
-						if player.ID ~= target.ID then
-							target:msg(
-								4,
-								"[GM Click] " .. player.name .. " is try to take your item (" .. Item(items[found]).name .. ")",
-								target.ID
-							)
-							return
-						end
-					else
-						if target:hasItem(items[found], amount[found]) then
-							if amount[found] > 1 then
-								num =
-									math.abs(
-									tonumber(
-										math.floor(player:input(name .. "How many " .. Item(items[found]).name .. " (" .. amount[found] .. ")?"))
-									)
-								)
-								if num > 0 then
-									if num >= amount[found] then
-										num = amount[found]
-									end
-									if target:hasItem(items[found], num) == true then
-										target:removeItem(items[found], num)
-										player:addItem(items[found], num)
-									else
-										player:dialogSeq({icon, name .. "Item has been removed from target!"}, 1)
-										click.inventory(player, target, npc)
-									end
+					if target:hasItem(items[found], amount[found]) then
+						if amount[found] > 1 then
+							num = math.abs(tonumber(math.floor(player:input(name .. "How many " .. Item(items[found]).name .. " (" .. amount[found] .. ")?"))))
+							if num > 0 then
+								if num >= amount[found] then
+									num = amount[found]
 								end
-							else
-								target:removeItem(items[found], amount[found])
-								player:addItem(items[found], amount[found])
+								if target:hasItem(items[found], num) == true then
+									target:removeItem(items[found], num)
+									player:addItem(items[found], num)
+								else
+									player:dialogSeq(
+										{
+											icon,
+											name .. "Item has been removed from target!"
+										},
+										1
+									)
+									click.inventory(player, target, npc)
+								end
 							end
-							player:sendMinitext("Done!!")
-							click.inventory(player, target, npc)
 						else
-							player:dialogSeq({icon, name .. "Item has been removed from target!"}, 1)
-							click.inventory(player, target, npc)
+							target:removeItem(items[found], amount[found])
+							player:addItem(
+								items[found],
+								amount[found],
+								itemDura[found],
+								itemOwner[found],
+								itemTime[found],
+								itemEngrave[found]
+							)
 						end
+						player:sendMinitext("Done!!")
+						gm_click.inventory(player, target, npc)
+					else
+						player:dialogSeq(
+							{icon, name .. "Item has been removed from target!"},
+							1
+						)
+						gm_click.inventory(player, target, npc)
 					end
 				elseif choice == 2 then
-					if target.ID == 2 or target.ID == 18 then
-						if player.ID ~= target.ID then
-							target:msg(
-								4,
-								"[GM Click] " .. player.name .. " is try to delete your item (" .. Item(items[found]).name .. ")",
-								target.ID
-							)
-							return
-						end
+					if target:hasItem(items[found], amount[found]) then
+						target:removeItem(items[found], amount[found])
+						player:addItem(items[found], amount[found])
+						player:sendMinitext("Done!!")
+						gm_click.inventory(player, target, npc)
 					else
-						if target:hasItem(items[found], amount[found]) then
-							target:removeItem(items[found], amount[found])
-							player:addItem(items[found], amount[found])
-							player:sendMinitext("Done!!")
-							click.inventory(player, target, npc)
-						else
-							player:dialogSeq({icon, name .. "Item has been removed from target!"}, 1)
-							click.inventory(player, target, npc)
-						end
+						player:dialogSeq(
+							{icon, name .. "Item has been removed from target!"},
+							1
+						)
+						gm_click.inventory(player, target, npc)
 					end
 				elseif choice == 3 then
-					click.inventory(player, target, npc)
+					gm_click.inventory(player, target, npc)
 				end
 			end
 		end
 	end,
+
 	--------------------------------------------------------------------------------------------------------------------------------
 
 	status = function(player, target, npc, dialog)
@@ -530,8 +666,8 @@ click = {
 
 		if weap ~= nil then
 			weaponName = weap.name
-			maxWeaponDam = weap.maxDmg
-			minWeaponDam = weap.minDmg
+			maxWeaponDam = weap.maxSDmg
+			minWeaponDam = weap.minSDmg
 
 			armorBonus = armorBonus + weap.ac
 			mightBonus = mightBonus + weap.might
@@ -666,6 +802,40 @@ click = {
 		else
 			bootsName = "None"
 		end
+		if crown ~= nil then
+			crownName = crown.name
+			armorBonus = armorBonus + crown.ac
+			mightBonus = mightBonus + crown.might
+			graceBonus = graceBonus + crown.grace
+			willBonus = willBonus + crown.will
+			vitaBonus = vitaBonus + crown.vita
+			manaBonus = manaBonus + crown.mana
+		else
+			crownName = "None"
+		end
+		if facea ~= nil then
+			faceaName = facea.name
+			armorBonus = armorBonus + facea.ac
+			mightBonus = mightBonus + facea.might
+			graceBonus = graceBonus + facea.grace
+			willBonus = willBonus + facea.will
+			vitaBonus = vitaBonus + facea.vita
+			manaBonus = manaBonus + facea.mana
+		else
+			faceaName = "None"
+		end
+		if mantle ~= nil then
+			mantleName = mantle.name
+			armorBonus = armorBonus + mantle.ac
+			mightBonus = mightBonus + mantle.might
+			graceBonus = graceBonus + mantle.grace
+			willBonus = willBonus + mantle.will
+			vitaBonus = vitaBonus + mantle.vita
+			manaBonus = manaBonus + mantle.mana
+		else
+			mantleName = "None"
+		end
+
 		--------------------------------------
 		--// End Equip Stat Bonus Total Calc--
 		--------------------------------------
@@ -673,26 +843,15 @@ click = {
 		local physicalDamageReductionPct = ((target.armor / (target.armor + 500)) * 100)
 		local bareHandDamage = 0
 
-		if weap == nil then -- You do not have a Weapon equiped, damage is bare handed.
+		if weap == nil then
+			-- You do not have a Weapon equiped, damage is bare handed.
 			finalDamage = bareHandDamage
 		end
 
 		-- You DO have a weapon equiped.
-		-- Warrior and Priest
-		if target.baseClass == 0 or target.baseClass == 1 or target.baseClass == 4 or target.baseClass == 5 then
-			finalWeaponDamage = 0
-			finalDamage = bareHandDamage + finalWeaponDamage
-		end
-		-- Scoundrel
-		if target.baseClass == 2 then
-			finalWeaponDamage = 0
-			finalDamage = bareHandDamage + finalWeaponDamage
-		end
-		-- Wizard
-		if target.baseClass == 3 then
-			finalWeaponDamage = 0
-			finalDamage = bareHandDamage + finalWeaponDamage
-		end
+
+		finalWeaponDamage = 0
+		finalDamage = bareHandDamage + finalWeaponDamage
 
 		if target.heroShow == 1 then
 			a = "On"
@@ -708,8 +867,12 @@ click = {
 		local maxLife = target.maxHealth
 		local nakedLife = target.baseHealth
 
-		currentLifePct = currentLife / maxLife * 100 -- decimal form of life Pct remaining
-		currentManaPct = currentMagic / maxMagic * 100 -- decimal form of mana Pct remaining
+		currentLifePct = currentLife / maxLife * 100
+
+		-- decimal form of life Pct remaining
+		currentManaPct = currentMagic / maxMagic * 100
+
+		-- decimal form of mana Pct remaining
 
 		------------------------------------------------------------
 		--Draw Table------------------------------------------------
@@ -717,29 +880,38 @@ click = {
 		table.insert(stat, "+====================================+")
 		table.insert(stat, "            Name: " .. target.name)
 		table.insert(stat, "           Class: " .. getPathName(target))
-		table.insert(stat, "           Title: " .. target.title .. " (" .. titlestats .. ")")
+		table.insert(
+			stat,
+			"           Title: " .. target.title .. " (" .. titlestats .. ")"
+		)
 		table.insert(stat, "           Level: " .. target.level)
 		table.insert(stat, "          Status: " .. target.state)
 		table.insert(stat, "         PK Flag: " .. stats)
 		table.insert(stat, "           Speed: " .. target.speed)
 
 		if target.gmLevel > 0 then
-			if player.ID == 2 or player.ID == 4 or player.ID == 7 then
-				if player.ID ~= target.ID then
-					table.insert(stat, " GM LVL: " .. target.gmLevel)
-				end
-			end
+			table.insert(stat, "           GM LVL: " .. target.gmLevel)
 		end
+
 		table.insert(stat, "+====================================+")
-		table.insert(stat, "          Nation: ")
-		table.insert(stat, "            Clan: ")
-		table.insert(stat, "      Clan Title: ")
-		table.insert(stat, "           Totem: " .. target:totemName(target.totem))
-		table.insert(stat, "           Karma:")
+		table.insert(
+			stat,
+			"          Nation: " .. target:countryName(target.country)
+		)
+		table.insert(stat, "            Clan: " .. target.clanName)
+		table.insert(stat, "      Clan Title: " .. target.title)
+		table.insert(
+			stat,
+			"           Totem: " .. target:getTotemName(target.totem)
+		)
+		table.insert(
+			stat,
+			"           Karma: " .. target:karmaLevel(target.karma)
+		)
 		table.insert(stat, "       Alignment:")
 		table.insert(stat, "+====================================+")
 		table.insert(stat, "")
-		 --
+
 		--[[
 	-- increments every 5%,  XP vs. TNL
 	if target.tnl ==  0 then
@@ -805,10 +977,9 @@ click = {
 	if target.tnl >= 96 then
 	table.insert(stat, "      |********************|")
 	end
-	]] table.insert(
-			stat,
-			""
-		)
+	]]
+		--
+		table.insert(stat, "")
 		displayEXP = target.exp
 		displayTNL = target.realtnl
 
@@ -816,7 +987,7 @@ click = {
 		--table.insert(stat, "             TNL: "..displayTNL.." ("..target.tnl.."%)")
 		table.insert(stat, "+====================================+")
 		table.insert(stat, "           Coins: " .. target.money)
-		table.insert(stat, "           Lapis: " .. target.lapis)
+		table.insert(stat, "           Kan: " .. target.registry["kan"])
 		table.insert(stat, "+====================================+")
 		table.insert(stat, "          | Base Stats |")
 		table.insert(stat, "          +------------+")
@@ -859,7 +1030,10 @@ click = {
 
 		lifePct = currentLifePct
 
-		table.insert(stat, "    Current Vita: " .. currentLife .. " (" .. lifePct .. "%)")
+		table.insert(
+			stat,
+			"    Current Vita: " .. currentLife .. " (" .. lifePct .. "%)"
+		)
 		table.insert(stat, "       Base Vita: " .. nakedLife)
 		table.insert(stat, "  +  Equip Bonus: " .. vitaBonus)
 		table.insert(stat, "  ================================")
@@ -868,6 +1042,7 @@ click = {
 		table.insert(stat, "  VitaRegen Rate: N/A")
 		table.insert(stat, "+====================================+")
 		table.insert(stat, "")
+
 		-- A mana bar, increments every 10%,  need curret mana / max mana
 
 		if currentManaPct < 0 then
@@ -908,7 +1083,10 @@ click = {
 
 		displayManaPct = round(manaPct)
 
-		table.insert(stat, "    Current Mana: " .. currentMagic .. " (" .. displayManaPct .. "%)")
+		table.insert(
+			stat,
+			"    Current Mana: " .. currentMagic .. " (" .. displayManaPct .. "%)"
+		)
 		table.insert(stat, "       Base Mana: " .. nakedMagic)
 		table.insert(stat, "  +  Equip Bonus: " .. manaBonus)
 		table.insert(stat, "  =================================")
@@ -917,23 +1095,23 @@ click = {
 		table.insert(stat, "  ManaRegen Rate: N/A")
 		table.insert(stat, "+====================================+")
 		table.insert(stat, "     Total Might: " .. target.might)
-		table.insert(stat, "      Base Might: " .. target.basemight)
+		table.insert(stat, "      Base Might: " .. target.baseMight)
 		table.insert(stat, "   + Equip Bonus: " .. mightBonus)
 		table.insert(stat, "")
 		table.insert(stat, "+====================================+")
 		table.insert(stat, "      Total Will: " .. target.will)
-		table.insert(stat, "       Base Will: " .. target.basewill)
+		table.insert(stat, "       Base Will: " .. target.baseWill)
 		table.insert(stat, "   + Equip Bonus: " .. willBonus)
 		table.insert(stat, "")
 		table.insert(stat, "+====================================+")
 		table.insert(stat, "     Total Grace: " .. target.grace)
-		table.insert(stat, "      Base Grace: " .. target.basegrace)
+		table.insert(stat, "      Base Grace: " .. target.baseGrace)
 		table.insert(stat, "   + Equip Bonus: " .. graceBonus)
 		table.insert(stat, "")
 		table.insert(stat, "+====================================+")
 		table.insert(stat, "    Total  Armor: " .. target.armor)
 		table.insert(stat, "   + Equip Bonus: " .. armorBonus)
-		table.insert(stat, "      Base Armor: " .. target.basearmor)
+		table.insert(stat, "      Base Armor: " .. target.baseArmor)
 		table.insert(stat, "")
 		table.insert(stat, "+====================================+")
 		table.insert(stat, "         |  Criticals |")
@@ -963,30 +1141,27 @@ click = {
 		table.insert(stat, "       Boots: " .. bootsName)
 		table.insert(stat, "    Left Sub: " .. script1Name)
 		table.insert(stat, "   Right Sub: " .. script2Name)
-		--table.insert(stat, "          Mantle: "..mantleName)
-		--table.insert(stat, "           Crown: "..crownName)
-		--table.insert(stat, "        Face Acc: "..faceaName)
-		--table.insert(stat, "            Cape: "..capeName)
+		table.insert(stat, "      Mantle: " .. mantleName)
+		table.insert(stat, "       Crown: " .. crownName)
+		table.insert(stat, "    Face Acc: " .. faceaName)
+		table.insert(stat, "      Mantle: " .. mantleName)
 		table.insert(stat, "+====================================+")
-		table.insert(stat, "          |SP Information|")
-		table.insert(stat, "          +--------------+")
-		table.insert(stat, "    SP Available: " .. target.registry["stat_points"])
-		table.insert(stat, "")
-		table.insert(stat, "    Bought Might: " .. target.registry["sp_spent_might"])
-		table.insert(stat, "    Bought  Will: " .. target.registry["sp_spent_will"])
-		table.insert(stat, "    Bought Grace: " .. target.registry["sp_spent_grace"])
-		table.insert(stat, "    Bought Armor: " .. target.registry["sp_spent_armor"])
-		table.insert(stat, "")
-		table.insert(stat, " Total SP  Spent: " .. target.registry["sp_spent"])
-		table.insert(stat, " Total SP Earned: " .. target.registry["total_stat_points"])
-		table.insert(stat, "")
-		table.insert(stat, "             +---------+")
-		table.insert(stat, "             |SP Respec|")
-		table.insert(stat, "             +---------+")
-		table.insert(stat, "+====================================+")
-		table.insert(stat, "  Total Exp Sold: " .. target.expSold)
-		table.insert(stat, "    Trained Vita: " .. target.registry["vita_sold"])
-		table.insert(stat, "    Trained Mana: " .. target.registry["mana_sold"])
+		table.insert(
+			stat,
+			"  Exp sold for Vita  : " .. Tools.formatNumber(target.expSoldHealth)
+		)
+		table.insert(
+			stat,
+			"  Exp sold for Mana  : " .. Tools.formatNumber(target.expSoldMagic)
+		)
+		table.insert(
+			stat,
+			"  Exp sold for Stats : " .. Tools.formatNumber(target.expSoldStats)
+		)
+		table.insert(
+			stat,
+			"  Total Exp Sold: " .. Tools.formatNumber(target.expSoldHealth + target.expSoldMagic + target.expSoldStats)
+		)
 		table.insert(stat, "")
 		table.insert(stat, "  Heroes Display: " .. a)
 		table.insert(stat, "")
@@ -1005,19 +1180,13 @@ click = {
 			-----------------------------------
 			-- Change "State"
 			-----------------------------------
-			if menu == "           Class: " .. target:getPathName(target) then
-				change.status(player, target, npc, "class")
+			if menu == "           Class: " .. target.className then
+				--change.status(player, target, npc, "class")
 			elseif menu == "           Title: " .. target.title .. " (" .. titlestats .. ")" then
-				change.status(player, target, npc, "title")
+				--change.status(player, target, npc, "title")
 			elseif menu == "           Level: " .. target.level then
-				change.choice(player, target, npc, "level")
+				--change.choice(player, target, npc, "level")
 			elseif menu == "          Status: " .. target.state then
-				if not player.ID == 2 or not player.ID == 4 or not player.ID == 7 then
-					if target.ID == 2 or target.ID == 4 or target.ID == 7 then
-						target:msg(4, "[Change Status] " .. player.name .. " is try to change your state", target.ID)
-						return
-					end
-				end
 				text = "<b>[" .. target.name .. "'s State]\n\n"
 				text = text .. "State 0 = Alive\n"
 				text = text .. "State 1 = Death\n"
@@ -1028,22 +1197,16 @@ click = {
 				if tonumber(state) < 0 or tonumber(state) > 5 then
 					anim(player)
 					player:sendMinitext("Invalid state number!")
-					click.status(player, target, npc, dialog)
+					gm_click.status(player, target, npc, dialog)
 					return
 				elseif tonumber(state) >= 0 and tonumber(state) < 5 then
 					target.state = tonumber(state)
 					target:updateState()
 					target:sendMinitext("State : " .. target.state)
 					player:sendMinitext("Done!!")
-					click.status(player, target, npc, dialog)
+					gm_click.status(player, target, npc, dialog)
 				end
 			elseif menu == "         PK Flag: " .. stats then
-				if not player.ID == 2 or not player.ID == 4 or not player.ID == 7 then
-					if target.ID == 2 or target.ID == 4 or target.ID == 7 then
-						target:msg(4, "[PK Status] " .. player.name .. " is trying to change your PK Status", target.ID)
-						return
-					end
-				end
 				PKstatus = {}
 				if target.PK == 0 then
 					table.insert(PKstatus, "ON")
@@ -1051,10 +1214,13 @@ click = {
 					table.insert(PKstatus, "OFF")
 				end
 				table.insert(PKstatus, "<< Back")
-				switch = player:menuString("<b>[" .. target.name .. "'s PK Status]\n\n", PKstatus)
+				switch = player:menuString(
+					"<b>[" .. target.name .. "'s PK Status]\n\n",
+					PKstatus
+				)
 				if switch == "<< Back" then
 					player:freeAsync()
-					click.status(player, target, npc, dialog)
+					gm_click.status(player, target, npc, dialog)
 					return
 				else
 					if switch == "ON" then
@@ -1066,63 +1232,62 @@ click = {
 					target:sendMinitext("PK Status : " .. stats)
 					player:sendMinitext("Done!!")
 					player:freeAsync()
-					click.status(player, target, npc, dialog)
+					gm_click.status(player, target, npc, dialog)
 				end
 			elseif menu == "           Speed: " .. target.speed then
+				change.choice(player, target, npc, "speed")
+
 				--elseif menu == " GM LVL: "..target.gmLevel and player.ID == 2 or player.ID == 4 then
 				--change.choice(player, target, npc, "gmLevel")
+
 				--elseif menu == "Nation   : "..target:countryName(target.country) then
-				--	change.status(player, target, npc, "country")
-				change.choice(player, target, npc, "speed")
+				--change.status(player, target, npc, "country")
 			elseif menu == "            Clan: " then
+				--clan.getInfo(player, target, npc, "clan")
+
 				--elseif menu == "Clan Title : "..target.clan then
 				--clan.changeTitle(player, target, npc, "clanTitle")
-				clan.getInfo(player, target, npc, "clan")
-			elseif menu == "           Totem: " .. target:totemName(target.totem) then
+			elseif menu == "           Totem: " .. target:getTotemName(target.totem) then
+				--change.status(player, target, npc, "totem")
+
 				--elseif menu == "      Karma: " then
+
 				--elseif menu == "      Alignment: " then
-				change.status(player, target, npc, "totem")
 			elseif menu == "             Exp: " .. displayEXP then
 				change.choice(player, target, npc, "exp")
 			elseif menu == "           Coins: " .. target.money then
 				change.choice(player, target, npc, "gold")
-			elseif menu == "           Lapis: " .. target.pp then
+			elseif menu == "           Kan: " .. target.registry["kan"] then
 				--change.choice(player, target, npc, "lapis")
-			elseif menu == "       Base Vita: " .. nakedLife then
-				change.choice(player, target, npc, "vita")
-			elseif menu == "       Base Mana: " .. nakedMagic then
-				change.choice(player, target, npc, "mana")
-			elseif menu == "      Base Might: " .. target.basemight then
-				change.choice(player, target, npc, "might")
-			elseif menu == "       Base Will: " .. target.basewill then
-				change.choice(player, target, npc, "will")
-			elseif menu == "      Base Grace: " .. target.basegrace then
-				change.choice(player, target, npc, "grace")
-			elseif menu == "      Base Armor: " .. target.basearmor then
-				change.choice(player, target, npc, "armor")
+			elseif menu == "       Base Vita: " .. target.baseHealth then
+				--change.choice(player, target, npc, "vita")
+			elseif menu == "       Base Mana: " .. target.baseMagic then
+				--change.choice(player, target, npc, "mana")
+			elseif menu == "      Base Might: " .. target.baseMight then
+				--change.choice(player, target, npc, "might")
+			elseif menu == "       Base Will: " .. target.baseWill then
+				--change.choice(player, target, npc, "will")
+			elseif menu == "      Base Grace: " .. target.baseGrace then
+				--change.choice(player, target, npc, "grace")
+			elseif menu == "      Base Armor: " .. target.baseArmor then
+				--change.choice(player, target, npc, "armor")
 			elseif menu == "  Fury Multiplier: x" .. target.fury then
-				change.choice(player, target, npc, "fury")
-			elseif menu == "             |SP Respec|" then
-				choice = player:menuString("Are you sure you want to respec " .. target.name .. "'s SP?", {"Yes", "No"})
-				if choice == "Yes" then
-					spend_sp.respec(target)
-				end
+				--change.choice(player, target, npc, "fury")
 			elseif menu == "  Heroes Display: " .. a then
 				if target.heroShow == 1 then
-					target.heroShow = 0
+					target:setHeroShow(0)
 					player:sendMinitext("" .. target.name .. " is now hidden on the Heroes List")
 				elseif target.heroShow == 0 then
-					target.heroShow = 1
-					target.state = 0
-					target:updateState()
+					target:setHeroShow(1)
 					player:sendMinitext("" .. target.name .. " is now visible on the Heroes List")
 				end
 			else
 				player:freeAsync()
-				click.menu(player, target, npc)
+				gm_click.status(player, target, npc, dialog)
 			end
 		end
 	end,
+
 	look = function(player, target, npc)
 		local gfx = ""
 		if target.gfxClone == 0 then
@@ -1131,15 +1296,19 @@ click = {
 			gfx = "On"
 		end
 		local dialog = "State      : " .. target.state .. "\nGfx Toogle : " .. gfx .. "\n\nWhat type of look?"
-		menu =
-			player:menuString(
+		menu = player:menuString(
 			"<b>[" .. target.name .. "'s look]\n\n" .. dialog,
-			{"Character's look", "Disguised look", "Mounted look", "Gfx toogle (On/Off)", "<< Back"}
+			{
+				"Character's look",
+				"Disguised look",
+				"Mounted look",
+				"Gfx toggle (On/Off)",
+				"<< Back"
+			}
 		)
 
 		if menu == "Character's look" then
-			charl =
-				player:menuString(
+			charl = player:menuString(
 				"<b>[" .. target.name .. "'s look]\n\n" .. dialog,
 				{"Hair style", "Face surgery", "Skin color", "<< Back"}
 			)
@@ -1155,7 +1324,7 @@ click = {
 				npc.gfxSkin = target.skinColor
 				skin.option(player, target, npc)
 			elseif charl == "<< Back" then
-				click.look(player, target, npc)
+				gm_click.look(player, target, npc)
 			end
 		elseif menu == "Disguised look" then
 			player.registry["gfx_dis"] = target.disguise
@@ -1163,32 +1332,34 @@ click = {
 			disguisee.option(player, target)
 		elseif menu == "Mounted look" then
 			player:dialogSeq({"Not implemented yet"}, 1)
-			click.look(player, target, npc)
+			gm_click.look(player, target, npc)
 		elseif menu == "Gfx toogle (On/Off)" then
 			gfx.option(player, target, npc)
 		elseif menu == "<< Back" then
 			player:freeAsync()
-			click.menu(player, target, npc)
+			gm_click.menu(player, target, npc)
 		end
 	end,
-	f1click = async(
-		function(player, npc, target)
-			player.dialogType = 0
-			local opts = {"Vending menu", "GM click menu", "Exit"}
-			menu = player:menuString("<b>[GM Menu]\n\nWhich menu do you needed from target?", opts)
-			if menu == "Vending menu" then
-				if target.registry["v_open"] > 0 and target:hasDuration("vending_menu") then
-					if totalSaleItem(target) > 0 then
-						player:freeAsync()
-						vending_menu.showShop(player, target, npc)
-					end
+
+	f1click = async(function(player, npc, target)
+		player.dialogType = 0
+		local opts = {"Vending menu", "GM click menu", "Exit"}
+		menu = player:menuString(
+			"<b>[GM Menu]\n\nWhich menu do you needed from target?",
+			opts
+		)
+		if menu == "Vending menu" then
+			if target.registry["v_open"] > 0 and target:hasDuration("vending_menu") then
+				if totalSaleItem(target) > 0 then
+					player:freeAsync()
+					vending_menu.showShop(player, target, npc)
 				end
-			elseif menu == "GM click menu" then
-				player:freeAsync()
-				click.menu(player, target, npc)
 			end
+		elseif menu == "GM click menu" then
+			player:freeAsync()
+			gm_click.menu(player, target, npc)
 		end
-	)
+	end)
 }
 
 getItemType = function(x)
