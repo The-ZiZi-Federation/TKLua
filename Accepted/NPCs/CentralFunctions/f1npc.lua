@@ -158,7 +158,7 @@ f1npc = {
 				if menu == "God Tools" then
 					god_tools.f1click(player, npc)
 				elseif menu == "Private Tools" then
-					-- private_tools.click(player, npc)
+					super_warp.cast(player)
 				elseif menu == "Minigame Powers" then
 					-- minigame_powers.f1click(player, npc)
 				elseif menu == "System Broadcast" then
