@@ -29,7 +29,7 @@ bestiary = {
 		menu = player:menuSeq("\nThat was Monster #" .. monsterId .. ", you like that shit?", opts)
 		if menu == "Next ->>" then
 			player.registry["beastiary"] = player.registry["beastiary"] + 1
-			return beastiary.browse_monster(player,npc, )
+			return beastiary.browse_monster(player,npc)
 		elseif menu == "<<- Previous" then
 			player.registry["beastiary"] = player.registry["beastiary"] - 1
 			return beastiary.browse_monster(player,npc)
