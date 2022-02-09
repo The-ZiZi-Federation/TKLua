@@ -41,7 +41,6 @@ modz_mode = {
 			player:updateState()
 			player:sendAnimation(anim)
 			player:playSound(sound)
-			player:sendMinitext("Your Spiritual Transformation ends")
 		end
 	end
 }
