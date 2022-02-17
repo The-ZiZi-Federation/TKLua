@@ -32,7 +32,11 @@ minigames = {
 		--end
 		--end
 
-		if (os.date("%A") == "Monday" or os.date("%A") == "Friday" or os.date("%A") == "Sunday") and realHour() == 21 and realMinute() == 0 and realSecond() == 0 then
+		if
+			(os.date("%A") == "Monday" or os.date("%A") == "Friday" or os.date("%A") == "Sunday") and realHour() == 21 and
+				realMinute() == 0 and
+				realSecond() == 0
+		 then
 			carnages.init(18)
 		end
 
@@ -40,7 +44,12 @@ minigames = {
 			carnages.init(18)
 		end
 
-		if (os.date("%A") == "Tuesday" or os.date("%A") == "Thursday" or os.date("%A") == "Saturday") and (realHour() == 19 or realHour() == 22) and realMinute() == 0 and realSecond() == 0 then
+		if
+			(os.date("%A") == "Tuesday" or os.date("%A") == "Thursday" or os.date("%A") == "Saturday") and
+				(realHour() == 19 or realHour() == 22) and
+				realMinute() == 0 and
+				realSecond() == 0
+		 then
 			elixir.init(30)
 		end
 
@@ -54,13 +63,12 @@ minigames = {
 
 		BomberWarNpc.core()
 	end,
-
 	giveMinigameExp = function(player, win) -- 1 == win, 2 == loss
 		if (player.level < 99) then
 			local totalExpForNextLevel = getXPforLevel(player.baseClass, player.level)
 			local totalExpForCurrentLevel = getXPforLevel(player.baseClass, player.level - 1)
 			local expBonus = totalExpForNextLevel - totalExpForCurrentLevel
-			
+
 			expBonus = math.ceil(expBonus * 0.75)
 			expBonus = math.max(expBonus, 300)
 			expBonus = math.ceil(expBonus / win)
@@ -80,7 +88,6 @@ minigames = {
 			player:giveXPStacked(expBonus)
 		end
 	end,
-
 	determineEventSchedule = function()
 		local eventType = {}
 
@@ -126,59 +133,38 @@ minigames = {
 				if (eventType[k] == 1) then
 					local rand = math.random(1, 3)
 					if (rand == 1) then
-						core.gameRegistry["event" .. counter] = 10 + core.gameRegistry[
-							"carnagecounter"
-						]
-						core.gameRegistry["carnagecounter"] = core.gameRegistry[
-							"carnagecounter"
-						] + 1
+						core.gameRegistry["event" .. counter] = 10 + core.gameRegistry["carnagecounter"]
+						core.gameRegistry["carnagecounter"] = core.gameRegistry["carnagecounter"] + 1
 						if (core.gameRegistry["carnagecounter"] > 7) then
 							-- hardcoded 7 is the length of the array in generate weekly schedule, if we pass the array here we can change it
 							core.gameRegistry["carnagecounter"] = 1
 						end
 					elseif (rand == 2) then
-						core.gameRegistry["event" .. counter] = 10 + core.gameRegistry[
-							"carnagecounter2"
-						]
-						core.gameRegistry["carnagecounter2"] = core.gameRegistry[
-							"carnagecounter2"
-						] + 1
+						core.gameRegistry["event" .. counter] = 10 + core.gameRegistry["carnagecounter2"]
+						core.gameRegistry["carnagecounter2"] = core.gameRegistry["carnagecounter2"] + 1
 						if (core.gameRegistry["carnagecounter2"] > 7) then
 							core.gameRegistry["carnagecounter2"] = 1
 						end
 					else
-						core.gameRegistry["event" .. counter] = 10 + core.gameRegistry[
-							"carnagecounter3"
-						]
-						core.gameRegistry["carnagecounter3"] = core.gameRegistry[
-							"carnagecounter3"
-						] + 1
+						core.gameRegistry["event" .. counter] = 10 + core.gameRegistry["carnagecounter3"]
+						core.gameRegistry["carnagecounter3"] = core.gameRegistry["carnagecounter3"] + 1
 						if (core.gameRegistry["carnagecounter3"] > 7) then
 							core.gameRegistry["carnagecounter3"] = 1
-							core.gameRegistry["carnagecounter3"] = core.gameRegistry[
-								"carnagecounter3"
-							]
+							core.gameRegistry["carnagecounter3"] = core.gameRegistry["carnagecounter3"]
 						end
 					end
 				elseif (eventType[k] == 2) then
-					core.gameRegistry["event" .. counter] = 20 + math.random(
-						1,
-						3
-					)
+					core.gameRegistry["event" .. counter] = 20 + math.random(1, 3)
 				elseif (eventType[k] == 3) then
 					core.gameRegistry["event" .. counter] = 30
 				elseif (eventType[k] == 4) then
 					core.gameRegistry["event" .. counter] = 40
 				elseif (eventType[k] == 5) then
-					core.gameRegistry["event" .. counter] = 50 + math.random(
-						1,
-						5
-					)
+					core.gameRegistry["event" .. counter] = 50 + math.random(1, 5)
 				end
 			end
 		end
 	end,
-
 	generateWeeklySchedule = function()
 		local foxHunts = {
 			"Fox hunt: Hectic horses",
@@ -221,13 +207,11 @@ minigames = {
 		for i = 1, 7 do
 			-- day
 			if i == 1 then
-				tomorrow = os.time()
-
 				--sunday 5am
+				tomorrow = os.time()
 			else
-				tomorrow = os.time() + (3600 * 24 * i)
-
 				-- 5am
+				tomorrow = os.time() + (3600 * 24 * i)
 			end
 
 			post = post .. "\n\n"
@@ -241,7 +225,10 @@ minigames = {
 				-- event
 				counter = counter + 1
 				post = post .. "\n"
-				post = post .. os.date("%I%p", eventStart + (7200 * (k - 1))) .. "      " .. minigames.eventNameLookUp(core.gameRegistry["event" .. counter])
+				post =
+					post ..
+					os.date("%I%p", eventStart + (7200 * (k - 1))) ..
+						"      " .. minigames.eventNameLookUp(core.gameRegistry["event" .. counter])
 			end
 
 			post = post .. "\n\n------------------------------------------------------\n"
@@ -249,7 +236,6 @@ minigames = {
 
 		addToBoard(18, title, post)
 	end,
-
 	eventList = function()
 		local foxHunts = {
 			"Fox hunt: Hectic horses",
@@ -300,7 +286,6 @@ minigames = {
 
 		return eventNames
 	end,
-
 	eventIdLookUp = function(eventname)
 		local eventNames = minigames.eventList()
 		local eventid = 0
@@ -313,7 +298,6 @@ minigames = {
 
 		return eventid
 	end,
-
 	eventNameLookUp = function(eventid)
 		local eventName = ""
 
@@ -359,7 +343,6 @@ minigames = {
 
 		return eventName
 	end,
-
 	minimumPlayerCheck = function(game, numPlayers)
 		local map = 0
 		local refund = 0
@@ -376,21 +359,17 @@ minigames = {
 			for i = 1, #pcs do
 				if game == "carnage" then
 					if (pcs[i].level >= 6 and pcs[i].level <= 35) then
-						refund = 200
-
 						-- "Carnage: Adventure (6-35)"
+						refund = 200
 					elseif (pcs[i].level >= 36 and pcs[i].level <= 65) then
-						refund = 500
-
 						-- "Carnage: Heroes (36-65)"
+						refund = 500
 					elseif (pcs[i].level >= 66 and pcs[i].level <= 85) then
-						refund = 1000
-
 						-- "Carnage: Glory (66-85)"
+						refund = 1000
 					elseif (pcs[i].level >= 86 and pcs[i].level <= 98) then
-						refund = 5000
-
 						-- "Carnage: Legends (86-98)"
+						refund = 5000
 					elseif (pcs[i].level >= 99) then
 						refund = 8000
 						if (pcs[i].baseHealth >= 50000 or pcs[i].baseMagic >= 25000) then
@@ -400,32 +379,21 @@ minigames = {
 							refund = 16000
 						end
 					end
-					pcs[i].registry["carnagePart"] = pcs[i].registry[
-						"carnagePart"
-					] - 1
+					pcs[i].registry["carnagePart"] = pcs[i].registry["carnagePart"] - 1
 					pcs[i]:removeLegendbyName("carnagePart")
 
 					if pcs[i].registry["carnagePart"] > 0 then
-						pcs[i]:addLegend(
-							"Participated in " .. pcs[i].registry["carnagePart"] .. " Carnages",
-							"carnagePart",
-							1,
-							128
-						)
+						pcs[i]:addLegend("Participated in " .. pcs[i].registry["carnagePart"] .. " Carnages", "carnagePart", 1, 128)
 					end
 				end
 
 				if game == "elixir" then
 					pcs[i]:removeLegendbyName("participated_in_elixir_wars")
-					pcs[i].registry["participated_in_elixir_wars"] = pcs[i].registry[
-						"participated_in_elixir_wars"
-					] - 1
+					pcs[i].registry["participated_in_elixir_wars"] = pcs[i].registry["participated_in_elixir_wars"] - 1
 
 					if pcs[i].registry["participated_in_elixir_wars"] > 0 then
 						pcs[i]:addLegend(
-							"Participated in " .. pcs[i].registry[
-								"participated_in_elixir_wars"
-							] .. " Elixir Wars",
+							"Participated in " .. pcs[i].registry["participated_in_elixir_wars"] .. " Elixir Wars",
 							"participated_in_elixir_wars",
 							1,
 							128
@@ -436,11 +404,7 @@ minigames = {
 
 				pcs[i]:addGold(refund)
 				pcs[i]:returnInn()
-				pcs[i]:msg(
-					4,
-					refund .. " gold has been refunded to you.",
-					pcs[i].ID
-				)
+				pcs[i]:msg(4, refund .. " gold has been refunded to you.", pcs[i].ID)
 			end
 
 			broadcast(

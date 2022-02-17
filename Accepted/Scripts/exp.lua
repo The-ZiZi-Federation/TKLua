@@ -6,20 +6,20 @@ onGetExp = function(player, mob)
 	--local expTable = {xp, xp*.75, xp*.70, xp*.65, xp*.60, xp*.55, xp*.525, xp*.5, xp*.475, xp*.45, xp*.425, xp*.4, xp*.375, xp*.35, xp*.325}
 	local expTable = {
 		xp,
-		xp *.70339,
-		xp *.67339,
-		xp *.64339,
-		xp *.61339,
-		xp *.58339,
-		xp *.55339,
-		xp *.53339,
-		xp *.51339,
-		xp *.49339,
-		xp *.47339,
-		xp *.45339,
-		xp *.44339,
-		xp *.43339,
-		xp *.42339
+		xp * .70339,
+		xp * .67339,
+		xp * .64339,
+		xp * .61339,
+		xp * .58339,
+		xp * .55339,
+		xp * .53339,
+		xp * .51339,
+		xp * .49339,
+		xp * .47339,
+		xp * .45339,
+		xp * .44339,
+		xp * .43339,
+		xp * .42339
 	}
 
 	local wisdomStarMultiplier = 1
@@ -39,18 +39,24 @@ onGetExp = function(player, mob)
 		if (distanceSquare(Player(player.group[z]), mob, 12)) then
 			if (Player(player.group[z]).state ~= 1) then
 				if (Player(player.group[z]).m == mob.m) then
-					table.insert(groupMembersInRangeAndAlive, {
-						id = player.group[z],
-						level = (Player(player.group[z]).level + (Player(player.group[z]).mark * 10))
-					})
+					table.insert(
+						groupMembersInRangeAndAlive,
+						{
+							id = player.group[z],
+							level = (Player(player.group[z]).level + (Player(player.group[z]).mark * 10))
+						}
+					)
 				end
 			end
 		end
 	end
 
-	table.sort(groupMembersInRangeAndAlive, function(a, b)
-		return tonumber(a.level) > tonumber(b.level)
-	end)
+	table.sort(
+		groupMembersInRangeAndAlive,
+		function(a, b)
+			return tonumber(a.level) > tonumber(b.level)
+		end
+	)
 
 	local amount = math.ceil(expTable[#groupMembersInRangeAndAlive])
 
@@ -72,64 +78,37 @@ onGetExp = function(player, mob)
 			Player(groupMembersInRangeAndAlive[i].id):sendMinitext("You can not gain experience in a group of this size.")
 		else
 			if Player(groupMembersInRangeAndAlive[i].id).level < 99 then
-				local exp = getXPforLevel(
-					Player(groupMembersInRangeAndAlive[i].id).baseClass,
-					Player(groupMembersInRangeAndAlive[i].id).level
-				)
-				local exp2 = getXPforLevel(
+				local exp =
+					getXPforLevel(Player(groupMembersInRangeAndAlive[i].id).baseClass, Player(groupMembersInRangeAndAlive[i].id).level)
+				local exp2 =
+					getXPforLevel(
 					Player(groupMembersInRangeAndAlive[i].id).baseClass,
 					Player(groupMembersInRangeAndAlive[i].id).level - 1
 				)
 				local diff = exp - exp2
-				local modified = diff *.1
+				local modified = diff * .1
 				if (finalxp < modified) then
-					Player(groupMembersInRangeAndAlive[i].id):giveXP(
-						finalxp,
-						finalxp
-					)
-					characterLog.xpWrite(
-						Player(groupMembersInRangeAndAlive[i].id),
-						finalxp,
-						mob
-					)
+					Player(groupMembersInRangeAndAlive[i].id):giveXP(finalxp, finalxp)
+					characterLog.xpWrite(Player(groupMembersInRangeAndAlive[i].id), finalxp, mob)
 				else
 					if (finalxp < 1000) then
-						Player(groupMembersInRangeAndAlive[i].id):giveXP(
-							finalxp,
-							finalxp
-						)
-						characterLog.xpWrite(
-							Player(groupMembersInRangeAndAlive[i].id),
-							finalxp,
-							mob
-						)
+						Player(groupMembersInRangeAndAlive[i].id):giveXP(finalxp, finalxp)
+						characterLog.xpWrite(Player(groupMembersInRangeAndAlive[i].id), finalxp, mob)
 					else
-						Player(groupMembersInRangeAndAlive[i].id):giveXP(
-							modified,
-							modified
-						)
-						characterLog.xpWrite(
-							Player(groupMembersInRangeAndAlive[i].id),
-							modified,
-							mob
-						)
+						Player(groupMembersInRangeAndAlive[i].id):giveXP(modified, modified)
+						characterLog.xpWrite(Player(groupMembersInRangeAndAlive[i].id), modified, mob)
 					end
 				end
 			else
-				Player(groupMembersInRangeAndAlive[i].id):giveXP(
-					finalxp,
-					finalxp
-				)
-				characterLog.xpWrite(
-					Player(groupMembersInRangeAndAlive[i].id),
-					finalxp,
-					mob
-				)
+				Player(groupMembersInRangeAndAlive[i].id):giveXP(finalxp, finalxp)
+				characterLog.xpWrite(Player(groupMembersInRangeAndAlive[i].id), finalxp, mob)
 			end
 		end
 		if mob.isBoss == 1 then
 			-- bosses
-			Player(groupMembersInRangeAndAlive[i].id):sendMinitext("You have killed " .. (Player(groupMembersInRangeAndAlive[i].id):killCount(mob.mobID)) .. " " .. mob.name)
+			Player(groupMembersInRangeAndAlive[i].id):sendMinitext(
+				"You have killed " .. (Player(groupMembersInRangeAndAlive[i].id):killCount(mob.mobID)) .. " " .. mob.name
+			)
 		end
 	end
 

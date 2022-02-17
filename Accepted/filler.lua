@@ -6,7 +6,6 @@ filler = {
 		local baseTile = getTile(m, x, y)
 		local newTile = 7
 	end,
-
 	first = function(player, baseTile)
 		local x = player.x
 		local y = player.y
@@ -36,10 +35,9 @@ filler = {
 			end
 			filler.repeatable(player, baseTile, newTile, oldCoords)
 
-			--call cross function
+		--call cross function
 		end
 	end,
-
 	repeatable = function(player, baseTile, newTile, coords)
 		local m = player.m
 		local newCoords = {xx = {}, yy = {}}
@@ -67,7 +65,6 @@ filler = {
 			filler.repeatable2(player, baseTile, newTile, oldCoords)
 		end
 	end,
-
 	repeatable2 = function(player, baseTile, newTile, coords)
 		local m = player.m
 		local newCoords = {xx = {}, yy = {}}
@@ -98,24 +95,17 @@ filler = {
 			end
 		end
 	end,
-
 	repeatable3 = function(player, baseTile, newTile, filler_coords)
 		local m = player.m
 		if (#filler_coords.xx > 0) then
 			for i = 1, #filler_coords.xx do
 				if (getTile(m, filler_coords.xx[i], filler_coords.yy[i]) == baseTile) then
-					setTile(
-						m,
-						filler_coords.xx[i],
-						filler_coords.yy[i],
-						newTile
-					)
+					setTile(m, filler_coords.xx[i], filler_coords.yy[i], newTile)
 				end
 			end
 			filler.repeatable2(player, baseTile, newTile, filler_coords)
 		end
 	end,
-
 	coords = function(player, oldCoords)
 		if (#oldCoords.xx > 0) then
 			for i = 1, #oldCoords.xx do
@@ -131,10 +121,7 @@ filler = {
 				table.insert(filler_coords.yy, oldCoords.yy[i] + 1)
 				table.insert(filler_coords.xx, oldCoords.xx[i])
 				table.insert(filler_coords.yy, oldCoords.yy[i] - 1)
-				player:talk(
-					0,
-					"" .. #oldCoords.xx .. " filler " .. #filler_coords.xx .. " #filler " .. #filler_coords
-				)
+				player:talk(0, "" .. #oldCoords.xx .. " filler " .. #filler_coords.xx .. " #filler " .. #filler_coords)
 			end
 			for i = 1, #filler_coords.xx do
 				for j = 1, #filler_coords.xx do

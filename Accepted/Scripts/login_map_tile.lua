@@ -52,7 +52,10 @@ login = function(player)
 			if pc[i].ID ~= player.ID then
 				pc[i]:msg(
 					4,
-					"[LOGIN]: " .. player.name .. " has logged in ~ @" .. player.mapTitle .. "(" .. player.m .. ") | IP: " .. player.ipaddress .. " | Time: " .. os.date(),
+					"[LOGIN]: " ..
+						player.name ..
+							" has logged in ~ @" ..
+								player.mapTitle .. "(" .. player.m .. ") | IP: " .. player.ipaddress .. " | Time: " .. os.date(),
 					pc[i].ID
 				)
 			end
@@ -87,10 +90,9 @@ login = function(player)
 	-- if player in jail, return
 
 	if player.registry["basic_tutorial_complete"] == 0 then
+		-- Welcome Map
 		-- has not done welcome tutorial
 		player:warp(4711, 3, 3)
-
-		-- Welcome Map
 	else
 		if offlineTime >= 10800 then
 			-- If player has been offline for more than 3 hours, warp them to their respective home. If not, let them stay on the map they logged in under
@@ -174,14 +176,10 @@ logout = function(player)
 	player.registry["session_end_time"] = os.time()
 
 	--added 8-7-16 for /played, keeps causing crashes
-	player.registry["session_total_time"] = os.time() - player.registry[
-		"session_start_time"
-	]
+	player.registry["session_total_time"] = os.time() - player.registry["session_start_time"]
 
 	--added 8-7-16 for /played, keeps causing crashes
-	player.registry["total_time_played"] = player.registry["total_time_played"] + player.registry[
-		"session_total_time"
-	]
+	player.registry["total_time_played"] = player.registry["total_time_played"] + player.registry["session_total_time"]
 
 	--added 8-7-16 for /played
 	player.registry["last_logout"] = os.time()
@@ -210,11 +208,7 @@ logout = function(player)
 	for i = 1, #pc do
 		if pc[i].gmLevel > 0 then
 			if pc[i].ID ~= player.ID then
-				pc[i]:msg(
-					4,
-					"[LOGOUT]: " .. player.name .. " has logged out.",
-					pc[i].ID
-				)
+				pc[i]:msg(4, "[LOGOUT]: " .. player.name .. " has logged out.", pc[i].ID)
 			end
 		end
 	end

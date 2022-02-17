@@ -36,16 +36,11 @@ dnd = {
 			player.gfxClone = 1
 			player:updateState()
 			for i = 1, 5 do
-				player:sendAnimationXY(
-					16,
-					math.random(player.x - 2, player.x + 2),
-					math.random(player.y - 2, player.y + 2)
-				)
+				player:sendAnimationXY(16, math.random(player.x - 2, player.x + 2), math.random(player.y - 2, player.y + 2))
 			end
 			player:setDuration("dnd", 720000)
 		end
 	end,
-
 	while_cast = function(player)
 		if realSecond() % 5 == 0 then
 			player:playSound(112)
@@ -71,7 +66,6 @@ dnd = {
 
 		player:sendAnimation(33)
 	end,
-
 	while_cast_250 = function(player)
 		local mob = player:getObjectsInArea(BL_MOB)
 		local pc = player:getObjectsInArea(BL_PC)
@@ -100,16 +94,11 @@ dnd = {
 			end
 		end
 	end,
-
 	uncast = function(player)
 		player.gfxClone = 0
 		player:updateState()
 		for i = 1, 5 do
-			player:sendAnimationXY(
-				16,
-				math.random(player.x - 2, player.x + 2),
-				math.random(player.y - 2, player.y + 2)
-			)
+			player:sendAnimationXY(16, math.random(player.x - 2, player.x + 2), math.random(player.y - 2, player.y + 2))
 		end
 		player:calcStat()
 	end

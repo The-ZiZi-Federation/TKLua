@@ -9,7 +9,7 @@ verbalScriptCheckBank = function(player, npc, speech)
 
 	local itemName = ""
 
-	for word in speech:gmatch("[%w\'%-%[%]]+") do
+	for word in speech:gmatch("[%w'%-%[%]]+") do
 		table.insert(words, word)
 	end
 
@@ -19,11 +19,7 @@ verbalScriptCheckBank = function(player, npc, speech)
 		Tools.checkKarma(player)
 
 		if (words[4] ~= "lucky" and (words[5] == "coins" or words[5] == "coin")) then
-			player:depositNoConfirm(
-				npc,
-				"coins",
-				player:inputNumberCheck(words[4])
-			)
+			player:depositNoConfirm(npc, "coins", player:inputNumberCheck(words[4]))
 			return
 		end
 
@@ -112,10 +108,7 @@ verbalScriptCheckBank = function(player, npc, speech)
 					if item.dura == item.maxDura then
 						amount = amount + item.amount
 					else
-						npc:talk(
-							0,
-							npc.name .. ": Your item has to be at full durability to deposit."
-						)
+						npc:talk(0, npc.name .. ": Your item has to be at full durability to deposit.")
 					end
 				end
 			end
@@ -134,11 +127,7 @@ verbalScriptCheckBank = function(player, npc, speech)
 		Tools.checkKarma(player)
 
 		if ((words[3]) ~= "lucky" and (words[4] == "coins" or words[4] == "coin")) then
-			player:withdrawNoConfirm(
-				npc,
-				"coins",
-				player:inputNumberCheck(words[3])
-			)
+			player:withdrawNoConfirm(npc, "coins", player:inputNumberCheck(words[3]))
 			return
 		end
 
@@ -252,17 +241,15 @@ verbalScriptCheckBank = function(player, npc, speech)
 	end
 
 	if (words[1] == "what" and words[2] == "have" and words[3] == "i" and words[4] == "deposited") then
-		local bankItemTable, bankCountTable, bankOwnerTable, bankEngraveTable, bankTimerTable, bankItemTableNames = player:bankItemsList()
+		local bankItemTable, bankCountTable, bankOwnerTable, bankEngraveTable, bankTimerTable, bankItemTableNames =
+			player:bankItemsList()
 
 		if #bankItemTable == 0 then
 			npc:talk(0, npc.name .. ": I am not keeping any of your things.")
 		else
-			npc:talk(
-				0,
-				npc.name .. ": I am keeping " .. #bankItemTable .. " of your things."
-			)
+			npc:talk(0, npc.name .. ": I am keeping " .. #bankItemTable .. " of your things.")
 		end
 
-		--talk... I am keeping # of your things.
+	--talk... I am keeping # of your things.
 	end
 end

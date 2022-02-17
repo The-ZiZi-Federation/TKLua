@@ -13,11 +13,8 @@ local _getPlayerSwingDamage = function(player, target)
 	local s = math.random(player.minSDam, player.maxSDam)
 
 	-- Use L (large) damage if target is a boss mob
-	if (target.blType == BL_MOB and
-		target.IsBoss == 1 and
-		player.minLDam > 0 and
-		player.maxLDam > 0) then
-			s = math.random(player.minLDam, player.maxLDam)
+	if (target.blType == BL_MOB and target.IsBoss == 1 and player.minLDam > 0 and player.maxLDam > 0) then
+		s = math.random(player.minLDam, player.maxLDam)
 	end
 
 	local enchant = math.max(player.enchant, 1)
@@ -254,15 +251,16 @@ swingDamage = function(block, target, printf)
 		protectors_bulwark_heal.cast(block, math.ceil(reduced * 0.5))
 	end
 
-	if (target.blType == BL_MOB or
-		(block.blType == BL_MOB and (block.owner == 0 or block.owner >= 1073741823)) or
-		(block.blType == BL_PC and block:canPK(target)) or
-		(block.blType == BL_MOB and block.owner > 0 and block.owner < 1073741823 and Player(block.owner):canPK(target))) then
-			target.attacker = block.ID
-			block.damage = finalDamage
+	if
+		(target.blType == BL_MOB or (block.blType == BL_MOB and (block.owner == 0 or block.owner >= 1073741823)) or
+			(block.blType == BL_PC and block:canPK(target)) or
+			(block.blType == BL_MOB and block.owner > 0 and block.owner < 1073741823 and Player(block.owner):canPK(target)))
+	 then
+		target.attacker = block.ID
+		block.damage = finalDamage
 
-			if (target.blType == BL_PC and (block.blType == BL_MOB or (block.blType == BL_PC and block:canPK(target)))) then
-				target:deductArmor(block.critChance)
-			end
+		if (target.blType == BL_PC and (block.blType == BL_MOB or (block.blType == BL_PC and block:canPK(target)))) then
+			target:deductArmor(block.critChance)
+		end
 	end
 end

@@ -9,7 +9,6 @@ player_combat = {
 		player.attacker = healer.ID
 		player:sendHealth(healer.damage, healer.critChance)
 	end,
-
 	on_attacked = function(player, attacker)
 		if (player.gfxDye == attacker.gfxDye) then
 			if (player.m == 33 or player.m == 3011 or player.m == 3017) then
@@ -28,7 +27,6 @@ mob_combat = {
 		mob.attacker = healer.ID
 		mob:sendHealth(healer.damage, healer.critChance)
 	end,
-
 	on_attacked = function(mob, attacker)
 		local start = os.time() * 1000 + timeMS()
 

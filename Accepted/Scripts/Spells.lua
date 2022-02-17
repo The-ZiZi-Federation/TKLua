@@ -80,10 +80,7 @@ function Player.learnSpell(player, npc, additionalSpells)
 		table.insert(spellItemReq, items)
 		table.insert(spellItemAmount, amounts)
 		table.insert(spellDesc, desc)
-		table.insert(
-			spellDisplay,
-			spellName2[i] .. " Lvl: " .. spellLevelReq[i]
-		)
+		table.insert(spellDisplay, spellName2[i] .. " Lvl: " .. spellLevelReq[i])
 	end
 
 	local sortedSpellName = sort_relative(spellLevelReq, spellName2)
@@ -109,21 +106,23 @@ function Player.learnSpell(player, npc, additionalSpells)
 			table.remove(sortedSpellLevelReq, i)
 			i = i - 1
 		end
-		
+
 		i = i + 1
 	end
 
-	local choice = player:menuSeq(
+	local choice =
+		player:menuSeq(
 		"You have unravelled your mind, and expanded your potential. Your destiny is waiting now, is it not? Which secret do you wish to learn?",
 		sortedSpellName,
 		{}
 	)
 
 	--player:talk(0,spellDesc[choice])
-	local choice2 = player:menuSeq(
-		"You are ready to learn " .. sortedSpellName[choice] .. ": " .. sortedSpellDesc[
-			choice
-		] .. " Do you swear you will use this secret only for good causes?",
+	local choice2 =
+		player:menuSeq(
+		"You are ready to learn " ..
+			sortedSpellName[choice] ..
+				": " .. sortedSpellDesc[choice] .. " Do you swear you will use this secret only for good causes?",
 		{"Yes", "No"},
 		{}
 	)
@@ -293,17 +292,19 @@ function Player.learnSpecificSpells(player, npc, spells)
 		j = j + 1
 	end
 
-	local choice = player:menuSeq(
+	local choice =
+		player:menuSeq(
 		"You have unravelled your mind, and expanded your potential. Your destiny is waiting now, is it not? Which secret do you wish to learn?",
 		sortedSpellName,
 		{}
 	)
 
 	--player:talk(0,spellDesc[choice])
-	local choice2 = player:menuSeq(
-		"You are ready to learn " .. sortedSpellName[choice] .. ": " .. sortedSpellDesc[
-			choice
-		] .. " Do you swear you will use this secret only for good causes?",
+	local choice2 =
+		player:menuSeq(
+		"You are ready to learn " ..
+			sortedSpellName[choice] ..
+				": " .. sortedSpellDesc[choice] .. " Do you swear you will use this secret only for good causes?",
 		{"Yes", "No"},
 		{}
 	)
@@ -471,17 +472,19 @@ function Player.learnWisdomSpells(player, npc, spells)
 		j = j + 1
 	end
 
-	local choice = player:menuSeq(
+	local choice =
+		player:menuSeq(
 		"You have unravelled your mind, and expanded your potential. Your destiny is waiting now, is it not? Which secret do you wish to learn?",
 		sortedSpellName,
 		{}
 	)
 
 	--player:talk(0,spellDesc[choice])
-	local choice2 = player:menuSeq(
-		"You are ready to learn " .. sortedSpellName[choice] .. ": " .. sortedSpellDesc[
-			choice
-		] .. " Do you swear you will use this secret only for good causes?",
+	local choice2 =
+		player:menuSeq(
+		"You are ready to learn " ..
+			sortedSpellName[choice] ..
+				": " .. sortedSpellDesc[choice] .. " Do you swear you will use this secret only for good causes?",
 		{"Yes", "No"},
 		{}
 	)
@@ -595,16 +598,9 @@ function Player.forgetSpell(player, npc)
 	local spellYNames = player:getSpellYName()
 	local selection
 
-	selection = player:menuSeq(
-		"Which secret do you wish to remove from your mind?",
-		spellNames,
-		{}
-	)
+	selection = player:menuSeq("Which secret do you wish to remove from your mind?", spellNames, {})
 
-	choice = player:menuString(
-		"Are you sure you wish to forget " .. spellNames[selection] .. "?",
-		{"Yes", "No"}
-	)
+	choice = player:menuString("Are you sure you wish to forget " .. spellNames[selection] .. "?", {"Yes", "No"})
 
 	if (choice == "Yes") then
 		player:removeSpell(spellYNames[selection])
@@ -626,10 +622,7 @@ function Player.currentFutureSpells(player, npc)
 	local spellName = {}
 	local spellName2 = {}
 	local spellYName2 = {}
-	local unknownSpells = player:getUnknownSpells(
-		player.baseClass,
-		player.class
-	)
+	local unknownSpells = player:getUnknownSpells(player.baseClass, player.class)
 
 	local spellLevelReq = {}
 	local spellItemReq = {}
@@ -675,10 +668,7 @@ function Player.currentFutureSpells(player, npc)
 		table.insert(spellItemReq, items)
 		table.insert(spellItemAmount, amounts)
 		table.insert(spellDesc, desc)
-		table.insert(
-			spellDisplay,
-			spellName2[i] .. " Lvl: " .. spellLevelReq[i]
-		)
+		table.insert(spellDisplay, spellName2[i] .. " Lvl: " .. spellLevelReq[i])
 	end
 
 	local sortedSpellName = sort_relative(spellLevelReq, spellName2)
@@ -706,18 +696,14 @@ function Player.currentFutureSpells(player, npc)
 		j = j + 1
 	end
 
-	local choice = player:menuSeq(
-		"Which spell would you like to learn more about?",
-		sortedSpellName,
-		{}
-	)
+	local choice = player:menuSeq("Which spell would you like to learn more about?", sortedSpellName, {})
 
 	player:dialogSeq(
 		{
 			t,
-			"<b>" .. sortedSpellName[choice] .. "\n\n" .. sortedSpellDesc[
-				choice
-			] .. " Can be learned at Level " .. sortedSpellLevelReq[choice]
+			"<b>" ..
+				sortedSpellName[choice] ..
+					"\n\n" .. sortedSpellDesc[choice] .. " Can be learned at Level " .. sortedSpellLevelReq[choice]
 		},
 		1
 	)
@@ -761,10 +747,7 @@ function Player.futureSpells(player, npc, additionalSpells)
 	local spellName = {}
 	local spellName2 = {}
 	local spellYName2 = {}
-	local unknownSpells = player:getUnknownSpells(
-		player.baseClass,
-		player.class
-	)
+	local unknownSpells = player:getUnknownSpells(player.baseClass, player.class)
 
 	local spellLevelReq = {}
 	local spellItemReq = {}
@@ -818,10 +801,7 @@ function Player.futureSpells(player, npc, additionalSpells)
 		table.insert(spellItemReq, items)
 		table.insert(spellItemAmount, amounts)
 		table.insert(spellDesc, desc)
-		table.insert(
-			spellDisplay,
-			spellName2[i] .. " Lvl: " .. spellLevelReq[i]
-		)
+		table.insert(spellDisplay, spellName2[i] .. " Lvl: " .. spellLevelReq[i])
 	end
 
 	local sortedSpellName = sort_relative(spellLevelReq, spellName2)
@@ -836,7 +816,10 @@ function Player.futureSpells(player, npc, additionalSpells)
 
 	local j = 1
 	while j <= #sortedSpellLevelReq do
-		if (sortedSpellLevelReq[j] <= player.level or sortedSpellLevelReq[j] - player.level > 10 or player:hasSpell(sortedSpellYName[j])) then
+		if
+			(sortedSpellLevelReq[j] <= player.level or sortedSpellLevelReq[j] - player.level > 10 or
+				player:hasSpell(sortedSpellYName[j]))
+		 then
 			table.remove(sortedSpellItemReq, j)
 			table.remove(sortedSpellItemAmount, j)
 			table.remove(sortedSpellDesc, j)
@@ -849,18 +832,14 @@ function Player.futureSpells(player, npc, additionalSpells)
 		j = j + 1
 	end
 
-	local choice = player:menuSeq(
-		"Which spell would you like to learn more about?",
-		sortedSpellName,
-		{}
-	)
+	local choice = player:menuSeq("Which spell would you like to learn more about?", sortedSpellName, {})
 
 	player:dialogSeq(
 		{
 			t,
-			"<b>" .. sortedSpellName[choice] .. "\n\n" .. sortedSpellDesc[
-				choice
-			] .. " Can be learned at Level " .. sortedSpellLevelReq[choice]
+			"<b>" ..
+				sortedSpellName[choice] ..
+					"\n\n" .. sortedSpellDesc[choice] .. " Can be learned at Level " .. sortedSpellLevelReq[choice]
 		},
 		1
 	)

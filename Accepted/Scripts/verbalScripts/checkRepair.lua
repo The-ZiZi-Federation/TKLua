@@ -3,7 +3,7 @@ verbalScriptCheckRepair = function(player, npc, speech)
 	local words = {}
 	local itemName = ""
 
-	for word in speech:gmatch("[%w\'%-%[%]]+") do
+	for word in speech:gmatch("[%w'%-%[%]]+") do
 		table.insert(words, word)
 	end
 

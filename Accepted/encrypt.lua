@@ -56,7 +56,6 @@ encrypt = {
 
 		--32 to 126 (space to z)
 	end,
-
 	decrypt = function(str, key)
 		local msgTable = {}
 		local i

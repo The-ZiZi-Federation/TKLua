@@ -2,11 +2,7 @@ function Player.sendParcelTo(player, npc)
 	local itemlist = {}
 	local found = 0
 
-	local fchoice = player:menuSeq(
-		"What would you like to send?",
-		{"Gold", "Item"},
-		{}
-	)
+	local fchoice = player:menuSeq("What would you like to send?", {"Gold", "Item"}, {})
 
 	if fchoice == 1 then
 		-- gold
@@ -17,7 +13,8 @@ function Player.sendParcelTo(player, npc)
 			return
 		end
 
-		local receiver = player:inputLetterCheck(player:input("Who do you want to send this " .. Tools.formatNumber(amount) .. " gold to?"))
+		local receiver =
+			player:inputLetterCheck(player:input("Who do you want to send this " .. Tools.formatNumber(amount) .. " gold to?"))
 		receiver = getOfflineID(receiver)
 
 		if not receiver then
@@ -31,14 +28,12 @@ function Player.sendParcelTo(player, npc)
 
 		if player:sendParcel(receiver, player.ID, 0, amount, 0, 0, 0) == true then
 			player:removeGold(amount)
-			player:sendMinitext("Your " .. Tools.formatNumber(amount) .. " gold has been sent in a parcel to " .. getOfflineID(receiver))
+			player:sendMinitext(
+				"Your " .. Tools.formatNumber(amount) .. " gold has been sent in a parcel to " .. getOfflineID(receiver)
+			)
 
 			if Player(receiver) ~= nil then
-				player:msg(
-					12,
-					"[PARCEL]: You got a parcel from " .. player.name .. "!",
-					Player(receiver).ID
-				)
+				player:msg(12, "[PARCEL]: You got a parcel from " .. player.name .. "!", Player(receiver).ID)
 			end
 		end
 
@@ -76,11 +71,7 @@ function Player.sendParcelTo(player, npc)
 	local cost = 0
 
 	if item.type == 0 then
-		player:menu(
-			"Food would rot, and I would end up with rats everywhere! I'm not willing to send it for you.",
-			{},
-			{}
-		)
+		player:menu("Food would rot, and I would end up with rats everywhere! I'm not willing to send it for you.", {}, {})
 		return
 	end
 
@@ -95,7 +86,8 @@ function Player.sendParcelTo(player, npc)
 	end
 
 	--local receiver = player:input("Who do you want to send this "..amount.." "..item.name.." to?")
-	local receiver = player:inputLetterCheck(player:input("Who do you want to send this " .. amount .. " " .. item.name .. " to?"))
+	local receiver =
+		player:inputLetterCheck(player:input("Who do you want to send this " .. amount .. " " .. item.name .. " to?"))
 
 	receiver = getOfflineID(receiver)
 
@@ -126,10 +118,13 @@ function Player.sendParcelTo(player, npc)
 			player:dialogSeq({"Item must be in perfect condition to send. Go and repair it first!"})
 			return
 		else
-			cost = cost + math.ceil((item.price *.05) * amount)
+			cost = cost + math.ceil((item.price * .05) * amount)
 			if player.money < cost then
 				player:menu(
-					"I need " .. Tools.formatNumber(cost) .. " for a seal; " .. Tools.formatNumber(cost) .. " you understand. You could use the Black Box on the Communing Stone.",
+					"I need " ..
+						Tools.formatNumber(cost) ..
+							" for a seal; " ..
+								Tools.formatNumber(cost) .. " you understand. You could use the Black Box on the Communing Stone.",
 					{}
 				)
 				return
@@ -139,21 +134,23 @@ function Player.sendParcelTo(player, npc)
 				return
 			end
 
-			if player:sendParcel(
-				receiver,
-				player.ID,
-				item.id,
-				amount,
-				item.owner,
-				item.realName,
-				0,
-				item.customLook,
-				item.customLookColor,
-				item.customIcon,
-				item.customIconColor,
-				item.protected,
-				item.dura
-			) == true then
+			if
+				player:sendParcel(
+					receiver,
+					player.ID,
+					item.id,
+					amount,
+					item.owner,
+					item.realName,
+					0,
+					item.customLook,
+					item.customLookColor,
+					item.customIcon,
+					item.customIconColor,
+					item.protected,
+					item.dura
+				) == true
+			 then
 				player:removeGold(cost)
 				if amount > item.stackAmount then
 					player:removeItem(item.id, amount, 2)
@@ -162,11 +159,7 @@ function Player.sendParcelTo(player, npc)
 				end
 				player:sendMinitext("Your parcel has been sent.")
 				if Player(receiver) ~= nil then
-					player:msg(
-						12,
-						"[PARCEL]: You got a parcel from " .. player.name .. "!",
-						Player(receiver).ID
-					)
+					player:msg(12, "[PARCEL]: You got a parcel from " .. player.name .. "!", Player(receiver).ID)
 				end
 			end
 		end
@@ -191,23 +184,11 @@ function Player.receiveParcelFrom(player, npc)
 		-- gold
 
 		player:addGold(item.amount)
-		player:removeParcel(
-			item.sender,
-			item.id,
-			item.amount,
-			item.pos,
-			item.owner,
-			item.realName,
-			item.npcflag
-		)
+		player:removeParcel(item.sender, item.id, item.amount, item.pos, item.owner, item.realName, item.npcflag)
 
 		if item.npcFlag > 0 then
 			local sender = NPC(item.sender)
-			player:msg(
-				12,
-				"[PARCEL]: You got a parcel from " .. sender.name .. "!",
-				player.ID
-			)
+			player:msg(12, "[PARCEL]: You got a parcel from " .. sender.name .. "!", player.ID)
 		else
 			local sender = getOfflineID(item.sender)
 			if sender ~= false then
@@ -233,23 +214,11 @@ function Player.receiveParcelFrom(player, npc)
 			item.customIconColor,
 			item.protected
 		)
-		player:removeParcel(
-			item.sender,
-			item.id,
-			item.amount,
-			item.pos,
-			item.owner,
-			item.realName,
-			item.npcflag
-		)
+		player:removeParcel(item.sender, item.id, item.amount, item.pos, item.owner, item.realName, item.npcflag)
 
 		if item.npcFlag > 0 then
 			local sender = NPC(item.sender)
-			player:msg(
-				12,
-				"[PARCEL]: You got a parcel from " .. sender.name .. "!",
-				player.ID
-			)
+			player:msg(12, "[PARCEL]: You got a parcel from " .. sender.name .. "!", player.ID)
 		else
 			local sender = getOfflineID(item.sender)
 			if sender ~= false then
@@ -259,37 +228,21 @@ function Player.receiveParcelFrom(player, npc)
 			end
 		end
 	else
-		local choice = player:menuSeq(
-			"You don't have enough space in your inventory for " .. Tools.formatNumber(item.amount) .. " " .. item.name .. ", bank instead?",
+		local choice =
+			player:menuSeq(
+			"You don't have enough space in your inventory for " ..
+				Tools.formatNumber(item.amount) .. " " .. item.name .. ", bank instead?",
 			{"Yes, deposit in my bank.", "Nevermind."},
 			{}
 		)
 
 		if choice == 1 then
-			player:bankDeposit(
-				item.id,
-				item.amount,
-				item.owner,
-				item.time,
-				item.realName
-			)
-			player:removeParcel(
-				item.sender,
-				item.id,
-				item.amount,
-				item.pos,
-				item.owner,
-				item.realName,
-				item.npcflag
-			)
+			player:bankDeposit(item.id, item.amount, item.owner, item.time, item.realName)
+			player:removeParcel(item.sender, item.id, item.amount, item.pos, item.owner, item.realName, item.npcflag)
 
 			if item.npcFlag > 0 then
 				local sender = NPC(item.sender)
-				player:msg(
-					12,
-					"[PARCEL]: You got a parcel from " .. sender.name .. "!",
-					player.ID
-				)
+				player:msg(12, "[PARCEL]: You got a parcel from " .. sender.name .. "!", player.ID)
 			else
 				local sender = getOfflineID(item.sender)
 				if sender ~= false then
@@ -325,18 +278,15 @@ function Player.receiveParcelFromList(player, npc)
 			table.insert(namelist, parcellist[x].name)
 		end
 	end
-	local choice = player:sell(
-		"Testing Parcel List.",
-		idlist,
-		amountlist,
-		namelist
-	)
-	if (player:hasSpace(
-		parcellist[choice].id,
-		parcellist[choice].amount,
-		parcellist[choice].owner,
-		parcellist[choice].realName
-	) == true) then
+	local choice = player:sell("Testing Parcel List.", idlist, amountlist, namelist)
+	if
+		(player:hasSpace(
+			parcellist[choice].id,
+			parcellist[choice].amount,
+			parcellist[choice].owner,
+			parcellist[choice].realName
+		) == true)
+	 then
 		player:addItem(
 			parcellist[choice].id,
 			parcellist[choice].amount,

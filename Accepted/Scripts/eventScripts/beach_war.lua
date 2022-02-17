@@ -7,14 +7,12 @@ BeachWarNpc = {
 		BeachWarNpc.guiText(player)
 		BeachWarNpc.refill(player)
 	end,
-
 	core = function()
 		BeachWarNpc.closed()
 		BeachWarNpc.enterArena()
 		BeachWarNpc.begin()
 		BeachWarNpc.endGame()
 	end,
-
 	open = function()
 		local style = ""
 
@@ -39,137 +37,120 @@ BeachWarNpc = {
 		core.gameRegistry["beach_war_start_time"] = os.time() + 900
 
 		--15 minute timer
-		broadcast(
-			-1,
-			"-----------------------------------------------------------------------------------------------------"
-		)
-		broadcast(
-			-1,
-			"                                " .. style .. " Beach War is now open in Kugnae Arena!"
-		)
-		broadcast(
-			-1,
-			"                                Registration will close in 15 minutes!"
-		)
-		broadcast(
-			-1,
-			"-----------------------------------------------------------------------------------------------------"
-		)
+		broadcast(-1, "-----------------------------------------------------------------------------------------------------")
+		broadcast(-1, "                                " .. style .. " Beach War is now open in Kugnae Arena!")
+		broadcast(-1, "                                Registration will close in 15 minutes!")
+		broadcast(-1, "-----------------------------------------------------------------------------------------------------")
 	end,
+	click = async(
+		function(player, npc)
+			----------Variable Declarations-----------------------------------
 
-	click = async(function(player, npc)
-		----------Variable Declarations-----------------------------------
+			local pc = player:getObjectsInMap(15021, BL_PC)
 
-		local pc = player:getObjectsInMap(15021, BL_PC)
+			--waiting room map
+			local n = "<b>[Beach War]\n\n"
+			local t = {g = convertGraphic(npc.look, "monster"), c = npc.lookColor}
+			player.npcGraphic = t.g
+			player.npcColor = t.c
+			player.dialogType = 0
 
-		--waiting room map
-		local n = "<b>[Beach War]\n\n"
-		local t = {g = convertGraphic(npc.look, "monster"), c = npc.lookColor}
-		player.npcGraphic = t.g
-		player.npcColor = t.c
-		player.dialogType = 0
+			local str = ""
+			local time = BeachWarNpc.getStartTimer()
+			local goldCost = 1000
+			local opts = {}
+			local diff
 
-		local str = ""
-		local time = BeachWarNpc.getStartTimer()
-		local goldCost = 1000
-		local opts = {}
-		local diff
+			---------------Table Inserts-----------------------------
+			table.insert(opts, "How To Play?")
 
-		---------------Table Inserts-----------------------------
-		table.insert(opts, "How To Play?")
-
-		if core.gameRegistry["beach_war_open"] == 1 then
-			if player.registry["beach_war_team"] == 0 and core.gameRegistry[
-				"beach_war_open"
-			] == 1 then
-				table.insert(opts, "Register For Beach War")
-			end
-			if player.registry["beach_war_team"] > 0 then
-				table.insert(opts, "I can't register!")
-			end
-		end
-		table.insert(opts, "Exit")
-
-		if core.gameRegistry["beach_war_start_time"] > os.time() then
-			--if the game is open, get timer string
-			str = "Waiting time: " .. BeachWarNpc.getStartTimer()
-		end
-
-		----------------------------------------------------------
-
-		local menu = player:menuString(
-			n .. "Hello, the game will start in few minutes.\n" .. str .. "\nIn the waiting room: " .. #pc,
-			opts
-		)
-
-		--Display the menu
-
-		-----------------Menu Options-------------------------
-		if menu == "How To Play?" then
-			player:dialogSeq(
-				{
-					t,
-					n .. "Beach War is a game where you use your water gun to soak members of the opposing team.",
-					n .. "A player can get soaked once and stay in the game, but a second shot will send you to the sidelines for a short time.",
-					n .. "Your gun can only hold 10 shots worth of water, but it will be slowly refilled if you stand by the pool at the center of the map.",
-					n .. "The game ends when one team reaches a target score, based on the number of players."
-				},
-				1
-			)
-			player:freeAsync()
-			BeachWarNpc.click(player, npc)
-		elseif menu == "Register For Beach War" then
-			if os.time() < player.registry["minigameBan"] then
-				--Check if player is banned from minigames
-				player:popUp("You are currently banned from minigames! Try again later maybe.")
-				return
-			end
-
-			local confirm = player:menuSeq(
-				"It will cost 5,000 gold to play. Do you agree?",
-				{"Yes, pay 5,000 gold.", "Nevermind."},
-				{}
-			)
-
-			if confirm == 1 then
-				if player.money < 5000 then
-					player:dialogSeq(
-						{t, "You don't have enough gold to play."},
-						0
-					)
-					return
+			if core.gameRegistry["beach_war_open"] == 1 then
+				if player.registry["beach_war_team"] == 0 and core.gameRegistry["beach_war_open"] == 1 then
+					table.insert(opts, "Register For Beach War")
 				end
-				player:removeGold(5000)
-				player.registry["beach_war_team"] = math.random(1, 2)
-				player:warp(15021, math.random(2, 14), math.random(2, 12))
-				player:sendAnimation(16)
-				player:playSound(29)
+				if player.registry["beach_war_team"] > 0 then
+					table.insert(opts, "I can't register!")
+				end
+			end
+			table.insert(opts, "Exit")
+
+			if core.gameRegistry["beach_war_start_time"] > os.time() then
+				--if the game is open, get timer string
+				str = "Waiting time: " .. BeachWarNpc.getStartTimer()
+			end
+
+			----------------------------------------------------------
+
+			local menu =
+				player:menuString(
+				n .. "Hello, the game will start in few minutes.\n" .. str .. "\nIn the waiting room: " .. #pc,
+				opts
+			)
+
+			--Display the menu
+
+			-----------------Menu Options-------------------------
+			if menu == "How To Play?" then
 				player:dialogSeq(
 					{
 						t,
-						n .. "Alright, your character is registered for Beach War.\nPlease wait until the game starts!"
+						n .. "Beach War is a game where you use your water gun to soak members of the opposing team.",
+						n ..
+							"A player can get soaked once and stay in the game, but a second shot will send you to the sidelines for a short time.",
+						n ..
+							"Your gun can only hold 10 shots worth of water, but it will be slowly refilled if you stand by the pool at the center of the map.",
+						n .. "The game ends when one team reaches a target score, based on the number of players."
 					},
 					1
 				)
-			end
-		elseif menu == "I can't register!" then
-			player.registry["beach_war_times_hit"] = 0
-			player.registry["beach_war_gun_pct"] = 0
-			player.registry["beach_war_flag"] = 0
-			player.registry["beach_war_team"] = 0
-			player.registry["beach_war_kills"] = 0
-			player:dialogSeq(
-				{
-					t,
-					n .. "Looks like a simple paperwork mixup. You should be all set to register now, have fun at the game!"
-				},
-				1
-			)
-			player:freeAsync()
-			BeachWarNpc.click(player, npc)
-		end
-	end),
+				player:freeAsync()
+				BeachWarNpc.click(player, npc)
+			elseif menu == "Register For Beach War" then
+				if os.time() < player.registry["minigameBan"] then
+					--Check if player is banned from minigames
+					player:popUp("You are currently banned from minigames! Try again later maybe.")
+					return
+				end
 
+				local confirm =
+					player:menuSeq("It will cost 5,000 gold to play. Do you agree?", {"Yes, pay 5,000 gold.", "Nevermind."}, {})
+
+				if confirm == 1 then
+					if player.money < 5000 then
+						player:dialogSeq({t, "You don't have enough gold to play."}, 0)
+						return
+					end
+					player:removeGold(5000)
+					player.registry["beach_war_team"] = math.random(1, 2)
+					player:warp(15021, math.random(2, 14), math.random(2, 12))
+					player:sendAnimation(16)
+					player:playSound(29)
+					player:dialogSeq(
+						{
+							t,
+							n .. "Alright, your character is registered for Beach War.\nPlease wait until the game starts!"
+						},
+						1
+					)
+				end
+			elseif menu == "I can't register!" then
+				player.registry["beach_war_times_hit"] = 0
+				player.registry["beach_war_gun_pct"] = 0
+				player.registry["beach_war_flag"] = 0
+				player.registry["beach_war_team"] = 0
+				player.registry["beach_war_kills"] = 0
+				player:dialogSeq(
+					{
+						t,
+						n .. "Looks like a simple paperwork mixup. You should be all set to register now, have fun at the game!"
+					},
+					1
+				)
+				player:freeAsync()
+				BeachWarNpc.click(player, npc)
+			end
+		end
+	),
 	guiText = function(player)
 		local diff = core.gameRegistry["beach_war_start_time"] - os.time()
 		local diffwait = core.gameRegistry["beach_war_wait_time"] - os.time()
@@ -186,19 +167,24 @@ BeachWarNpc = {
 			if diffwait > 0 then
 				player:guitext("\nBeach War will begin in: " .. getTimerValues("beach_war_wait_time") .. "    ")
 			else
-				player:guitext("\nRED: " .. core.gameRegistry["beach_war_red_point"] .. " | BLUE: " .. core.gameRegistry[
-					"beach_war_blue_point"
-				] .. "  \nYour kills: " .. player.registry["beach_war_kills"])
+				player:guitext(
+					"\nRED: " ..
+						core.gameRegistry["beach_war_red_point"] ..
+							" | BLUE: " ..
+								core.gameRegistry["beach_war_blue_point"] .. "  \nYour kills: " .. player.registry["beach_war_kills"]
+				)
 			end
 		end
 
 		if player.gmLevel > 0 and player.m == 15020 then
-			player:guitext("\nRED: " .. core.gameRegistry["beach_war_red_point"] .. " | BLUE: " .. core.gameRegistry[
-				"beach_war_blue_point"
-			] .. "  \nYour kills: " .. player.registry["beach_war_kills"])
+			player:guitext(
+				"\nRED: " ..
+					core.gameRegistry["beach_war_red_point"] ..
+						" | BLUE: " ..
+							core.gameRegistry["beach_war_blue_point"] .. "  \nYour kills: " .. player.registry["beach_war_kills"]
+			)
 		end
 	end,
-
 	getStartTimer = function()
 		local hour, minute, second = 0, 0, 0
 
@@ -208,14 +194,10 @@ BeachWarNpc = {
 			dif = core.gameRegistry["beach_war_start_time"] - os.time()
 			hour = string.format("%02.f", math.floor(dif / 3600))
 			minute = string.format("%02.f", math.floor(dif / 60 - (hour * 60)))
-			second = string.format(
-				"%02.f",
-				math.floor(dif - hour * 3600 - minute * 60)
-			)
+			second = string.format("%02.f", math.floor(dif - hour * 3600 - minute * 60))
 			return hour .. ":" .. minute .. ":" .. second
 		end
 	end,
-
 	closed = function()
 		local diff = core.gameRegistry["beach_war_start_time"] - os.time()
 
@@ -226,10 +208,7 @@ BeachWarNpc = {
 						-1,
 						"-----------------------------------------------------------------------------------------------------"
 					)
-					broadcast(
-						-1,
-						"                                 Beach War entry is closing in 5 minute!"
-					)
+					broadcast(-1, "                                 Beach War entry is closing in 5 minute!")
 					broadcast(
 						-1,
 						"-----------------------------------------------------------------------------------------------------"
@@ -239,10 +218,7 @@ BeachWarNpc = {
 						-1,
 						"-----------------------------------------------------------------------------------------------------"
 					)
-					broadcast(
-						-1,
-						"                                 Beach War entry is closing in 10 minutes!"
-					)
+					broadcast(-1, "                                 Beach War entry is closing in 10 minutes!")
 					broadcast(
 						-1,
 						"-----------------------------------------------------------------------------------------------------"
@@ -252,24 +228,15 @@ BeachWarNpc = {
 						-1,
 						"-----------------------------------------------------------------------------------------------------"
 					)
-					broadcast(
-						-1,
-						"                                 Beach War entry is closing in 1 minute!"
-					)
+					broadcast(-1, "                                 Beach War entry is closing in 1 minute!")
 					broadcast(
 						-1,
 						"-----------------------------------------------------------------------------------------------------"
 					)
 				elseif diff == 10 then
-					broadcast(
-						15021,
-						"                                    Beach War Starts in 10 seconds!"
-					)
+					broadcast(15021, "                                    Beach War Starts in 10 seconds!")
 				elseif diff <= 3 then
-					broadcast(
-						15021,
-						"                                    Beach War Starts in " .. diff .. " seconds!"
-					)
+					broadcast(15021, "                                    Beach War Starts in " .. diff .. " seconds!")
 				end
 			elseif core.gameRegistry["beach_war_start_time"] < os.time() then
 				core.gameRegistry["beach_war_open"] = 0
@@ -277,10 +244,7 @@ BeachWarNpc = {
 					-1,
 					"-----------------------------------------------------------------------------------------------------"
 				)
-				broadcast(
-					-1,
-					"                                 Beach War entry is closed!"
-				)
+				broadcast(-1, "                                 Beach War entry is closed!")
 				broadcast(
 					-1,
 					"-----------------------------------------------------------------------------------------------------"
@@ -289,14 +253,12 @@ BeachWarNpc = {
 			end
 		end
 	end,
-
 	getRandomMap = function()
 		local allBeachWarMaps = {15020}
 		local randomMap = allBeachWarMaps[math.random(1, #allBeachWarMaps)]
 
 		core.gameRegistry["beach_war_current_map"] = randomMap
 	end,
-
 	setMapBlockers = function(mapID)
 		local blocker = 12447
 		local noPass = 1
@@ -321,7 +283,6 @@ BeachWarNpc = {
 			setPass(mapID, 28, 40, noPass)
 		end
 	end,
-
 	removeMapBlockers = function(mapID)
 		local noBlocker = 0
 		local pass = 0
@@ -346,7 +307,6 @@ BeachWarNpc = {
 			setPass(mapID, 28, 40, pass)
 		end
 	end,
-
 	start = function()
 		BeachWarNpc.assignTeams()
 		BeachWarNpc.getRandomMap()
@@ -384,10 +344,7 @@ BeachWarNpc = {
 					-1,
 					"-----------------------------------------------------------------------------------------------------"
 				)
-				broadcast(
-					-1,
-					"                             Not enough players. Beach War canceled!"
-				)
+				broadcast(-1, "                             Not enough players. Beach War canceled!")
 				broadcast(
 					-1,
 					"-----------------------------------------------------------------------------------------------------"
@@ -396,7 +353,6 @@ BeachWarNpc = {
 			end
 		end
 	end,
-
 	costume = function(player)
 		local team = player.registry["beach_war_team"]
 		local dye, str = 0, ""
@@ -442,7 +398,6 @@ BeachWarNpc = {
 		player.attackSpeed = 50
 		player:updateState()
 	end,
-
 	assignTeams = function()
 		local red, blue = 0, 0
 		local pc = core:getObjectsInMap(15021, BL_PC)
@@ -487,7 +442,6 @@ BeachWarNpc = {
 			end
 		end
 	end,
-
 	wait = function()
 		local map = core.gameRegistry["beach_war_current_map"]
 
@@ -499,16 +453,12 @@ BeachWarNpc = {
 			map,
 			"-----------------------------------------------------------------------------------------------------"
 		)
-		broadcast(
-			map,
-			"                                    Get Ready! The round starts in 60 seconds!"
-		)
+		broadcast(map, "                                    Get Ready! The round starts in 60 seconds!")
 		broadcast(
 			map,
 			"-----------------------------------------------------------------------------------------------------"
 		)
 	end,
-
 	enterArena = function()
 		local diff = core.gameRegistry["beach_war_wait_time"] - os.time()
 		local map = core.gameRegistry["beach_war_current_map"]
@@ -525,13 +475,9 @@ BeachWarNpc = {
 					pc[i]:warp(map, 36, 41)
 				end
 			end
-			broadcast(
-				map,
-				"                                    Beach War starts in 30 seconds!"
-			)
+			broadcast(map, "                                    Beach War starts in 30 seconds!")
 		end
 	end,
-
 	begin = function()
 		local diff = core.gameRegistry["beach_war_wait_time"] - os.time()
 		local map = core.gameRegistry["beach_war_current_map"]
@@ -545,17 +491,13 @@ BeachWarNpc = {
 				map,
 				"-----------------------------------------------------------------------------------------------------"
 			)
-			broadcast(
-				map,
-				"                                   The Beach War has begun!"
-			)
+			broadcast(map, "                                   The Beach War has begun!")
 			broadcast(
 				map,
 				"-----------------------------------------------------------------------------------------------------"
 			)
 		end
 	end,
-
 	stop = function()
 		local map = core.gameRegistry["beach_war_current_map"]
 		local pc = core:getObjectsInMap(map, BL_PC)
@@ -590,7 +532,6 @@ BeachWarNpc = {
 			end
 		end
 	end,
-
 	cancel = function()
 		local map = 15021
 		local pc = core:getObjectsInMap(map, BL_PC)
@@ -624,7 +565,6 @@ BeachWarNpc = {
 			end
 		end
 	end,
-
 	shoot = function(player)
 		local team = player.registry["beach_war_team"]
 
@@ -636,9 +576,7 @@ BeachWarNpc = {
 		if team > 0 then
 			if player.m == map and player.gfxClone == 1 then
 				if player.registry["beach_war_gun_pct"] >= 10 then
-					player.registry["beach_war_gun_pct"] = player.registry[
-						"beach_war_gun_pct"
-					] - 10
+					player.registry["beach_war_gun_pct"] = player.registry["beach_war_gun_pct"] - 10
 					player:playSound(709)
 					player:sendMinitext("Your water tank is at " .. player.registry["beach_war_gun_pct"] .. "%")
 					for i = 1, 8 do
@@ -683,7 +621,6 @@ BeachWarNpc = {
 			end
 		end
 	end,
-
 	hit = function(player, target)
 		local map = core.gameRegistry["beach_war_current_map"]
 		local team = target.registry["beach_war_team"]
@@ -704,65 +641,43 @@ BeachWarNpc = {
 				teamName = "red"
 			end
 
-			player.registry["total_beach_war_hits"] = player.registry[
-				"total_beach_war_hits"
-			] + 1
+			player.registry["total_beach_war_hits"] = player.registry["total_beach_war_hits"] + 1
 
 			--permanent registry for stat tracking
-			player.registry["total_beach_war_kills"] = player.registry[
-				"total_beach_war_kills"
-			] + 1
+			player.registry["total_beach_war_kills"] = player.registry["total_beach_war_kills"] + 1
 
 			--permanent registry for stat tracking
-			target.registry["total_beach_war_deaths"] = target.registry[
-				"total_beach_war_deaths"
-			] + 1
+			target.registry["total_beach_war_deaths"] = target.registry["total_beach_war_deaths"] + 1
 
 			--permanent registry for stat tracking
 			target.registry["total_beach_war_times_hit"] = 1
 
 			--permanent registry for stat tracking
 
-			core.gameRegistry["beach_war_" .. teamName .. "_point"] = core.gameRegistry[
-				"beach_war_" .. teamName .. "_point"
-			] + 1
+			core.gameRegistry["beach_war_" .. teamName .. "_point"] = core.gameRegistry["beach_war_" .. teamName .. "_point"] + 1
 
 			--increase current game score
-			player.registry["beach_war_kills"] = player.registry[
-				"beach_war_kills"
-			] + 1
+			player.registry["beach_war_kills"] = player.registry["beach_war_kills"] + 1
 
 			target:setDuration("beach_war_respawn", 15000)
 			target:warp(map, x, y)
 
-			broadcast(
-				map,
-				"" .. target.name .. " was SOAKED by " .. player.name .. "!"
-			)
+			broadcast(map, "" .. target.name .. " was SOAKED by " .. player.name .. "!")
 
 			BeachWarNpc.winnerCheck()
 		elseif core.gameRegistry["beach_war_hits_to_kill"] == 2 then
 			if target.registry["beach_war_times_hit"] == 0 then
-				player.registry["total_beach_war_hits"] = player.registry[
-					"total_beach_war_hits"
-				] + 1
+				player.registry["total_beach_war_hits"] = player.registry["total_beach_war_hits"] + 1
 
 				--permanent registry for stat tracking
-				target.registry["total_beach_war_times_hit"] = target.registry[
-					"total_beach_war_times_hit"
-				] + 1
+				target.registry["total_beach_war_times_hit"] = target.registry["total_beach_war_times_hit"] + 1
 
 				--permanent registry for stat tracking
 
 				target:sendMinitext("You got shot by " .. player.name .. "! Don't get hit again!")
-				target.registry["beach_war_times_hit"] = target.registry[
-					"beach_war_times_hit"
-				] + 1
+				target.registry["beach_war_times_hit"] = target.registry["beach_war_times_hit"] + 1
 
-				broadcast(
-					map,
-					"" .. target.name .. " has been shot by " .. player.name .. "!"
-				)
+				broadcast(map, "" .. target.name .. " has been shot by " .. player.name .. "!")
 			elseif target.registry["beach_war_times_hit"] == 1 then
 				if team == 1 then
 					x = 3
@@ -773,46 +688,33 @@ BeachWarNpc = {
 					y = 47
 					teamName = "red"
 				end
-				player.registry["total_beach_war_hits"] = player.registry[
-					"total_beach_war_hits"
-				] + 1
+				player.registry["total_beach_war_hits"] = player.registry["total_beach_war_hits"] + 1
 
 				--permanent registry for stat tracking
-				player.registry["total_beach_war_kills"] = player.registry[
-					"total_beach_war_kills"
-				] + 1
+				player.registry["total_beach_war_kills"] = player.registry["total_beach_war_kills"] + 1
 
 				--permanent registry for stat tracking
-				target.registry["total_beach_war_deaths"] = target.registry[
-					"total_beach_war_deaths"
-				] + 1
+				target.registry["total_beach_war_deaths"] = target.registry["total_beach_war_deaths"] + 1
 
 				--permanent registry for stat tracking
 				target.registry["total_beach_war_times_hit"] = 1
 
 				--permanent registry for stat tracking
 
-				core.gameRegistry["beach_war_" .. teamName .. "_point"] = core.gameRegistry[
-					"beach_war_" .. teamName .. "_point"
-				] + 1
-				player.registry["beach_war_kills"] = player.registry[
-					"beach_war_kills"
-				] + 1
+				core.gameRegistry["beach_war_" .. teamName .. "_point"] =
+					core.gameRegistry["beach_war_" .. teamName .. "_point"] + 1
+				player.registry["beach_war_kills"] = player.registry["beach_war_kills"] + 1
 
 				target:setDuration("beach_war_respawn", 10000)
 				target:warp(map, x, y)
 
-				broadcast(
-					map,
-					"" .. target.name .. " has been SOAKED by " .. player.name .. "!"
-				)
+				broadcast(map, "" .. target.name .. " has been SOAKED by " .. player.name .. "!")
 				BeachWarNpc.winnerCheck()
 
 				target.registry["beach_war_times_hit"] = 0
 			end
 		end
 	end,
-
 	refill = function(player)
 		local m, x, y = player.m, player.x, player.y
 		local refillTile = {
@@ -837,12 +739,8 @@ BeachWarNpc = {
 		if m == 15020 then
 			for i = 1, #refillTile do
 				if getTile(m, x, y) == refillTile[i] then
-					if player.registry["beach_war_gun_pct"] < 100 and player.registry[
-						"beach_war_team"
-					] > 0 and player.gfxClone == 1 then
-						player.registry["beach_war_gun_pct"] = player.registry[
-							"beach_war_gun_pct"
-						] + 5
+					if player.registry["beach_war_gun_pct"] < 100 and player.registry["beach_war_team"] > 0 and player.gfxClone == 1 then
+						player.registry["beach_war_gun_pct"] = player.registry["beach_war_gun_pct"] + 5
 						player:sendMinitext("Refilling: Your water tank is at " .. player.registry["beach_war_gun_pct"] .. "%")
 					else
 						player:sendMinitext("Your gun's water tank is full!")
@@ -851,7 +749,6 @@ BeachWarNpc = {
 			end
 		end
 	end,
-
 	winnerCheck = function()
 		local pointsToWin = 50
 
@@ -867,26 +764,17 @@ BeachWarNpc = {
 		--
 
 		if core.gameRegistry["beach_war_red_point"] == pointsToWin then
-			core.gameRegistry["beach_war_red_wins"] = core.gameRegistry[
-				"beach_war_red_wins"
-			] + 1
-			core.gameRegistry["beach_war_round"] = core.gameRegistry[
-				"beach_war_round"
-			] + 1
+			core.gameRegistry["beach_war_red_wins"] = core.gameRegistry["beach_war_red_wins"] + 1
+			core.gameRegistry["beach_war_round"] = core.gameRegistry["beach_war_round"] + 1
 			BeachWarNpc.roundWin("red")
 			return
 		elseif core.gameRegistry["beach_war_blue_point"] == pointsToWin then
-			core.gameRegistry["beach_war_blue_wins"] = core.gameRegistry[
-				"beach_war_blue_wins"
-			] + 1
+			core.gameRegistry["beach_war_blue_wins"] = core.gameRegistry["beach_war_blue_wins"] + 1
 			BeachWarNpc.roundWin("blue")
-			core.gameRegistry["beach_war_round"] = core.gameRegistry[
-				"beach_war_round"
-			] + 1
+			core.gameRegistry["beach_war_round"] = core.gameRegistry["beach_war_round"] + 1
 			return
 		end
 	end,
-
 	roundWin = function(teamID)
 		local map = core.gameRegistry["beach_war_current_map"]
 		local pc = core:getObjectsInMap(map, BL_PC)
@@ -916,14 +804,10 @@ BeachWarNpc = {
 			)
 			broadcast(
 				map,
-				"Round over! " .. teamName .. " Team has " .. core.gameRegistry[
-					"beach_war_" .. teamID .. "_wins"
-				] .. " of 3 wins!"
+				"Round over! " .. teamName .. " Team has " .. core.gameRegistry["beach_war_" .. teamID .. "_wins"] .. " of 3 wins!"
 			)
 
-			if core.gameRegistry["beach_war_blue_wins"] == 2 or core.gameRegistry[
-				"beach_war_red_wins"
-			] == 2 then
+			if core.gameRegistry["beach_war_blue_wins"] == 2 or core.gameRegistry["beach_war_red_wins"] == 2 then
 				BeachWarNpc.declareWinner(teamID)
 				return
 			end
@@ -933,7 +817,6 @@ BeachWarNpc = {
 			BeachWarNpc.declareWinner(teamID)
 		end
 	end,
-
 	nextRound = function()
 		local map = core.gameRegistry["beach_war_current_map"]
 		local pc = core:getObjectsInMap(map, BL_PC)
@@ -952,7 +835,6 @@ BeachWarNpc = {
 		core.gameRegistry["beach_war_blue_point"] = 0
 		BeachWarNpc.wait()
 	end,
-
 	declareWinner = function(teamID)
 		local map = core.gameRegistry["beach_war_current_map"]
 		local pc = core:getObjectsInMap(map, BL_PC)
@@ -974,24 +856,18 @@ BeachWarNpc = {
 			--flush any respawn duration
 		end
 		core.gameRegistry["beach_war_winner"] = teamNum
-		broadcast(
-			map,
-			"         Game Over! " .. teamName .. " Team is the winner!"
-		)
+		broadcast(map, "         Game Over! " .. teamName .. " Team is the winner!")
 		broadcast(map, "         You will exit the arena in 10 seconds!")
 
 		core.gameRegistry["beach_war_end_timer"] = os.time() + 10
 	end,
-
 	endGame = function()
 		local map = core.gameRegistry["beach_war_current_map"]
 		local pc = core:getObjectsInMap(map, BL_PC)
 		local arenaPC = core:getObjectsInMap(31, BL_PC)
 		local x, y = 8, 10
 
-		if core.gameRegistry["beach_war_end_timer"] > 0 and core.gameRegistry[
-			"beach_war_end_timer"
-		] < os.time() then
+		if core.gameRegistry["beach_war_end_timer"] > 0 and core.gameRegistry["beach_war_end_timer"] < os.time() then
 			if #pc > 0 then
 				for i = 1, #pc do
 					if pc[i].registry["beach_war_team"] == core.gameRegistry["beach_war_winner"] then
@@ -1029,7 +905,6 @@ BeachWarNpc = {
 			core.gameRegistry["beach_war_winner"] = 0
 		end
 	end,
-
 	entryLegend = function(player)
 		local reg = player.registry["beach_war_entries"]
 
@@ -1038,26 +913,13 @@ BeachWarNpc = {
 		end
 
 		if reg > 0 then
-			player.registry["beach_war_entries"] = player.registry[
-				"beach_war_entries"
-			] + 1
-			player:addLegend(
-				"Played in " .. player.registry["beach_war_entries"] .. " Beach Wars",
-				"beach_war_entries",
-				198,
-				16
-			)
+			player.registry["beach_war_entries"] = player.registry["beach_war_entries"] + 1
+			player:addLegend("Played in " .. player.registry["beach_war_entries"] .. " Beach Wars", "beach_war_entries", 198, 16)
 		else
 			player.registry["beach_war_entries"] = 1
-			player:addLegend(
-				"Played in 1 Beach War",
-				"beach_war_entries",
-				198,
-				16
-			)
+			player:addLegend("Played in 1 Beach War", "beach_war_entries", 198, 16)
 		end
 	end,
-
 	victoryLegend = function(player)
 		local reg = player.registry["beach_war_wins"]
 
@@ -1066,15 +928,8 @@ BeachWarNpc = {
 		end
 
 		if reg > 0 then
-			player.registry["beach_war_wins"] = player.registry[
-				"beach_war_wins"
-			] + 1
-			player:addLegend(
-				"Won " .. player.registry["beach_war_wins"] .. " Beach Wars",
-				"beach_war_wins",
-				198,
-				16
-			)
+			player.registry["beach_war_wins"] = player.registry["beach_war_wins"] + 1
+			player:addLegend("Won " .. player.registry["beach_war_wins"] .. " Beach Wars", "beach_war_wins", 198, 16)
 		else
 			player.registry["beach_war_wins"] = 1
 			player:addLegend("Won 1 Beach War", "beach_war_wins", 198, 16)
@@ -1088,7 +943,6 @@ beach_war_respawn = {
 			beach_war_respawn.beachWarWarpIn(player, 0)
 		end
 	end,
-
 	beachWarWarpIn = function(player, tries)
 		local x = math.random(1, 38)
 		local y = math.random(6, 43)
@@ -1113,10 +967,7 @@ beach_war_respawn = {
 						player.registry["beach_war_gun_pct"] = 100
 						player:warp(m, x, y)
 					else
-						return beach_war_respawn.beachWarWarpIn(
-							player,
-							numTries
-						)
+						return beach_war_respawn.beachWarWarpIn(player, numTries)
 					end
 				else
 					return beach_war_respawn.beachWarWarpIn(player, numTries)

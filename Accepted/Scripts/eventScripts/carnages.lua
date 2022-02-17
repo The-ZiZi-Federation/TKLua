@@ -3,7 +3,8 @@ carnages = {
 		core.gameRegistry["minigameEventId"] = eventid
 		broadcast(
 			-1,
-			"" .. minigames.eventNameLookUp(core.gameRegistry["minigameEventId"]) .. " doors opening. Tower Arena (184,31 Kugnae)"
+			"" ..
+				minigames.eventNameLookUp(core.gameRegistry["minigameEventId"]) .. " doors opening. Tower Arena (184,31 Kugnae)"
 		)
 
 		core.gameRegistry["carnageState"] = 1
@@ -99,13 +100,9 @@ carnages = {
 		local obj = getObject(m, 11, 2)
 		setObject(m, 11, 2, obj - 18)
 	end,
-
 	closeGame = function()
 		if core.gameRegistry["carnageMap"] > 0 then
-			local pcs = core:getObjectsInMap(
-				core.gameRegistry["carnageMap"],
-				BL_PC
-			)
+			local pcs = core:getObjectsInMap(core.gameRegistry["carnageMap"], BL_PC)
 			if #pcs ~= nil then
 				for i = 1, #pcs do
 					clone.wipe(pcs[i])
@@ -134,27 +131,28 @@ carnages = {
 		carnages.closeCarnageDoors()
 		carnages.clearTeams()
 	end,
-
 	timer = function(eventid)
 		local maps = {3011, 3010, 33, 3017}
 		if (core.gameRegistry["carnageState"] == 1) then
 			if (os.time() == core.gameRegistry["carnageStart"] + 600) then
 				broadcast(
 					-1,
-					"" .. minigames.eventNameLookUp(core.gameRegistry["minigameEventId"]) .. " doors closing in 5 minutes. Tower Arena (184,31 Kugnae)"
+					"" ..
+						minigames.eventNameLookUp(core.gameRegistry["minigameEventId"]) ..
+							" doors closing in 5 minutes. Tower Arena (184,31 Kugnae)"
 				)
 			end
 			if (os.time() == core.gameRegistry["carnageStart"] + 900) then
 				if not minigames.minimumPlayerCheck("carnage", 6) then
-					broadcast(-1, minigames.eventNameLookUp(core.gameRegistry["minigameEventId"]) .. " cancelled due to too few participants.")
+					broadcast(
+						-1,
+						minigames.eventNameLookUp(core.gameRegistry["minigameEventId"]) .. " cancelled due to too few participants."
+					)
 					carnages.closeGame()
 					return
 				end
 
-				broadcast(
-					-1,
-					"" .. minigames.eventNameLookUp(core.gameRegistry["minigameEventId"]) .. " doors closed."
-				)
+				broadcast(-1, "" .. minigames.eventNameLookUp(core.gameRegistry["minigameEventId"]) .. " doors closed.")
 				carnages.closeCarnageDoors()
 				for i = 1, #carnageTeams do
 					carnageTeams[i] = nil
@@ -172,10 +170,7 @@ carnages = {
 		end
 
 		if (core.gameRegistry["carnageState"] == 3) then
-			broadcast2(
-				maps,
-				"[Host Monty]: Please be patient while I setup the teams!"
-			)
+			broadcast2(maps, "[Host Monty]: Please be patient while I setup the teams!")
 			local players = core:getObjectsInMap(3010, BL_PC)
 
 			carnageTeams = {}
@@ -186,49 +181,73 @@ carnages = {
 
 			for z = 1, #players do
 				if (players[z].baseClass == 1) then
-					table.insert(warriors, {
-						id = players[z].id,
-						stats = players[z].baseMagic + players[z].baseHealth
-					})
+					table.insert(
+						warriors,
+						{
+							id = players[z].id,
+							stats = players[z].baseMagic + players[z].baseHealth
+						}
+					)
 					carnages.teamDye(players[z], 0)
 				end
 				if (players[z].baseClass == 2) then
-					table.insert(rogues, {
-						id = players[z].id,
-						stats = players[z].baseMagic + players[z].baseHealth
-					})
+					table.insert(
+						rogues,
+						{
+							id = players[z].id,
+							stats = players[z].baseMagic + players[z].baseHealth
+						}
+					)
 					carnages.teamDye(players[z], 0)
 				end
 				if (players[z].baseClass == 3) then
-					table.insert(mages, {
-						id = players[z].id,
-						stats = players[z].baseMagic + players[z].baseHealth
-					})
+					table.insert(
+						mages,
+						{
+							id = players[z].id,
+							stats = players[z].baseMagic + players[z].baseHealth
+						}
+					)
 					carnages.teamDye(players[z], 0)
 				end
 				if (players[z].baseClass == 4) then
-					table.insert(poets, {
-						id = players[z].id,
-						stats = players[z].baseMagic + players[z].baseHealth
-					})
+					table.insert(
+						poets,
+						{
+							id = players[z].id,
+							stats = players[z].baseMagic + players[z].baseHealth
+						}
+					)
 					carnages.teamDye(players[z], 0)
 				end
 
 				players[z]:calcStat()
 			end
 
-			table.sort(warriors, function(a, b)
-				return tonumber(a.stats) > tonumber(b.stats)
-			end)
-			table.sort(rogues, function(a, b)
-				return tonumber(a.stats) > tonumber(b.stats)
-			end)
-			table.sort(mages, function(a, b)
-				return tonumber(a.stats) > tonumber(b.stats)
-			end)
-			table.sort(poets, function(a, b)
-				return tonumber(a.stats) > tonumber(b.stats)
-			end)
+			table.sort(
+				warriors,
+				function(a, b)
+					return tonumber(a.stats) > tonumber(b.stats)
+				end
+			)
+			table.sort(
+				rogues,
+				function(a, b)
+					return tonumber(a.stats) > tonumber(b.stats)
+				end
+			)
+			table.sort(
+				mages,
+				function(a, b)
+					return tonumber(a.stats) > tonumber(b.stats)
+				end
+			)
+			table.sort(
+				poets,
+				function(a, b)
+					return tonumber(a.stats) > tonumber(b.stats)
+				end
+			)
 
 			table.insert(carnageTeams, warriors)
 			table.insert(carnageTeams, rogues)
@@ -256,46 +275,23 @@ carnages = {
 				end
 
 				if (#carnageTeams[4] > 0) then
-					carnages.teamDye(
-						Player(carnageTeams[4][1].id),
-						core.gameRegistry["carnageDye"] % 2 + 1
-					)
-					core.gameRegistry["carnageDye"] = core.gameRegistry[
-						"carnageDye"
-					] + 1
+					carnages.teamDye(Player(carnageTeams[4][1].id), core.gameRegistry["carnageDye"] % 2 + 1)
+					core.gameRegistry["carnageDye"] = core.gameRegistry["carnageDye"] + 1
 					table.remove(carnageTeams[4], 1)
 				elseif (#carnageTeams[2] > 0) then
-					carnages.teamDye(
-						Player(carnageTeams[2][1].id),
-						core.gameRegistry["carnageDye"] % 2 + 1
-					)
-					core.gameRegistry["carnageDye"] = core.gameRegistry[
-						"carnageDye"
-					] + 1
+					carnages.teamDye(Player(carnageTeams[2][1].id), core.gameRegistry["carnageDye"] % 2 + 1)
+					core.gameRegistry["carnageDye"] = core.gameRegistry["carnageDye"] + 1
 					table.remove(carnageTeams[2], 1)
 				elseif (#carnageTeams[3] > 0) then
-					carnages.teamDye(
-						Player(carnageTeams[3][1].id),
-						core.gameRegistry["carnageDye"] % 2 + 1
-					)
-					core.gameRegistry["carnageDye"] = core.gameRegistry[
-						"carnageDye"
-					] + 1
+					carnages.teamDye(Player(carnageTeams[3][1].id), core.gameRegistry["carnageDye"] % 2 + 1)
+					core.gameRegistry["carnageDye"] = core.gameRegistry["carnageDye"] + 1
 					table.remove(carnageTeams[3], 1)
 				elseif (#carnageTeams[1] > 0) then
-					carnages.teamDye(
-						Player(carnageTeams[1][1].id),
-						core.gameRegistry["carnageDye"] % 2 + 1
-					)
-					core.gameRegistry["carnageDye"] = core.gameRegistry[
-						"carnageDye"
-					] + 1
+					carnages.teamDye(Player(carnageTeams[1][1].id), core.gameRegistry["carnageDye"] % 2 + 1)
+					core.gameRegistry["carnageDye"] = core.gameRegistry["carnageDye"] + 1
 					table.remove(carnageTeams[1], 1)
 				else
-					broadcast2(
-						maps,
-						"[Host Monty]: Alright teams are setup, get ready to enter!"
-					)
+					broadcast2(maps, "[Host Monty]: Alright teams are setup, get ready to enter!")
 					core.gameRegistry["carnageState"] = 5
 					core.gameRegistry["carnageStart"] = os.time()
 				end
@@ -336,11 +332,11 @@ carnages = {
 		end
 
 		if (core.gameRegistry["carnageState"] == 8) then
-			if (core.gameRegistry["carnageBlackScore"] < 2 and core.gameRegistry[
-				"carnageRedScore"
-			] < 2 and core.gameRegistry["carnageWhiteScore"] < 2 and core.gameRegistry[
-				"carnageBlueScore"
-			] < 2) then
+			if
+				(core.gameRegistry["carnageBlackScore"] < 2 and core.gameRegistry["carnageRedScore"] < 2 and
+					core.gameRegistry["carnageWhiteScore"] < 2 and
+					core.gameRegistry["carnageBlueScore"] < 2)
+			 then
 				local players = core:getObjectsInMap(3010, BL_PC)
 				if (#players <= 100) then
 					--core.gameRegistry["carnageMap"] = 3011
@@ -364,10 +360,7 @@ carnages = {
 				setObject(3010, 27, 10, 371)
 				setObject(3010, 29, 10, 370)
 				setObject(3010, 30, 10, 371)
-				broadcast2(
-					maps,
-					"[Host Monty]: Doors are open, please enter the arena!"
-				)
+				broadcast2(maps, "[Host Monty]: Doors are open, please enter the arena!")
 				core.gameRegistry["carnageState"] = 9
 				core.gameRegistry["carnageStart"] = os.time()
 			else
@@ -378,10 +371,7 @@ carnages = {
 
 		if (core.gameRegistry["carnageState"] == 9) then
 			if (os.time() > core.gameRegistry["carnageStart"] + 30) then
-				broadcast2(
-					maps,
-					"[Host Monty]: Round is starting in 30 seconds."
-				)
+				broadcast2(maps, "[Host Monty]: Round is starting in 30 seconds.")
 				core.gameRegistry["carnageState"] = 10
 				core.gameRegistry["carnageStart"] = os.time()
 			end
@@ -389,10 +379,7 @@ carnages = {
 
 		if (core.gameRegistry["carnageState"] == 10) then
 			if (os.time() > core.gameRegistry["carnageStart"] + 15) then
-				broadcast2(
-					maps,
-					"[Host Monty]: Round is starting in 15 seconds."
-				)
+				broadcast2(maps, "[Host Monty]: Round is starting in 15 seconds.")
 				core.gameRegistry["carnageState"] = 11
 				core.gameRegistry["carnageStart"] = os.time()
 			end
@@ -400,14 +387,8 @@ carnages = {
 
 		if (core.gameRegistry["carnageState"] == 11) then
 			if (os.time() > core.gameRegistry["carnageStart"] + 10) then
-				broadcast2(
-					maps,
-					"[Host Monty]: Round is starting in 5 seconds. Get ready!"
-				)
-				local traps = core:getObjectsInMap(
-					core.gameRegistry["carnageMap"],
-					BL_NPC
-				)
+				broadcast2(maps, "[Host Monty]: Round is starting in 5 seconds. Get ready!")
+				local traps = core:getObjectsInMap(core.gameRegistry["carnageMap"], BL_NPC)
 				if (#traps > 0) then
 					for z = 1, #traps do
 						if (traps[z].type == 2) then
@@ -415,10 +396,7 @@ carnages = {
 						end
 					end
 				end
-				local players = core:getObjectsInMap(
-					core.gameRegistry["carnageMap"],
-					BL_PC
-				)
+				local players = core:getObjectsInMap(core.gameRegistry["carnageMap"], BL_PC)
 				if (#players > 0) then
 					for z = 1, #players do
 						players[z]:talkSelf(2, "All traps have been removed!")
@@ -451,10 +429,7 @@ carnages = {
 				core.gameRegistry["carnageState"] = 13
 				carnages.removeBarricade()
 				core.gameRegistry["carnageStart"] = os.time()
-				local players = core:getObjectsInMap(
-					core.gameRegistry["carnageMap"],
-					BL_PC
-				)
+				local players = core:getObjectsInMap(core.gameRegistry["carnageMap"], BL_PC)
 				if (#players > 0) then
 					for z = 1, #players do
 						players[z]:setTimer(2, 10 * 60)
@@ -485,10 +460,7 @@ carnages = {
 				local red = 0
 				local blue = 0
 				local white = 0
-				local players = core:getObjectsInMap(
-					core.gameRegistry["carnageMap"],
-					BL_PC
-				)
+				local players = core:getObjectsInMap(core.gameRegistry["carnageMap"], BL_PC)
 				for z = 1, #players do
 					if (players[z].gfxDye == 60 and players[z].state ~= 1) then
 						black = black + 1
@@ -506,54 +478,37 @@ carnages = {
 
 				if (red == 0 and blue == 0 and white == 0 and black > 0) then
 					--black wins
-					core.gameRegistry["carnageBlackScore"] = core.gameRegistry[
-						"carnageBlackScore"
-					] + 1
+					core.gameRegistry["carnageBlackScore"] = core.gameRegistry["carnageBlackScore"] + 1
 					core.gameRegistry["carnageStart"] = os.time()
 					core.gameRegistry["carnageState"] = 14
 					core.gameRegistry["carnageRoundWinner"] = 1
 				end
 				if (black == 0 and blue == 0 and white == 0 and red > 0) then
 					-- red wins
-					core.gameRegistry["carnageRedScore"] = core.gameRegistry[
-						"carnageRedScore"
-					] + 1
+					core.gameRegistry["carnageRedScore"] = core.gameRegistry["carnageRedScore"] + 1
 					core.gameRegistry["carnageState"] = 14
 					core.gameRegistry["carnageStart"] = os.time()
 					core.gameRegistry["carnageRoundWinner"] = 2
 				end
 				if (black == 0 and blue == 0 and red == 0 and white > 0) then
 					-- white wins
-					core.gameRegistry["carnageWhiteScore"] = core.gameRegistry[
-						"carnageWhiteScore"
-					] + 1
+					core.gameRegistry["carnageWhiteScore"] = core.gameRegistry["carnageWhiteScore"] + 1
 					core.gameRegistry["carnageState"] = 14
 					core.gameRegistry["carnageStart"] = os.time()
 					core.gameRegistry["carnageRoundWinner"] = 3
 				end
 				if (black == 0 and white == 0 and red == 0 and blue > 0) then
 					-- blue wins
-					core.gameRegistry["carnageBlueScore"] = core.gameRegistry[
-						"carnageBlueScore"
-					] + 1
+					core.gameRegistry["carnageBlueScore"] = core.gameRegistry["carnageBlueScore"] + 1
 					core.gameRegistry["carnageState"] = 14
 					core.gameRegistry["carnageStart"] = os.time()
 					core.gameRegistry["carnageRoundWinner"] = 4
 				end
 			end
 			if (os.time() > core.gameRegistry["carnageStart"] + 600) then
-				broadcast2(
-					maps,
-					"[Host Monty]: Stop fighting! We will begin circle shortly."
-				)
-				broadcast2(
-					maps,
-					"[Host Monty]: Players will have 5 minutes to kill as many as possible!"
-				)
-				broadcast2(
-					maps,
-					"[Host Monty]: The team with the most alive at the end will win the round!"
-				)
+				broadcast2(maps, "[Host Monty]: Stop fighting! We will begin circle shortly.")
+				broadcast2(maps, "[Host Monty]: Players will have 5 minutes to kill as many as possible!")
+				broadcast2(maps, "[Host Monty]: The team with the most alive at the end will win the round!")
 				core.gameRegistry["carnageState"] = 1000
 				core.gameRegistry["carnageStart"] = os.time()
 				setMapPvP(core.gameRegistry["carnageMap"], 0)
@@ -578,10 +533,7 @@ carnages = {
 				core.gameRegistry["carnageState"] = 15
 				core.gameRegistry["carnageStart"] = os.time()
 
-				local players = core:getObjectsInMap(
-					core.gameRegistry["carnageMap"],
-					BL_PC
-				)
+				local players = core:getObjectsInMap(core.gameRegistry["carnageMap"], BL_PC)
 				for z = 1, #players do
 					players[z]:setTimer(2, 0)
 				end
@@ -590,10 +542,7 @@ carnages = {
 
 		if (core.gameRegistry["carnageState"] == 15) then
 			-- warp players back and start next round
-			local players = core:getObjectsInMap(
-				core.gameRegistry["carnageMap"],
-				BL_PC
-			)
+			local players = core:getObjectsInMap(core.gameRegistry["carnageMap"], BL_PC)
 			for z = 1, #players do
 				players[z].state = 0
 				players[z].disguise = 0
@@ -615,18 +564,9 @@ carnages = {
 			end
 			broadcast2(maps, "[Host Monty]: Current score is...")
 			broadcast2(maps, "- Red: " .. core.gameRegistry["carnageRedScore"])
-			broadcast2(
-				maps,
-				"- Black: " .. core.gameRegistry["carnageBlackScore"]
-			)
-			broadcast2(
-				maps,
-				"- Blue: " .. core.gameRegistry["carnageBlueScore"]
-			)
-			broadcast2(
-				maps,
-				"- White: " .. core.gameRegistry["carnageWhiteScore"]
-			)
+			broadcast2(maps, "- Black: " .. core.gameRegistry["carnageBlackScore"])
+			broadcast2(maps, "- Blue: " .. core.gameRegistry["carnageBlueScore"])
+			broadcast2(maps, "- White: " .. core.gameRegistry["carnageWhiteScore"])
 			core.gameRegistry["carnageState"] = 16
 			core.gameRegistry["carnageStart"] = os.time()
 		end
@@ -643,10 +583,7 @@ carnages = {
 			local players = core:getObjectsInMap(3010, BL_PC)
 
 			if (core.gameRegistry["carnageBlackScore"] >= 2) then
-				broadcast2(
-					maps,
-					"[Host Monty]: Congratulations to the Black team. Please exit through the doors at the bottom."
-				)
+				broadcast2(maps, "[Host Monty]: Congratulations to the Black team. Please exit through the doors at the bottom.")
 				setObject(3010, 18, 32, 370)
 				setObject(3010, 19, 32, 371)
 			else
@@ -655,10 +592,7 @@ carnages = {
 			end
 
 			if (core.gameRegistry["carnageWhiteScore"] >= 2) then
-				broadcast2(
-					maps,
-					"[Host Monty]: Congratulations to the White team. Please exit through the doors at the bottom."
-				)
+				broadcast2(maps, "[Host Monty]: Congratulations to the White team. Please exit through the doors at the bottom.")
 				setObject(3010, 10, 32, 370)
 				setObject(3010, 11, 32, 371)
 			else
@@ -667,10 +601,7 @@ carnages = {
 			end
 
 			if (core.gameRegistry["carnageRedScore"] >= 2) then
-				broadcast2(
-					maps,
-					"[Host Monty]: Congratulations to the Red team. Please exit through the doors at the bottom."
-				)
+				broadcast2(maps, "[Host Monty]: Congratulations to the Red team. Please exit through the doors at the bottom.")
 				setObject(3010, 2, 32, 370)
 				setObject(3010, 3, 32, 371)
 			else
@@ -679,10 +610,7 @@ carnages = {
 			end
 
 			if (core.gameRegistry["carnageBlueScore"] >= 2) then
-				broadcast2(
-					maps,
-					"[Host Monty]: Congratulations to the Blue team. Please exit through the doors at the bottom."
-				)
+				broadcast2(maps, "[Host Monty]: Congratulations to the Blue team. Please exit through the doors at the bottom.")
 				setObject(3010, 26, 32, 370)
 				setObject(3010, 27, 32, 371)
 			else
@@ -714,10 +642,7 @@ carnages = {
 
 		if (core.gameRegistry["carnageState"] == 1000) then
 			if (os.time() > core.gameRegistry["carnageStart"] + 5) then
-				local players = core:getObjectsInMap(
-					core.gameRegistry["carnageMap"],
-					BL_PC
-				)
+				local players = core:getObjectsInMap(core.gameRegistry["carnageMap"], BL_PC)
 				for z = 1, #players do
 					players[z]:flushDuration(1)
 				end
@@ -730,10 +655,7 @@ carnages = {
 
 		if (core.gameRegistry["carnageState"] == 1001) then
 			if (os.time() > core.gameRegistry["carnageStart"] + 5) then
-				broadcast2(
-					maps,
-					"[Host Monty]: Circle round will begin in 15 seconds."
-				)
+				broadcast2(maps, "[Host Monty]: Circle round will begin in 15 seconds.")
 				core.gameRegistry["carnageState"] = 1002
 				core.gameRegistry["carnageStart"] = os.time()
 			end
@@ -746,10 +668,7 @@ carnages = {
 				core.gameRegistry["carnageStart"] = os.time()
 				setMapPvP(core.gameRegistry["carnageMap"], 1)
 				carnages.startCircle()
-				local players = core:getObjectsInMap(
-					core.gameRegistry["carnageMap"],
-					BL_PC
-				)
+				local players = core:getObjectsInMap(core.gameRegistry["carnageMap"], BL_PC)
 				for z = 1, #players do
 					players[z]:setTimer(2, 5 * 60)
 				end
@@ -761,10 +680,7 @@ carnages = {
 				local red = 0
 				local white = 0
 				local blue = 0
-				local players = core:getObjectsInMap(
-					core.gameRegistry["carnageMap"],
-					BL_PC
-				)
+				local players = core:getObjectsInMap(core.gameRegistry["carnageMap"], BL_PC)
 				for z = 1, #players do
 					if (players[z].gfxDye == 60 and players[z].state ~= 1) then
 						black = black + 1
@@ -782,9 +698,7 @@ carnages = {
 
 				if (red == 0 and blue == 0 and white == 0 and black > 0) then
 					--black wins
-					core.gameRegistry["carnageBlackScore"] = core.gameRegistry[
-						"carnageBlackScore"
-					] + 1
+					core.gameRegistry["carnageBlackScore"] = core.gameRegistry["carnageBlackScore"] + 1
 					core.gameRegistry["carnageStart"] = os.time()
 					core.gameRegistry["carnageState"] = 14
 					core.gameRegistry["carnageRoundWinner"] = 1
@@ -792,9 +706,7 @@ carnages = {
 				end
 				if (black == 0 and blue == 0 and white == 0 and red > 0) then
 					-- red wins
-					core.gameRegistry["carnageRedScore"] = core.gameRegistry[
-						"carnageRedScore"
-					] + 1
+					core.gameRegistry["carnageRedScore"] = core.gameRegistry["carnageRedScore"] + 1
 					core.gameRegistry["carnageState"] = 14
 					core.gameRegistry["carnageStart"] = os.time()
 					core.gameRegistry["carnageRoundWinner"] = 2
@@ -802,9 +714,7 @@ carnages = {
 				end
 				if (black == 0 and blue == 0 and red == 0 and white > 0) then
 					-- white wins
-					core.gameRegistry["carnageWhiteScore"] = core.gameRegistry[
-						"carnageWhiteScore"
-					] + 1
+					core.gameRegistry["carnageWhiteScore"] = core.gameRegistry["carnageWhiteScore"] + 1
 					core.gameRegistry["carnageState"] = 14
 					core.gameRegistry["carnageStart"] = os.time()
 					core.gameRegistry["carnageRoundWinner"] = 3
@@ -812,9 +722,7 @@ carnages = {
 				end
 				if (black == 0 and white == 0 and red == 0 and blue > 0) then
 					-- blue wins
-					core.gameRegistry["carnageBlueScore"] = core.gameRegistry[
-						"carnageBlueScore"
-					] + 1
+					core.gameRegistry["carnageBlueScore"] = core.gameRegistry["carnageBlueScore"] + 1
 					core.gameRegistry["carnageState"] = 14
 					core.gameRegistry["carnageStart"] = os.time()
 					core.gameRegistry["carnageRoundWinner"] = 4
@@ -827,10 +735,7 @@ carnages = {
 				local red = 0
 				local white = 0
 				local blue = 0
-				local players = core:getObjectsInMap(
-					core.gameRegistry["carnageMap"],
-					BL_PC
-				)
+				local players = core:getObjectsInMap(core.gameRegistry["carnageMap"], BL_PC)
 				for z = 1, #players do
 					if (players[z].gfxDye == 60 and players[z].state ~= 1) then
 						black = black + 1
@@ -847,33 +752,25 @@ carnages = {
 				end
 
 				if (black > red and black > blue and black > white) then
-					core.gameRegistry["carnageBlackScore"] = core.gameRegistry[
-						"carnageBlackScore"
-					] + 1
+					core.gameRegistry["carnageBlackScore"] = core.gameRegistry["carnageBlackScore"] + 1
 					core.gameRegistry["carnageStart"] = os.time()
 					core.gameRegistry["carnageState"] = 14
 					core.gameRegistry["carnageRoundWinner"] = 1
 					carnages.removeCircleBarricade()
 				elseif (red > black and red > blue and red > white) then
-					core.gameRegistry["carnageRedScore"] = core.gameRegistry[
-						"carnageRedScore"
-					] + 1
+					core.gameRegistry["carnageRedScore"] = core.gameRegistry["carnageRedScore"] + 1
 					core.gameRegistry["carnageState"] = 14
 					core.gameRegistry["carnageStart"] = os.time()
 					core.gameRegistry["carnageRoundWinner"] = 2
 					carnages.removeCircleBarricade()
 				elseif (white > red and white > blue and white > black) then
-					core.gameRegistry["carnageWhiteScore"] = core.gameRegistry[
-						"carnageWhiteScore"
-					] + 1
+					core.gameRegistry["carnageWhiteScore"] = core.gameRegistry["carnageWhiteScore"] + 1
 					core.gameRegistry["carnageStart"] = os.time()
 					core.gameRegistry["carnageState"] = 14
 					core.gameRegistry["carnageRoundWinner"] = 3
 					carnages.removeCircleBarricade()
 				elseif (blue > red and blue > white and blue > black) then
-					core.gameRegistry["carnageBlueScore"] = core.gameRegistry[
-						"carnageBlueScore"
-					] + 1
+					core.gameRegistry["carnageBlueScore"] = core.gameRegistry["carnageBlueScore"] + 1
 					core.gameRegistry["carnageStart"] = os.time()
 					core.gameRegistry["carnageState"] = 14
 					core.gameRegistry["carnageRoundWinner"] = 4
@@ -976,7 +873,6 @@ carnages = {
 	]]
 		--
 	end,
-
 	scoreCheck = function()
 		local redTeam = carnages.getAlivePlayers(1)
 		local blueTeam = carnages.getAlivePlayers(2)
@@ -990,15 +886,11 @@ carnages = {
 
 			if redTeam == 0 then
 				broadcast(-1, "Blue team wins the round.")
-				core.gameRegistry["carnageBlueTeamWins"] = core.gameRegistry[
-					"carnageTeamBlueWins"
-				] + 1
+				core.gameRegistry["carnageBlueTeamWins"] = core.gameRegistry["carnageTeamBlueWins"] + 1
 				winner = true
 			elseif blueTeam == 0 then
 				broadcast(-1, "Red team wins the round.")
-				core.gameRegistry["carnageRedTeamWins"] = core.gameRegistry[
-					"carnageTeamRedWins"
-				] + 1
+				core.gameRegistry["carnageRedTeamWins"] = core.gameRegistry["carnageTeamRedWins"] + 1
 				winner = true
 			end
 		elseif core.gameRegistry["carnage4team"] == 1 then
@@ -1027,39 +919,29 @@ carnages = {
 				if winningTeam == 1 then
 					-- red team
 					broadcast(-1, "Red team wins the round.")
-					core.gameRegistry["carnageRedTeamWins"] = core.gameRegistry[
-						"carnageRedTeamWins"
-					] + 1
+					core.gameRegistry["carnageRedTeamWins"] = core.gameRegistry["carnageRedTeamWins"] + 1
 					winner = true
 				elseif winningTeam == 2 then
 					-- blue team
 					broadcast(-1, "Blue team wins the round.")
-					core.gameRegistry["carnageBlueTeamWins"] = core.gameRegistry[
-						"carnageBlueTeamWins"
-					] + 1
+					core.gameRegistry["carnageBlueTeamWins"] = core.gameRegistry["carnageBlueTeamWins"] + 1
 					winner = true
 				elseif winningTeam == 3 then
 					-- black team
 					broadcast(-1, "Black team wins the round.")
-					core.gameRegistry["carnageBlackTeamWins"] = core.gameRegistry[
-						"carnageBlackTeamWins"
-					] + 1
+					core.gameRegistry["carnageBlackTeamWins"] = core.gameRegistry["carnageBlackTeamWins"] + 1
 					winner = true
 				elseif winningTeam == 4 then
 					-- white team
 					broadcast(-1, "White team wins the round.")
-					core.gameRegistry["carnageWhiteTeamWins"] = core.gameRegistry[
-						"carnageWhiteTeamWins"
-					] + 1
+					core.gameRegistry["carnageWhiteTeamWins"] = core.gameRegistry["carnageWhiteTeamWins"] + 1
 					winner = true
 				end
 			end
 		end
 
 		if winner == true then
-			core.gameRegistry["carnageRound"] = core.gameRegistry[
-				"carnageRound"
-			] + 1
+			core.gameRegistry["carnageRound"] = core.gameRegistry["carnageRound"] + 1
 
 			carnages.roomResurrect()
 
@@ -1070,7 +952,6 @@ carnages = {
 			end
 		end
 	end,
-
 	scoreBroadcast = function()
 		local m = core.gameRegistry["carnageMap"]
 
@@ -1089,9 +970,7 @@ carnages = {
 				for j = 1, #carnageTeams do
 					if carnageTeams[j].ID == players[i].ID then
 						local text = ""
-						text = text .. "Kills: " .. carnageTeams[j].kills .. " | Deaths: " .. carnageTeams[
-							j
-						].deaths .. "\n"
+						text = text .. "Kills: " .. carnageTeams[j].kills .. " | Deaths: " .. carnageTeams[j].deaths .. "\n"
 						text = text .. "\n" .. aliveText
 
 						players[i]:guitext(text)
@@ -1101,7 +980,6 @@ carnages = {
 			end
 		end
 	end,
-
 	warpPlayersMini = function()
 		local m = core.gameRegistry["carnageMap"]
 
@@ -1142,7 +1020,6 @@ carnages = {
 			end
 		end
 	end,
-
 	playerCountCheck = function()
 		local val = false
 		local alive = 0
@@ -1176,7 +1053,6 @@ carnages = {
 
 		return val
 	end,
-
 	getAlivePlayers = function(team)
 		local alive = 0
 
@@ -1190,7 +1066,6 @@ carnages = {
 
 		return alive
 	end,
-
 	gameStartBroadcast = function()
 		local pcs = core:getObjectsInMap(3010, BL_PC)
 
@@ -1202,11 +1077,9 @@ carnages = {
 			pcs[i]:guitext("Pre carnage session has ended. Teams balanced.\nProceed through the doors.")
 		end
 	end,
-
 	resetRound = function()
 		core.gameRegistry["carnageRoundTimer"] = 0
 	end,
-
 	roomResurrect = function()
 		local m = core.gameRegistry["carnageMap"]
 
@@ -1248,17 +1121,12 @@ carnages = {
 	chooseMap = function()
 		if core.gameRegistry["carnageMap"] == 0 then
 			local carnageMaps = {31, 3009, 3011, 3016, 3017}
-			core.gameRegistry["carnageMap"] = carnageMaps[
-				math.random(1, #carnageMaps)
-			]
+			core.gameRegistry["carnageMap"] = carnageMaps[math.random(1, #carnageMaps)]
 		end
 	end,
 	summonCircle = function()
 		local m = core.gameRegistry["carnageMap"]
-		local players = core:getObjectsInMap(
-			core.gameRegistry["carnageMap"],
-			BL_PC
-		)
+		local players = core:getObjectsInMap(core.gameRegistry["carnageMap"], BL_PC)
 
 		if m == 3011 then
 			for z = 1, #players do
@@ -1434,7 +1302,7 @@ carnages = {
 			carnages.dropBarricade(m, 24, 28)
 			carnages.dropBarricade(m, 24, 29)
 
-			---
+		---
 		end
 	end,
 	removeCircleBarricade = function()
@@ -1564,7 +1432,7 @@ carnages = {
 			carnages.deleteBarricade(m, 24, 28)
 			carnages.deleteBarricade(m, 24, 29)
 
-			---
+		---
 		end
 	end,
 	startCircle = function()
@@ -1694,7 +1562,6 @@ carnages = {
 			end
 		end
 	end,
-
 	removeBarricade = function()
 		local m = core.gameRegistry["carnageMap"]
 		if m == 3011 then
@@ -1778,17 +1645,12 @@ carnages = {
 			end
 		end
 	end,
-
 	carnageRestartRound = function()
-		local players = core:getObjectsInMap(
-			core.gameRegistry["carnageMap"],
-			BL_PC
-		)
+		local players = core:getObjectsInMap(core.gameRegistry["carnageMap"], BL_PC)
 		for z = 1, #players do
 			players[z]:setTimer(2, 0)
 		end
 	end,
-
 	setMiniBarricade = function()
 		local m = core.gameRegistry["carnageMap"]
 
@@ -1810,7 +1672,6 @@ carnages = {
 			end
 		end
 	end,
-
 	removeMiniBarricade = function()
 		local m = core.gameRegistry["carnageMap"]
 
@@ -1839,7 +1700,6 @@ carnages = {
 			end
 		end
 	end,
-
 	removeOfflinePlayers = function()
 		local i = 1
 		while i <= #carnageTeams do
@@ -1850,7 +1710,6 @@ carnages = {
 			end
 		end
 	end,
-
 	setDoors = function(state)
 		--[[
 	local m = 3010
@@ -1875,7 +1734,6 @@ carnages = {
 ]]
 		--
 	end,
-
 	autoTeamBalance = function()
 		local pcs = core:getObjectsInMap(3010, BL_PC)
 
@@ -1914,14 +1772,17 @@ carnages = {
 			local randomTeam = math.random(1, 2)
 			if #carnageTeams == 0 then
 				-- empty table
-				table.insert(carnageTeams, {
-					ID = pcs[i].ID,
-					team = randomTeam,
-					kills = 0,
-					deaths = 0,
-					damage = 0,
-					healing = 0
-				})
+				table.insert(
+					carnageTeams,
+					{
+						ID = pcs[i].ID,
+						team = randomTeam,
+						kills = 0,
+						deaths = 0,
+						damage = 0,
+						healing = 0
+					}
+				)
 				carnages.teamDye(pcs[i], randomTeam)
 			end
 
@@ -1934,17 +1795,16 @@ carnages = {
 					found = true
 
 					if math.abs(team1 - team2) > 1 then
+						--return
 						carnageTeams[j].team = pathCheck
 						carnages.teamDye(pcs[i], pathCheck)
 						carnages.preSessionTeamWarps(pcs[i], pathCheck)
-
-						--return
 					elseif math.abs(team2 - team1) > 1 then
 						carnageTeams[j].team = pathCheck
 						carnages.teamDye(pcs[i], pathCheck)
 						carnages.preSessionTeamWarps(pcs[i], pathCheck)
 
-						--return
+					--return
 					end
 					if team1 == team2 then
 						for qq = 4, 1 do
@@ -1955,7 +1815,7 @@ carnages = {
 								carnages.preSessionTeamWarps(pcs[i], pathCheck)
 								break
 
-								--return
+							--return
 							end
 						end
 					end
@@ -1963,26 +1823,32 @@ carnages = {
 
 				if j == #carnageTeams and found == false then
 					if pathCheck ~= 0 then
-						table.insert(carnageTeams, {
-							ID = pcs[i].ID,
-							team = pathCheck,
-							kills = 0,
-							deaths = 0,
-							damage = 0,
-							healing = 0
-						})
+						table.insert(
+							carnageTeams,
+							{
+								ID = pcs[i].ID,
+								team = pathCheck,
+								kills = 0,
+								deaths = 0,
+								damage = 0,
+								healing = 0
+							}
+						)
 						carnages.teamDye(pcs[i], pathCheck)
 						carnages.preSessionTeamWarps(pcs[i], pathCheck)
 					else
 						local randomTeam = math.random(1, 2)
-						table.insert(carnageTeams, {
-							ID = pcs[i].ID,
-							team = randomTeam,
-							kills = 0,
-							deaths = 0,
-							damage = 0,
-							healing = 0
-						})
+						table.insert(
+							carnageTeams,
+							{
+								ID = pcs[i].ID,
+								team = randomTeam,
+								kills = 0,
+								deaths = 0,
+								damage = 0,
+								healing = 0
+							}
+						)
 						carnages.teamDye(pcs[i], randomTeam)
 						carnages.preSessionTeamWarps(pcs[i], randomTeam)
 					end
@@ -1990,7 +1856,6 @@ carnages = {
 			end
 		end
 	end,
-
 	preSessionTeamWarps = function(player, team)
 		local m = 3010
 		local x = 0
@@ -2012,7 +1877,6 @@ carnages = {
 
 		player:warp(m, x, y)
 	end,
-
 	teamDye = function(player, team)
 		local armor = {}
 
@@ -2039,13 +1903,11 @@ carnages = {
 
 		player:updateState()
 	end,
-
 	clearTeams = function()
 		for i = 1, #carnageTeams do
 			carnageTeams[i] = nil
 		end
 	end,
-
 	pathBalance = function(basePath)
 		local teampath = {0, 0}
 		local team = {0, 0}
@@ -2054,9 +1916,7 @@ carnages = {
 		for k = 1, 4 do
 			for j = 1, #players do
 				for i = 1, #carnageTeams do
-					if (carnageTeams[i].team == k and carnageTeams[i].ID == players[j].ID and players[
-						j
-					].baseClass == basePath) then
+					if (carnageTeams[i].team == k and carnageTeams[i].ID == players[j].ID and players[j].baseClass == basePath) then
 						teampath[k] = teampath[k] + 1
 					end
 					if (carnageTeams[i].team == k and carnageTeams[i].ID == players[j].ID) then

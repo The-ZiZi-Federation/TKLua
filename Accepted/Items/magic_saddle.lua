@@ -1,14 +1,12 @@
 magic_saddle_brown = {
+	use = function(player)
+		local item = player:getInventoryItem(player.invSlot)
 
-use = function(player)
+		if player.m == 15000 or player.m == 15010 or player.m == 15011 then
+			player:sendMinitext("Can't ride here!")
+			return
+		end
 
-	local item = player:getInventoryItem(player.invSlot)
-
-	if player.m == 15000 or player.m == 15010 or player.m == 15011 then
-		player:sendMinitext("Can't ride here!")
-	return
-	end
-	
 		if player.registry["mounted"] == 0 and player.state == 0 then
 			player.state = 3
 			player.registry["summoned_mount"] = item.look
@@ -28,20 +26,18 @@ use = function(player)
 			player.registry["mounted"] = 0
 			player:sendMinitext("You are no longer mounted")
 		end
---	end		
-end
+		--	end
+	end
 }
 
 magic_saddle_white = {
+	use = function(player)
+		local item = player:getInventoryItem(player.invSlot)
 
-use = function(player)
-
-	local item = player:getInventoryItem(player.invSlot)
-
-	if player.m == 15000 or player.m == 15010 or player.m == 15011 then
-		player:sendMinitext("Can't ride here!")
-	return
-	end
+		if player.m == 15000 or player.m == 15010 or player.m == 15011 then
+			player:sendMinitext("Can't ride here!")
+			return
+		end
 
 		if player.registry["mounted"] == 0 and player.state == 0 then
 			player.state = 3
@@ -62,19 +58,17 @@ use = function(player)
 			player.registry["mounted"] = 0
 			player:sendMinitext("You are no longer mounted")
 		end
-end
+	end
 }
 
 magic_saddle_black = {
+	use = function(player)
+		local item = player:getInventoryItem(player.invSlot)
 
-use = function(player)
-
-	local item = player:getInventoryItem(player.invSlot)
-
-	if player.m == 15000 or player.m == 15010 or player.m == 15011 then
-		player:sendMinitext("Can't ride here!")
-	return
-	end
+		if player.m == 15000 or player.m == 15010 or player.m == 15011 then
+			player:sendMinitext("Can't ride here!")
+			return
+		end
 		if player.registry["mounted"] == 0 and player.state == 0 then
 			player.state = 3
 			player.registry["summoned_mount"] = item.look
@@ -94,5 +88,5 @@ use = function(player)
 			player.registry["mounted"] = 0
 			player:sendMinitext("You are no longer mounted")
 		end
-end
+	end
 }

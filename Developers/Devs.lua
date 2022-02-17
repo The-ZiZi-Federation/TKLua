@@ -29,9 +29,7 @@ function Player.staff(player, str, int)
 
 			for i = 1, #projectManagerTable.charIDs do
 				if (str == "pm") then
-					if (player.ID == projectManagerTable.charIDs[i] and projectManagerTable.charLevels[
-						i
-					] >= int) then
+					if (player.ID == projectManagerTable.charIDs[i] and projectManagerTable.charLevels[i] >= int) then
 						accessLevel = true
 					end
 				else
@@ -158,11 +156,7 @@ checkLuaSafety = function(player, check)
 				strCheck = string.find(check, "Player", strCheck + 1)
 
 				if (string.byte(check, strCheck + 7) == 34) then
-					strCheck = string.match(
-						check,
-						'("' .. player.name .. '")',
-						strCheck + 6
-					)
+					strCheck = string.match(check, '("' .. player.name .. '")', strCheck + 6)
 
 					if (strCheck == nil) then
 						player.luaExec = 0
@@ -170,11 +164,7 @@ checkLuaSafety = function(player, check)
 						player.luaExec = 1
 					end
 				elseif (string.byte(check, strCheck + 7) == 39) then
-					strCheck = string.match(
-						check,
-						"('" .. player.name .. "')",
-						strCheck + 6
-					)
+					strCheck = string.match(check, "('" .. player.name .. "')", strCheck + 6)
 
 					if (strCheck == nil) then
 						player.luaExec = 0
@@ -182,11 +172,7 @@ checkLuaSafety = function(player, check)
 						player.luaExec = 1
 					end
 				else
-					strCheck = string.match(
-						check,
-						"(" .. player.ID .. ")",
-						strCheck + 6
-					)
+					strCheck = string.match(check, "(" .. player.ID .. ")", strCheck + 6)
 
 					if (strCheck == nil) then
 						player.luaExec = 0
@@ -202,30 +188,30 @@ checkLuaSafety = function(player, check)
 end
 
 Player.upgradeGear = function(player, start, multType)
-	local multiplier =.06
+	local multiplier = .06
 	local upgrade = start
 
 	if (multType == 1) then
-		multiplier =.1
+		multiplier = .1
 	elseif (multType == 2) then
-		multiplier =.15
+		multiplier = .15
 	end
 
-	player:talk(0, "Plain: " .. math.floor(start +.5))
+	player:talk(0, "Plain: " .. math.floor(start + .5))
 
 	for i = 0, 8 do
 		if (i < 3) then
 			upgrade = upgrade + (upgrade * multiplier)
 		elseif (i >= 3 and i < 5) then
-			upgrade = upgrade + (upgrade * (multiplier +.02))
+			upgrade = upgrade + (upgrade * (multiplier + .02))
 		elseif (i >= 5 and i < 7) then
-			upgrade = upgrade + (upgrade * (multiplier +.04))
+			upgrade = upgrade + (upgrade * (multiplier + .04))
 		elseif (i == 7) then
-			upgrade = upgrade + (upgrade * (multiplier +.06))
+			upgrade = upgrade + (upgrade * (multiplier + .06))
 		elseif (i == 8) then
-			upgrade = upgrade + (upgrade * (multiplier +.08))
+			upgrade = upgrade + (upgrade * (multiplier + .08))
 		end
 
-		player:talk(0, "+" .. (i + 1) .. ": " .. math.floor(upgrade +.5))
+		player:talk(0, "+" .. (i + 1) .. ": " .. math.floor(upgrade + .5))
 	end
 end

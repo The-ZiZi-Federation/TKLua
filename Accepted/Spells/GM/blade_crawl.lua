@@ -1,6 +1,6 @@
 blade_crawl = {
 	cast = function(player)
-		local healthCost, magicCost, minAmount = player.health *.5, player.magic *.5, 5000
+		local healthCost, magicCost, minAmount = player.health * .5, player.magic * .5, 5000
 
 		if not player:canCast(1, 1, 0) then
 			return
@@ -25,22 +25,8 @@ blade_crawl = {
 						player:playSound(88)
 						player:playSound(508)
 						player:sendAnimationXY(304, player.x, player.y)
-						player:addNPC(
-							"blade_crawl",
-							player.m,
-							player.x,
-							player.y,
-							2,
-							90,
-							2000,
-							player.ID
-						)
-						side = player:getObjectsInCell(
-							player.m,
-							player.x,
-							player.y,
-							BL_NPC
-						)
+						player:addNPC("blade_crawl", player.m, player.x, player.y, 2, 90, 2000, player.ID)
+						side = player:getObjectsInCell(player.m, player.x, player.y, BL_NPC)
 						if #side > 0 then
 							for i = 1, #side do
 								if side[i].yname == "blade_crawl" then
@@ -55,14 +41,12 @@ blade_crawl = {
 			end
 		end
 	end,
-
 	while_cast = function(player)
 		player:sendAnimation(364)
 		player.paralyzed = true
 	end,
-
 	action = function(block, owner)
-		local damage = owner.health *.5 + owner.magic *.5
+		local damage = owner.health * .5 + owner.magic * .5
 		local m, x, y, side = block.m, block.x, block.y, block.side
 		local step = block.registry["step"]
 		local threat
@@ -76,12 +60,7 @@ blade_crawl = {
 				endAction(block)
 			end
 		end
-		pc, mob = getTargetFacing(block, BL_PC, 0, step), getTargetFacing(
-			block,
-			BL_MOB,
-			0,
-			step
-		)
+		pc, mob = getTargetFacing(block, BL_PC, 0, step), getTargetFacing(block, BL_MOB, 0, step)
 		if pc ~= nil then
 			if owner:canPK(pc) and pc.ID ~= 1 then
 				pc.attacker = owner.ID
@@ -114,11 +93,9 @@ blade_crawl = {
 		block:sendAnimationXY(411, x, y)
 		owner:playSound(357)
 	end,
-
 	endAction = function(block)
 		block:delete()
 	end,
-
 	uncast = function(player)
 		player.paralyzed = false
 		player:calcStat()

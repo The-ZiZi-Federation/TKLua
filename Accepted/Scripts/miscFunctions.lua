@@ -32,10 +32,9 @@ spawn_a_monster = function(player, mob, amount, m, x, y)
 			player:msg(0, "[System] Minimum mob amount to spawn is 1")
 			return
 		else
+			-- mini text at right side, appear
 			player:spawn(mob, x, y, amount)
 			player:sendMinitext("Temporary Spawned!")
-
-			-- mini text at right side, appear
 		end
 	end
 end

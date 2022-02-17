@@ -14,7 +14,6 @@ SumoWarNpc = {
 		)
 		core.gameRegistry["sumo_war_end_timer"] = os.time() + 5
 	end,
-
 	blueWin = function()
 		local pc = core:getObjectsInMap(15030, BL_PC)
 
@@ -30,7 +29,6 @@ SumoWarNpc = {
 		)
 		core.gameRegistry["sumo_war_end_timer"] = os.time() + 5
 	end,
-
 	getStartTimer = function()
 		local hour, minute, second = 0, 0, 0
 
@@ -40,113 +38,105 @@ SumoWarNpc = {
 			dif = core.gameRegistry["sumo_war_start"] - os.time()
 			hour = string.format("%02.f", math.floor(dif / 3600))
 			minute = string.format("%02.f", math.floor(dif / 60 - (hour * 60)))
-			second = string.format(
-				"%02.f",
-				math.floor(dif - hour * 3600 - minute * 60)
-			)
+			second = string.format("%02.f", math.floor(dif - hour * 3600 - minute * 60))
 			return hour .. ":" .. minute .. ":" .. second
 		end
 	end,
+	click = async(
+		function(player, npc)
+			local pc = player:getObjectsInMap(15031, BL_PC)
+			local n = "<b>[Sumo War]\n\n"
+			local t = {g = convertGraphic(npc.look, "monster"), c = npc.lookColor}
+			player.npcGraphic = t.g
+			player.npcColor = t.c
+			player.dialogType = 0
 
-	click = async(function(player, npc)
-		local pc = player:getObjectsInMap(15031, BL_PC)
-		local n = "<b>[Sumo War]\n\n"
-		local t = {g = convertGraphic(npc.look, "monster"), c = npc.lookColor}
-		player.npcGraphic = t.g
-		player.npcColor = t.c
-		player.dialogType = 0
+			local str, par = "", ""
+			local time = SumoWarNpc.getStartTimer()
 
-		local str, par = "", ""
-		local time = SumoWarNpc.getStartTimer()
-
-		local opts = {}
-		table.insert(opts, "How To Play?")
-		if core.gameRegistry["sumo_war"] == 1 then
-			if player.registry["sumo_war_team"] == 0 then
-				table.insert(opts, "Register For Sumo War")
-			else
-				par = " participant."
-			end
-
-			if player.registry["sumo_war_team"] > 0 then
-				table.insert(opts, "I can't register!")
-			end
-		end
-
-		table.insert(opts, "Exit")
-
-		if core.gameRegistry["sumo_war_start"] > os.time() then
-			str = "Waiting time: " .. SumoWarNpc.getStartTimer()
-		end
-
-		menu = player:menuString(
-			n .. "Hello," .. par .. " The game will start in few minutes.\n" .. str .. "\nTotal players: " .. #pc,
-			opts
-		)
-
-		if menu == "How To Play?" then
-			player:dialogSeq(
-				{
-					t,
-					n .. "Sumo War is a team based game about knocking oppenents into the water in order to score points.",
-					n .. "Depending on the total number of players, your team may need 5, 10 or 15 points to win the game.",
-					n .. "Use your attack to push enemies around, and if they splash into the water your team scores a point.",
-					n .. "Anyone who gets knocked into the water will re-enter the game after a short wait.",
-					n .. "Be careful of the bridges, they can be tricky."
-				},
-				1
-			)
-			player:freeAsync()
-			SumoWarNpc.click(player, npc)
-		elseif menu == "Register For Sumo War" then
-			if os.time() < player.registry["minigameBan"] then
-				--Check if player is banned from minigames
-				player:popUp("You are currently banned from minigames! Try again later maybe.")
-				return
-			end
-
-			local confirm = player:menuSeq(
-				"It will cost 2,000 gold to play. Do you agree?",
-				{"Yes, pay 2,000 gold.", "Nevermind."},
-				{}
-			)
-
-			if confirm == 1 then
-				if player.money < 2000 then
-					player:dialogSeq(
-						{t, "You don't have enough gold to play."},
-						0
-					)
-					return
+			local opts = {}
+			table.insert(opts, "How To Play?")
+			if core.gameRegistry["sumo_war"] == 1 then
+				if player.registry["sumo_war_team"] == 0 then
+					table.insert(opts, "Register For Sumo War")
+				else
+					par = " participant."
 				end
 
-				player:removeGold(2000)
-				player.registry["sumo_war_team"] = math.random(1, 2)
-				player:warp(15031, math.random(2, 14), math.random(2, 12))
-				player:sendAnimation(16)
-				player:playSound(29)
+				if player.registry["sumo_war_team"] > 0 then
+					table.insert(opts, "I can't register!")
+				end
+			end
+
+			table.insert(opts, "Exit")
+
+			if core.gameRegistry["sumo_war_start"] > os.time() then
+				str = "Waiting time: " .. SumoWarNpc.getStartTimer()
+			end
+
+			menu =
+				player:menuString(
+				n .. "Hello," .. par .. " The game will start in few minutes.\n" .. str .. "\nTotal players: " .. #pc,
+				opts
+			)
+
+			if menu == "How To Play?" then
 				player:dialogSeq(
 					{
 						t,
-						n .. "Alright, your character is registered for Sumo War.\nPlease wait until the game starts!"
+						n .. "Sumo War is a team based game about knocking oppenents into the water in order to score points.",
+						n .. "Depending on the total number of players, your team may need 5, 10 or 15 points to win the game.",
+						n .. "Use your attack to push enemies around, and if they splash into the water your team scores a point.",
+						n .. "Anyone who gets knocked into the water will re-enter the game after a short wait.",
+						n .. "Be careful of the bridges, they can be tricky."
 					},
 					1
 				)
-			end
-		elseif menu == "I can't register!" then
-			player.registry["sumo_war_team"] = 0
-			player:dialogSeq(
-				{
-					t,
-					n .. "Looks like a simple paperwork mixup. You should be all set to register now, have fun at the game!"
-				},
-				1
-			)
-			player:freeAsync()
-			SumoWarNpc.click(player, npc)
-		end
-	end),
+				player:freeAsync()
+				SumoWarNpc.click(player, npc)
+			elseif menu == "Register For Sumo War" then
+				if os.time() < player.registry["minigameBan"] then
+					--Check if player is banned from minigames
+					player:popUp("You are currently banned from minigames! Try again later maybe.")
+					return
+				end
 
+				local confirm =
+					player:menuSeq("It will cost 2,000 gold to play. Do you agree?", {"Yes, pay 2,000 gold.", "Nevermind."}, {})
+
+				if confirm == 1 then
+					if player.money < 2000 then
+						player:dialogSeq({t, "You don't have enough gold to play."}, 0)
+						return
+					end
+
+					player:removeGold(2000)
+					player.registry["sumo_war_team"] = math.random(1, 2)
+					player:warp(15031, math.random(2, 14), math.random(2, 12))
+					player:sendAnimation(16)
+					player:playSound(29)
+					player:dialogSeq(
+						{
+							t,
+							n .. "Alright, your character is registered for Sumo War.\nPlease wait until the game starts!"
+						},
+						1
+					)
+				end
+			elseif menu == "I can't register!" then
+				player.registry["sumo_war_team"] = 0
+				player:dialogSeq(
+					{
+						t,
+						n .. "Looks like a simple paperwork mixup. You should be all set to register now, have fun at the game!"
+					},
+					1
+				)
+				player:freeAsync()
+				SumoWarNpc.click(player, npc)
+			end
+		end
+	),
 	core = function()
 		SumoWarNpc.closed()
 		SumoWarNpc.balancing()
@@ -155,53 +145,23 @@ SumoWarNpc = {
 		SumoWarNpc.endGame()
 		SumoWarNpc.bridgeController()
 	end,
-
 	open = function()
 		core.gameRegistry["sumo_war"] = 1
 		core.gameRegistry["sumo_war_start"] = os.time() + 900
-		broadcast(
-			-1,
-			"-----------------------------------------------------------------------------------------------------"
-		)
-		broadcast(
-			-1,
-			"                                Sumo War is now open in Kugnae Arena!"
-		)
-		broadcast(
-			-1,
-			"                                    Entry is closing in 15 minutes!"
-		)
-		broadcast(
-			-1,
-			"-----------------------------------------------------------------------------------------------------"
-		)
+		broadcast(-1, "-----------------------------------------------------------------------------------------------------")
+		broadcast(-1, "                                Sumo War is now open in Kugnae Arena!")
+		broadcast(-1, "                                    Entry is closing in 15 minutes!")
+		broadcast(-1, "-----------------------------------------------------------------------------------------------------")
 	end,
-
 	roundTwo = function()
 		core.gameRegistry["sumo_war"] = 1
 		core.gameRegistry["sumo_war_start"] = os.time() + 120
-		broadcast(
-			-1,
-			"-----------------------------------------------------------------------------------------------------"
-		)
-		broadcast(
-			-1,
-			"                                 Another chance to play! Get ready!"
-		)
-		broadcast(
-			-1,
-			"                                Sumo War is now open in Kugnae Arena!"
-		)
-		broadcast(
-			-1,
-			"                                    Entry is closing in 2 minutes!"
-		)
-		broadcast(
-			-1,
-			"-----------------------------------------------------------------------------------------------------"
-		)
+		broadcast(-1, "-----------------------------------------------------------------------------------------------------")
+		broadcast(-1, "                                 Another chance to play! Get ready!")
+		broadcast(-1, "                                Sumo War is now open in Kugnae Arena!")
+		broadcast(-1, "                                    Entry is closing in 2 minutes!")
+		broadcast(-1, "-----------------------------------------------------------------------------------------------------")
 	end,
-
 	closed = function()
 		local diff = core.gameRegistry["sumo_war_start"] - os.time()
 
@@ -212,10 +172,7 @@ SumoWarNpc = {
 						-1,
 						"-----------------------------------------------------------------------------------------------------"
 					)
-					broadcast(
-						-1,
-						"                                 Sumo War entry is closing in 5 minute!"
-					)
+					broadcast(-1, "                                 Sumo War entry is closing in 5 minute!")
 					broadcast(
 						-1,
 						"-----------------------------------------------------------------------------------------------------"
@@ -225,10 +182,7 @@ SumoWarNpc = {
 						-1,
 						"-----------------------------------------------------------------------------------------------------"
 					)
-					broadcast(
-						-1,
-						"                                 Sumo War entry is closing in 10 minutes!"
-					)
+					broadcast(-1, "                                 Sumo War entry is closing in 10 minutes!")
 					broadcast(
 						-1,
 						"-----------------------------------------------------------------------------------------------------"
@@ -238,24 +192,15 @@ SumoWarNpc = {
 						-1,
 						"-----------------------------------------------------------------------------------------------------"
 					)
-					broadcast(
-						-1,
-						"                                 Sumo War entry is closing in 1 minute!"
-					)
+					broadcast(-1, "                                 Sumo War entry is closing in 1 minute!")
 					broadcast(
 						-1,
 						"-----------------------------------------------------------------------------------------------------"
 					)
 				elseif diff == 10 then
-					broadcast(
-						15031,
-						"                                    Sumo War Starts in 10 seconds!"
-					)
+					broadcast(15031, "                                    Sumo War Starts in 10 seconds!")
 				elseif diff <= 3 then
-					broadcast(
-						15031,
-						"                                    Sumo War Starts in " .. diff .. " seconds!"
-					)
+					broadcast(15031, "                                    Sumo War Starts in " .. diff .. " seconds!")
 				end
 			elseif core.gameRegistry["sumo_war_start"] < os.time() then
 				core.gameRegistry["sumo_war"] = 0
@@ -263,10 +208,7 @@ SumoWarNpc = {
 					-1,
 					"-----------------------------------------------------------------------------------------------------"
 				)
-				broadcast(
-					-1,
-					"                                 Sumo War entry is closed!"
-				)
+				broadcast(-1, "                                 Sumo War entry is closed!")
 				broadcast(
 					-1,
 					"-----------------------------------------------------------------------------------------------------"
@@ -275,14 +217,11 @@ SumoWarNpc = {
 			end
 		end
 	end,
-
 	endGame = function()
 		local pc = core:getObjectsInMap(15030, BL_PC)
 		local arenaPC = core:getObjectsInMap(31, BL_PC)
 
-		if core.gameRegistry["sumo_war_end_timer"] > 0 and core.gameRegistry[
-			"sumo_war_end_timer"
-		] < os.time() then
+		if core.gameRegistry["sumo_war_end_timer"] > 0 and core.gameRegistry["sumo_war_end_timer"] < os.time() then
 			core.gameRegistry["sumo_war_end_timer"] = 0
 			core.gameRegistry["sumo_war"] = 0
 			core.gameRegistry["sumo_war_red_point"] = 0
@@ -323,17 +262,16 @@ SumoWarNpc = {
 			end
 			core.gameRegistry["sumo_war_winner"] = 0
 
-			--[[if core.gameRegistry["sumo_war_round_2"] == 0 then
+		--[[if core.gameRegistry["sumo_war_round_2"] == 0 then
 			core.gameRegistry["sumo_war_round_2"] = 1
 			SumoWarNpc.roundTwo()
 		elseif core.gameRegistry["sumo_war_round_2"] == 1 then
 			core.gameRegistry["sumo_war_round_2"] = 0
 			return
 		end]]
-			--
+		--
 		end
 	end,
-
 	stop = function()
 		local pc = core:getObjectsInMap(15030, BL_PC)
 
@@ -364,7 +302,6 @@ SumoWarNpc = {
 			end
 		end
 	end,
-
 	cancel = function()
 		local pc = core:getObjectsInMap(15031, BL_PC)
 
@@ -393,7 +330,6 @@ SumoWarNpc = {
 			end
 		end
 	end,
-
 	entryLegend = function(player)
 		local reg = player.registry["sumo_war_entries"]
 
@@ -402,9 +338,7 @@ SumoWarNpc = {
 		end
 
 		if reg > 0 then
-			player.registry["sumo_war_entries"] = player.registry[
-				"sumo_war_entries"
-			] + 1
+			player.registry["sumo_war_entries"] = player.registry["sumo_war_entries"] + 1
 			player:addLegend(
 				"Participated in " .. player.registry["sumo_war_entries"] .. " Sumo Wars",
 				"sumo_war_entries",
@@ -413,15 +347,9 @@ SumoWarNpc = {
 			)
 		else
 			player.registry["sumo_war_entries"] = 1
-			player:addLegend(
-				"Participated in 1 Sumo War",
-				"sumo_war_entries",
-				204,
-				16
-			)
+			player:addLegend("Participated in 1 Sumo War", "sumo_war_entries", 204, 16)
 		end
 	end,
-
 	victoryLegend = function(player)
 		local reg = player.registry["sumo_war_wins"]
 
@@ -431,18 +359,12 @@ SumoWarNpc = {
 
 		if reg > 0 then
 			player.registry["sumo_war_wins"] = player.registry["sumo_war_wins"] + 1
-			player:addLegend(
-				"Won " .. player.registry["sumo_war_wins"] .. " Sumo Wars",
-				"sumo_war_wins",
-				204,
-				16
-			)
+			player:addLegend("Won " .. player.registry["sumo_war_wins"] .. " Sumo Wars", "sumo_war_wins", 204, 16)
 		else
 			player.registry["sumo_war_wins"] = 1
 			player:addLegend("Won 1 Sumo War", "sumo_war_wins", 204, 16)
 		end
 	end,
-
 	start = function()
 		livingRedSquirt = {}
 		livingBlueSquirt = {}
@@ -488,10 +410,7 @@ SumoWarNpc = {
 					15031,
 					"-----------------------------------------------------------------------------------------------------"
 				)
-				broadcast(
-					15031,
-					"                             Not enough players. Sumo War canceled!"
-				)
+				broadcast(15031, "                             Not enough players. Sumo War canceled!")
 				broadcast(
 					15031,
 					"-----------------------------------------------------------------------------------------------------"
@@ -500,55 +419,37 @@ SumoWarNpc = {
 			end
 		end
 	end,
-
 	wait = function()
 		broadcast(
 			15030,
 			"-----------------------------------------------------------------------------------------------------"
 		)
-		broadcast(
-			15030,
-			"                                    Get Ready! Sumo War starts in 30 seconds!"
-		)
+		broadcast(15030, "                                    Get Ready! Sumo War starts in 30 seconds!")
 		broadcast(
 			15030,
 			"-----------------------------------------------------------------------------------------------------"
 		)
 	end,
-
 	begin = function()
 		local pc = core:getObjectsInMap(15030, BL_PC)
 
-		if core.gameRegistry["sumo_war_wait_time"] > 0 and core.gameRegistry[
-			"sumo_war_wait_time"
-		] < os.time() then
+		if core.gameRegistry["sumo_war_wait_time"] > 0 and core.gameRegistry["sumo_war_wait_time"] < os.time() then
 			if #pc > 6 then
 				broadcast(
 					15030,
 					"-----------------------------------------------------------------------------------------------------"
 				)
-				broadcast(
-					15030,
-					"                                   The Sumo War has begun!"
-				)
+				broadcast(15030, "                                   The Sumo War has begun!")
 				broadcast(
 					15030,
 					"-----------------------------------------------------------------------------------------------------"
 				)
 				for i = 1, #pc do
 					if pc[i].registry["sumo_war_team"] == 1 then
-						pc[i]:warp(
-							15030,
-							math.random(52, 54),
-							math.random(10, 37)
-						)
+						pc[i]:warp(15030, math.random(52, 54), math.random(10, 37))
 						SumoWarNpc.entryLegend(pc[i])
 					elseif pc[i].registry["sumo_war_team"] == 2 then
-						pc[i]:warp(
-							15030,
-							math.random(95, 97),
-							math.random(10, 37)
-						)
+						pc[i]:warp(15030, math.random(95, 97), math.random(10, 37))
 						SumoWarNpc.entryLegend(pc[i])
 					end
 				end
@@ -557,10 +458,7 @@ SumoWarNpc = {
 					15031,
 					"-----------------------------------------------------------------------------------------------------"
 				)
-				broadcast(
-					15031,
-					"                             Not enough players. Sumo War canceled!"
-				)
+				broadcast(15031, "                             Not enough players. Sumo War canceled!")
 				broadcast(
 					15031,
 					"-----------------------------------------------------------------------------------------------------"
@@ -571,7 +469,6 @@ SumoWarNpc = {
 			core.gameRegistry["sumo_war_wait_time"] = 0
 		end
 	end,
-
 	balancing = function()
 		local red, blue = {}, {}
 		local pc = core:getObjectsInMap(15031, BL_PC)
@@ -602,7 +499,6 @@ SumoWarNpc = {
 			end
 		end
 	end,
-
 	costume = function(player)
 		local team = player.registry["sumo_war_team"]
 		local dye, str = 0, ""
@@ -636,7 +532,6 @@ SumoWarNpc = {
 		player.gfxClone = 1
 		player:updateState()
 	end,
-
 	winnerCheck = function()
 		local pointsToWin = 30
 
@@ -659,7 +554,6 @@ SumoWarNpc = {
 			return
 		end
 	end,
-
 	push = function(player)
 		local team = player.registry["sumo_war_team"]
 		local tile = {
@@ -703,9 +597,10 @@ SumoWarNpc = {
 		end
 
 		if m == 15030 then
-			if target ~= nil and target.state ~= 1 and (target.registry["sumo_war_team"] ~= player.registry["sumo_war_team"]) and core.gameRegistry[
-				"sumo_war_winner"
-			] == 0 then
+			if
+				target ~= nil and target.state ~= 1 and (target.registry["sumo_war_team"] ~= player.registry["sumo_war_team"]) and
+					core.gameRegistry["sumo_war_winner"] == 0
+			 then
 				target.attacker = player.ID
 				player:sendFrontAnimation(191)
 				if player.side == 0 then
@@ -731,13 +626,9 @@ SumoWarNpc = {
 					for i = 1, #tile do
 						if getTile(target.m, target.x, target.y) == tile[i] then
 							if player.registry["sumo_war_team"] == 1 then
-								core.gameRegistry["sumo_war_red_point"] = core.gameRegistry[
-									"sumo_war_red_point"
-								] + 1
+								core.gameRegistry["sumo_war_red_point"] = core.gameRegistry["sumo_war_red_point"] + 1
 							elseif player.registry["sumo_war_team"] == 2 then
-								core.gameRegistry["sumo_war_blue_point"] = core.gameRegistry[
-									"sumo_war_blue_point"
-								] + 1
+								core.gameRegistry["sumo_war_blue_point"] = core.gameRegistry["sumo_war_blue_point"] + 1
 							end
 							target:sendAnimationXY(142, target.x, target.y)
 							SumoWarNpc.splash(target)
@@ -747,7 +638,6 @@ SumoWarNpc = {
 			end
 		end
 	end,
-
 	splash = function(player)
 		player.health = 0
 		player.state = 1
@@ -757,19 +647,17 @@ SumoWarNpc = {
 		player:warp(15030, math.random(11, 35), math.random(28, 40))
 		broadcast(
 			15030,
-			"CURRENT SCORE  |  RED: " .. core.gameRegistry["sumo_war_red_point"] .. "   BLUE: " .. core.gameRegistry[
-				"sumo_war_blue_point"
-			] .. "   BRIDGE: " .. core.gameRegistry["sumo_war_bridge_point"]
+			"CURRENT SCORE  |  RED: " ..
+				core.gameRegistry["sumo_war_red_point"] ..
+					"   BLUE: " ..
+						core.gameRegistry["sumo_war_blue_point"] .. "   BRIDGE: " .. core.gameRegistry["sumo_war_bridge_point"]
 		)
 		SumoWarNpc.winnerCheck()
 	end,
-
 	respawn = function()
 		local pc = core:getObjectsInMap(15030, BL_PC)
 
-		core.gameRegistry["sumo_respawn_time"] = core.gameRegistry[
-			"sumo_respawn_time"
-		] + 1
+		core.gameRegistry["sumo_respawn_time"] = core.gameRegistry["sumo_respawn_time"] + 1
 
 		if core.gameRegistry["sumo_respawn_time"] == 15 then
 			for i = 1, #pc do
@@ -779,18 +667,10 @@ SumoWarNpc = {
 							pc[i].health = pc[i].maxHealth
 							pc[i].state = 0
 							if pc[i].registry["sumo_war_team"] == 1 then
-								pc[i]:warp(
-									15030,
-									math.random(52, 54),
-									math.random(10, 37)
-								)
+								pc[i]:warp(15030, math.random(52, 54), math.random(10, 37))
 							end
 							if pc[i].registry["sumo_war_team"] == 2 then
-								pc[i]:warp(
-									15030,
-									math.random(95, 97),
-									math.random(10, 37)
-								)
+								pc[i]:warp(15030, math.random(95, 97), math.random(10, 37))
 							end
 						end
 					end
@@ -799,7 +679,6 @@ SumoWarNpc = {
 			core.gameRegistry["sumo_respawn_time"] = 0
 		end
 	end,
-
 	bridge = function(id)
 		local x
 		local y
@@ -858,17 +737,13 @@ SumoWarNpc = {
 				if #splashPC1 > 0 then
 					for i = 1, #splashPC1 do
 						SumoWarNpc.splash(splashPC1[i])
-						core.gameRegistry["sumo_war_bridge_point"] = core.gameRegistry[
-							"sumo_war_bridge_point"
-						] + 1
+						core.gameRegistry["sumo_war_bridge_point"] = core.gameRegistry["sumo_war_bridge_point"] + 1
 					end
 				end
 				if #splashPC2 > 0 then
 					for i = 1, #splashPC2 do
 						SumoWarNpc.splash(splashPC2[i])
-						core.gameRegistry["sumo_war_bridge_point"] = core.gameRegistry[
-							"sumo_war_bridge_point"
-						] + 1
+						core.gameRegistry["sumo_war_bridge_point"] = core.gameRegistry["sumo_war_bridge_point"] + 1
 					end
 				end
 			end
@@ -934,41 +809,32 @@ SumoWarNpc = {
 			if #splashPC3 > 0 then
 				for i = 1, #splashPC3 do
 					SumoWarNpc.splash(splashPC3[i])
-					core.gameRegistry["sumo_war_bridge_point"] = core.gameRegistry[
-						"sumo_war_bridge_point"
-					] + 1
+					core.gameRegistry["sumo_war_bridge_point"] = core.gameRegistry["sumo_war_bridge_point"] + 1
 				end
 			end
 
 			if #splashPC4 > 0 then
 				for i = 1, #splashPC4 do
 					SumoWarNpc.splash(splashPC4[i])
-					core.gameRegistry["sumo_war_bridge_point"] = core.gameRegistry[
-						"sumo_war_bridge_point"
-					] + 1
+					core.gameRegistry["sumo_war_bridge_point"] = core.gameRegistry["sumo_war_bridge_point"] + 1
 				end
 			end
 
 			if #splashPC5 > 0 then
 				for i = 1, #splashPC5 do
 					SumoWarNpc.splash(splashPC5[i])
-					core.gameRegistry["sumo_war_bridge_point"] = core.gameRegistry[
-						"sumo_war_bridge_point"
-					] + 1
+					core.gameRegistry["sumo_war_bridge_point"] = core.gameRegistry["sumo_war_bridge_point"] + 1
 				end
 			end
 
 			if #splashPC6 > 0 then
 				for i = 1, #splashPC6 do
 					SumoWarNpc.splash(splashPC6[i])
-					core.gameRegistry["sumo_war_bridge_point"] = core.gameRegistry[
-						"sumo_war_bridge_point"
-					] + 1
+					core.gameRegistry["sumo_war_bridge_point"] = core.gameRegistry["sumo_war_bridge_point"] + 1
 				end
 			end
 		end
 	end,
-
 	bridgeController = function()
 		if core.gameRegistry["sumo_war"] == 1 then
 			SumoWarNpc.bridge(math.random(1, 18))

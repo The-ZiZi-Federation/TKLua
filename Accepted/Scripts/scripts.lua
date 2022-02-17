@@ -68,9 +68,7 @@ function mithia_lore_time()
 		dayOfMonth = dayOfMonth - 30
 	end
 
-	local month = months[
-		(curSeason() - 1) * 3 + math.floor((mdate - 1) / 30) + 1
-	]
+	local month = months[(curSeason() - 1) * 3 + math.floor((mdate - 1) / 30) + 1]
 
 	return {
 		Year = year,
@@ -90,61 +88,54 @@ checktile = function(tipo, dist)
 
 	-- Facing North
 	if (tipo.side == 0) then
+		--Facing East
 		d = tipo:getObjectsInCell(tipo.m, tipo.x, tipo.y - dist, BL_ALL)
 
-		if (#d == 0 and tipo:objectCanMove(tipo.x, tipo.y - dist, tipo.side) == true and getPass(
-			tipo.m,
-			tipo.x,
-			tipo.y - dist
-		) == 0) then
+		if
+			(#d == 0 and tipo:objectCanMove(tipo.x, tipo.y - dist, tipo.side) == true and
+				getPass(tipo.m, tipo.x, tipo.y - dist) == 0)
+		 then
 			--				tipo:sendMinitext("Empty.")
 			return true
 		else
 			--tipo:sendMinitext("There is nowhere for you to land!")
 			return false
 		end
-
-		--Facing East
 	elseif (tipo.side == 1) then
+		--Facing South
 		d = tipo:getObjectsInCell(tipo.m, tipo.x + dist, tipo.y, BL_ALL)
 
-		if (#d == 0 and tipo:objectCanMove(tipo.x + dist, tipo.y, tipo.side) == true and getPass(
-			tipo.m,
-			tipo.x + dist,
-			tipo.y
-		) == 0) then
+		if
+			(#d == 0 and tipo:objectCanMove(tipo.x + dist, tipo.y, tipo.side) == true and
+				getPass(tipo.m, tipo.x + dist, tipo.y) == 0)
+		 then
 			--			tipo:sendMinitext("Empty.")
 			return true
 		else
 			--tipo:sendMinitext("There is nowhere for you to land!")
 			return false
 		end
-
-		--Facing South
 	elseif (tipo.side == 2) then
+		--Facing West
 		d = tipo:getObjectsInCell(tipo.m, tipo.x, tipo.y + dist, BL_ALL)
 
-		if (#d == 0 and tipo:objectCanMove(tipo.x, tipo.y + dist, tipo.side) == true and getPass(
-			tipo.m,
-			tipo.x,
-			tipo.y + dist
-		) == 0) then
+		if
+			(#d == 0 and tipo:objectCanMove(tipo.x, tipo.y + dist, tipo.side) == true and
+				getPass(tipo.m, tipo.x, tipo.y + dist) == 0)
+		 then
 			--				tipo:sendMinitext("Empty.")
 			return true
 		else
 			--tipo:sendMinitext("There is nowhere for you to land!")
 			return false
 		end
-
-		--Facing West
 	elseif (tipo.side == 3) then
 		d = tipo:getObjectsInCell(tipo.m, tipo.x - dist, tipo.y, BL_ALL)
 
-		if (#d == 0 and tipo:objectCanMove(tipo.x - dist, tipo.y, tipo.side) == true and getPass(
-			tipo.m,
-			tipo.x - dist,
-			tipo.y
-		) == 0) then
+		if
+			(#d == 0 and tipo:objectCanMove(tipo.x - dist, tipo.y, tipo.side) == true and
+				getPass(tipo.m, tipo.x - dist, tipo.y) == 0)
+		 then
 			--			tipo:sendMinitext("Empty.")
 			return true
 		else
@@ -200,21 +191,19 @@ checktiletype = function(tipo, dist)
 		--tipo:sendMinitext("There is no target in front of you.")
 		return false
 	else
-		if (#d ~= 0) then
-			return d[1]
-
-			--returning a block allows us to use every aspect of it
-		elseif (#e ~= 0) then
-			return e[1]
-		elseif (#f ~= 0) then
-			return f[1]
-		end
-
 		--	if (tar == 1) and (d[1].state ~= 1) then
 		--		return false
 		--	else
 		--		return true
 		--	end
+		if (#d ~= 0) then
+			--returning a block allows us to use every aspect of it
+			return d[1]
+		elseif (#e ~= 0) then
+			return e[1]
+		elseif (#f ~= 0) then
+			return f[1]
+		end
 	end
 end
 
@@ -517,58 +506,18 @@ getTargetsBackstab = function(block, blockType)
 	local returnTable = {}
 
 	if block.side == 0 then
-		frontBlocks = block:getObjectsInCell(
-			block.m,
-			block.x,
-			block.y - 1,
-			blockType
-		)
-		backBlocks = block:getObjectsInCell(
-			block.m,
-			block.x,
-			block.y + 1,
-			blockType
-		)
+		frontBlocks = block:getObjectsInCell(block.m, block.x, block.y - 1, blockType)
+		backBlocks = block:getObjectsInCell(block.m, block.x, block.y + 1, blockType)
 	elseif block.side == 1 then
 		-- right
-		frontBlocks = block:getObjectsInCell(
-			block.m,
-			block.x + 1,
-			block.y,
-			blockType
-		)
-		backBlocks = block:getObjectsInCell(
-			block.m,
-			block.x - 1,
-			block.y,
-			blockType
-		)
+		frontBlocks = block:getObjectsInCell(block.m, block.x + 1, block.y, blockType)
+		backBlocks = block:getObjectsInCell(block.m, block.x - 1, block.y, blockType)
 	elseif block.side == 2 then
-		frontBlocks = block:getObjectsInCell(
-			block.m,
-			block.x,
-			block.y + 1,
-			blockType
-		)
-		backBlocks = block:getObjectsInCell(
-			block.m,
-			block.x,
-			block.y - 1,
-			blockType
-		)
+		frontBlocks = block:getObjectsInCell(block.m, block.x, block.y + 1, blockType)
+		backBlocks = block:getObjectsInCell(block.m, block.x, block.y - 1, blockType)
 	elseif block.side == 3 then
-		frontBlocks = block:getObjectsInCell(
-			block.m,
-			block.x - 1,
-			block.y,
-			blockType
-		)
-		backBlocks = block:getObjectsInCell(
-			block.m,
-			block.x + 1,
-			block.y,
-			blockType
-		)
+		frontBlocks = block:getObjectsInCell(block.m, block.x - 1, block.y, blockType)
+		backBlocks = block:getObjectsInCell(block.m, block.x + 1, block.y, blockType)
 	end
 
 	if (#frontBlocks > 0) then
@@ -596,58 +545,18 @@ getTargetsFlank = function(block, blockType)
 	local returnTable = {}
 
 	if block.side == 0 then
-		rightSideBlocks = block:getObjectsInCell(
-			block.m,
-			block.x + 1,
-			block.y,
-			blockType
-		)
-		leftSideBlocks = block:getObjectsInCell(
-			block.m,
-			block.x - 1,
-			block.y,
-			blockType
-		)
+		rightSideBlocks = block:getObjectsInCell(block.m, block.x + 1, block.y, blockType)
+		leftSideBlocks = block:getObjectsInCell(block.m, block.x - 1, block.y, blockType)
 	elseif block.side == 1 then
 		-- right
-		rightSideBlocks = block:getObjectsInCell(
-			block.m,
-			block.x + 1,
-			block.y + 1,
-			blockType
-		)
-		leftSideBlocks = block:getObjectsInCell(
-			block.m,
-			block.x + 1,
-			block.y - 1,
-			blockType
-		)
+		rightSideBlocks = block:getObjectsInCell(block.m, block.x + 1, block.y + 1, blockType)
+		leftSideBlocks = block:getObjectsInCell(block.m, block.x + 1, block.y - 1, blockType)
 	elseif block.side == 2 then
-		rightSideBlocks = block:getObjectsInCell(
-			block.m,
-			block.x - 1,
-			block.y,
-			blockType
-		)
-		leftSideBlocks = block:getObjectsInCell(
-			block.m,
-			block.x + 1,
-			block.y,
-			blockType
-		)
+		rightSideBlocks = block:getObjectsInCell(block.m, block.x - 1, block.y, blockType)
+		leftSideBlocks = block:getObjectsInCell(block.m, block.x + 1, block.y, blockType)
 	elseif block.side == 3 then
-		rightSideBlocks = block:getObjectsInCell(
-			block.m,
-			block.x - 1,
-			block.y - 1,
-			blockType
-		)
-		leftSideBlocks = block:getObjectsInCell(
-			block.m,
-			block.x - 1,
-			block.y + 1,
-			blockType
-		)
+		rightSideBlocks = block:getObjectsInCell(block.m, block.x - 1, block.y - 1, blockType)
+		leftSideBlocks = block:getObjectsInCell(block.m, block.x - 1, block.y + 1, blockType)
 	end
 
 	if (#rightSideBlocks > 0) then
@@ -670,30 +579,10 @@ getTargetsFlank = function(block, blockType)
 end
 
 getTargetsAround = function(block, blockType)
-	local northBlocks = block:getObjectsInCell(
-		block.m,
-		block.x,
-		block.y - 1,
-		blockType
-	)
-	local eastBlocks = block:getObjectsInCell(
-		block.m,
-		block.x + 1,
-		block.y,
-		blockType
-	)
-	local southBlocks = block:getObjectsInCell(
-		block.m,
-		block.x,
-		block.y + 1,
-		blockType
-	)
-	local westBlocks = block:getObjectsInCell(
-		block.m,
-		block.x - 1,
-		block.y,
-		blockType
-	)
+	local northBlocks = block:getObjectsInCell(block.m, block.x, block.y - 1, blockType)
+	local eastBlocks = block:getObjectsInCell(block.m, block.x + 1, block.y, blockType)
+	local southBlocks = block:getObjectsInCell(block.m, block.x, block.y + 1, blockType)
+	local westBlocks = block:getObjectsInCell(block.m, block.x - 1, block.y, blockType)
 	local returnTable = {}
 
 	if (#northBlocks > 0) then
@@ -959,81 +848,21 @@ getSide = function(block, target)
 end
 
 canMove = function(block)
-	local checkPCNorth = block:getObjectsInCell(
-		block.m,
-		block.x,
-		block.y - 1,
-		BL_PC
-	)
-	local checkblockNorth = block:getObjectsInCell(
-		block.m,
-		block.x,
-		block.y - 1,
-		BL_MOB
-	)
-	local checkNPCNorth = block:getObjectsInCell(
-		block.m,
-		block.x,
-		block.y - 1,
-		BL_NPC
-	)
+	local checkPCNorth = block:getObjectsInCell(block.m, block.x, block.y - 1, BL_PC)
+	local checkblockNorth = block:getObjectsInCell(block.m, block.x, block.y - 1, BL_MOB)
+	local checkNPCNorth = block:getObjectsInCell(block.m, block.x, block.y - 1, BL_NPC)
 
-	local checkPCEast = block:getObjectsInCell(
-		block.m,
-		block.x + 1,
-		block.y,
-		BL_PC
-	)
-	local checkblockEast = block:getObjectsInCell(
-		block.m,
-		block.x + 1,
-		block.y,
-		BL_MOB
-	)
-	local checkNPCEast = block:getObjectsInCell(
-		block.m,
-		block.x + 1,
-		block.y,
-		BL_NPC
-	)
+	local checkPCEast = block:getObjectsInCell(block.m, block.x + 1, block.y, BL_PC)
+	local checkblockEast = block:getObjectsInCell(block.m, block.x + 1, block.y, BL_MOB)
+	local checkNPCEast = block:getObjectsInCell(block.m, block.x + 1, block.y, BL_NPC)
 
-	local checkPCWest = block:getObjectsInCell(
-		block.m,
-		block.x - 1,
-		block.y,
-		BL_PC
-	)
-	local checkblockWest = block:getObjectsInCell(
-		block.m,
-		block.x - 1,
-		block.y,
-		BL_MOB
-	)
-	local checkNPCWest = block:getObjectsInCell(
-		block.m,
-		block.x - 1,
-		block.y,
-		BL_NPC
-	)
+	local checkPCWest = block:getObjectsInCell(block.m, block.x - 1, block.y, BL_PC)
+	local checkblockWest = block:getObjectsInCell(block.m, block.x - 1, block.y, BL_MOB)
+	local checkNPCWest = block:getObjectsInCell(block.m, block.x - 1, block.y, BL_NPC)
 
-	local checkPCSouth = block:getObjectsInCell(
-		block.m,
-		block.x,
-		block.y + 1,
-		BL_PC
-	)
-	local checkblockSouth = block:getObjectsInCell(
-		block.m,
-		block.x,
-		block.y + 1,
-		BL_MOB
-	)
-	local checkNPCSouth = block:getObjectsInCell(
-		block.m,
-		block.x,
-		block.y + 1,
-		BL_NPC
-	)
+	local checkPCSouth = block:getObjectsInCell(block.m, block.x, block.y + 1, BL_PC)
+	local checkblockSouth = block:getObjectsInCell(block.m, block.x, block.y + 1, BL_MOB)
+	local checkNPCSouth = block:getObjectsInCell(block.m, block.x, block.y + 1, BL_NPC)
 
 	if (#checkNPCNorth > 0) then
 		i = 0
@@ -1087,29 +916,29 @@ canMove = function(block)
 		until (i == #checkNPCSouth)
 	end
 
-	if (block.y - 1 > 0 and #checkPCNorth + #checkblockNorth + #checkNPCNorth == 0 and block:objectCanMove(
-		block.x,
-		block.y - 1,
-		0
-	) == true and getPass(block.m, block.x, block.y - 1) == 0) then
+	if
+		(block.y - 1 > 0 and #checkPCNorth + #checkblockNorth + #checkNPCNorth == 0 and
+			block:objectCanMove(block.x, block.y - 1, 0) == true and
+			getPass(block.m, block.x, block.y - 1) == 0)
+	 then
 		return true
-	elseif (block.x + 1 <= block.xmax and #checkPCEast + #checkblockEast + #checkNPCEast == 0 and block:objectCanMove(
-		block.x + 1,
-		block.y,
-		1
-	) == true and getPass(block.m, block.x + 1, block.y) == 0) then
+	elseif
+		(block.x + 1 <= block.xmax and #checkPCEast + #checkblockEast + #checkNPCEast == 0 and
+			block:objectCanMove(block.x + 1, block.y, 1) == true and
+			getPass(block.m, block.x + 1, block.y) == 0)
+	 then
 		return true
-	elseif (block.x - 1 > 0 and #checkPCWest + #checkblockWest + #checkNPCWest == 0 and block:objectCanMove(
-		block.x - 1,
-		block.y,
-		3
-	) == true and getPass(block.m, block.x - 1, block.y) == 0) then
+	elseif
+		(block.x - 1 > 0 and #checkPCWest + #checkblockWest + #checkNPCWest == 0 and
+			block:objectCanMove(block.x - 1, block.y, 3) == true and
+			getPass(block.m, block.x - 1, block.y) == 0)
+	 then
 		return true
-	elseif (block.y + 1 <= block.ymax and #checkPCSouth + #checkblockSouth + #checkNPCSouth == 0 and block:objectCanMove(
-		block.x,
-		block.y + 1,
-		2
-	) == true and getPass(block.m, block.x, block.y + 1) == 0) then
+	elseif
+		(block.y + 1 <= block.ymax and #checkPCSouth + #checkblockSouth + #checkNPCSouth == 0 and
+			block:objectCanMove(block.x, block.y + 1, 2) == true and
+			getPass(block.m, block.x, block.y + 1) == 0)
+	 then
 		return true
 	else
 		return false
@@ -1263,14 +1092,17 @@ getInstanceWarps = function(mapid)
 	local mapWarps = {}
 
 	for i = 1, #warps, 6 do
-		table.insert(mapWarps, {
-			mm = warps[i],
-			mx = warps[i + 1],
-			my = warps[i + 2],
-			dm = warps[i + 3],
-			dx = warps[i + 4],
-			dy = warps[i + 5]
-		})
+		table.insert(
+			mapWarps,
+			{
+				mm = warps[i],
+				mx = warps[i + 1],
+				my = warps[i + 2],
+				dm = warps[i + 3],
+				dx = warps[i + 4],
+				dy = warps[i + 5]
+			}
+		)
 	end
 
 	Player(2):talk(0, "" .. #mapWarps)

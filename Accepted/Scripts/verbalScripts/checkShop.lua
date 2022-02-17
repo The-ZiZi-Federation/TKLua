@@ -6,7 +6,7 @@ verbalScriptCheckShop = function(player, npc, speech)
 	local words = {}
 	local itemName = ""
 
-	for word in speech:gmatch("[%w\'%-%[%]]+") do
+	for word in speech:gmatch("[%w'%-%[%]]+") do
 		table.insert(words, word)
 	end
 
@@ -75,14 +75,7 @@ verbalScriptCheckShop = function(player, npc, speech)
 				amount = tonumber(words[j + 1])
 			end
 
-			player:buyNoConfirm(
-				npc,
-				itemName,
-				amount,
-				buyItems,
-				prices,
-				maxAmounts
-			)
+			player:buyNoConfirm(npc, itemName, amount, buyItems, prices, maxAmounts)
 		end
 	end
 

@@ -9,7 +9,8 @@ Player.faerieLight = function(player)
 		return
 	end
 
-	local choice = player:menuSeq(
+	local choice =
+		player:menuSeq(
 		"Thy karma fills thy soul. Shall it light the way for all?",
 		{"Yes, exchange my karma for it.", "No, I will retain my karma."},
 		{}

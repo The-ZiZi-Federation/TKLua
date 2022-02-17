@@ -8,7 +8,13 @@ characterLog = {
 
 		local file = io.open(dir, "a+")
 
-		text = text .. "<" .. os.date() .. "> [" .. mob.name .. "] | @" .. mob.mapTitle .. " (M: " .. mob.m .. " X:" .. mob.x .. " Y: " .. mob.y .. ") | Dropped items: "
+		text =
+			text ..
+			"<" ..
+				os.date() ..
+					"> [" ..
+						mob.name ..
+							"] | @" .. mob.mapTitle .. " (M: " .. mob.m .. " X:" .. mob.x .. " Y: " .. mob.y .. ") | Dropped items: "
 
 		for i = 1, #dropItems do
 			if i ~= #dropItems then
@@ -23,7 +29,6 @@ characterLog = {
 		file:write(text .. "")
 		file:flush()
 	end,
-
 	bossKillLog = function(mob, groupMembers)
 		if (not Config.loggingEnabled) then
 			return
@@ -51,15 +56,11 @@ characterLog = {
 			end
 		end
 
-		text = text .. " | @" .. mob.mapTitle .. " (" .. mob.m .. ") | Dropped items: " .. table.concat(
-			names,
-			", "
-		) .. "\n"
+		text = text .. " | @" .. mob.mapTitle .. " (" .. mob.m .. ") | Dropped items: " .. table.concat(names, ", ") .. "\n"
 
 		file:write(text .. "")
 		file:flush()
 	end,
-
 	whisperLog = function(dstName, srcName, msg)
 		if (not Config.loggingEnabled) then
 			return
@@ -70,8 +71,10 @@ characterLog = {
 
 		local srcPlayer = Player(srcName)
 
-		local file1 = "../rtklua/History/logs/chatlogs/whispers/" .. dstName .. "<=>" .. srcName .. "_" .. os.date("%m.%d.%Y") .. ".txt"
-		local file2 = "../rtklua/History/logs/chatlogs/whispers/" .. srcName .. "<=>" .. dstName .. "_" .. os.date("%m.%d.%Y") .. ".txt"
+		local file1 =
+			"../rtklua/History/logs/chatlogs/whispers/" .. dstName .. "<=>" .. srcName .. "_" .. os.date("%m.%d.%Y") .. ".txt"
+		local file2 =
+			"../rtklua/History/logs/chatlogs/whispers/" .. srcName .. "<=>" .. dstName .. "_" .. os.date("%m.%d.%Y") .. ".txt"
 
 		if io.open(file1, "r") ~= nil then
 			-- checks existence of each file. if they both do not exist, then makes new file using file1 format
@@ -82,12 +85,12 @@ characterLog = {
 			file = io.open(file1, "a+")
 		end
 
-		local text = srcName .. ": " .. msg .. " | " .. os.date() .. " | @" .. srcPlayer.mapTitle .. " (" .. srcPlayer.m .. ")\n"
+		local text =
+			srcName .. ": " .. msg .. " | " .. os.date() .. " | @" .. srcPlayer.mapTitle .. " (" .. srcPlayer.m .. ")\n"
 
 		file:write(text .. "")
 		file:flush()
 	end,
-
 	clanChatLog = function(srcName, speech)
 		if (not Config.loggingEnabled) then
 			return
@@ -96,15 +99,21 @@ characterLog = {
 		srcName = string.lower(srcName)
 		local player = Player(srcName)
 
-		local dir, text = "../rtklua/History/logs/chatlogs/clan/" .. getClanName(player.clan) .. "_full_" .. os.date("%m.%d.%Y") .. ".txt", ""
+		local dir, text =
+			"../rtklua/History/logs/chatlogs/clan/" .. getClanName(player.clan) .. "_full_" .. os.date("%m.%d.%Y") .. ".txt",
+			""
 		local file = io.open(dir, "a+")
 
-		text = text .. "<" .. os.date() .. "> " .. player.name .. "(" .. player.ID .. "): '" .. speech .. "' | @" .. player.mapTitle .. " (" .. player.m .. ")\n"
+		text =
+			text ..
+			"<" ..
+				os.date() ..
+					"> " ..
+						player.name .. "(" .. player.ID .. "): '" .. speech .. "' | @" .. player.mapTitle .. " (" .. player.m .. ")\n"
 
 		file:write(text .. "")
 		file:flush()
 	end,
-
 	groupChatLog = function(srcName, speech)
 		if (not Config.loggingEnabled) then
 			return
@@ -116,12 +125,16 @@ characterLog = {
 		local dir, text = "../rtklua/History/logs/chatlogs/groups/groupChatLog_full_" .. os.date("%m.%d.%Y") .. ".txt", ""
 		local file = io.open(dir, "a+")
 
-		text = text .. "<" .. os.date() .. "> " .. player.name .. "(" .. player.ID .. "): '" .. speech .. "' | @" .. player.mapTitle .. " (" .. player.m .. ")\n"
+		text =
+			text ..
+			"<" ..
+				os.date() ..
+					"> " ..
+						player.name .. "(" .. player.ID .. "): '" .. speech .. "' | @" .. player.mapTitle .. " (" .. player.m .. ")\n"
 
 		file:write(text .. "")
 		file:flush()
 	end,
-
 	noviceChatLog = function(srcName, speech)
 		if (not Config.loggingEnabled) then
 			return
@@ -133,12 +146,16 @@ characterLog = {
 		local dir, text = "../rtklua/History/logs/chatlogs/novice/noviceChatLog_full_" .. os.date("%m.%d.%Y") .. ".txt", ""
 		local file = io.open(dir, "a+")
 
-		text = text .. "<" .. os.date() .. "> " .. player.name .. "(" .. player.ID .. "): '" .. speech .. "' | @" .. player.mapTitle .. " (" .. player.m .. ")\n"
+		text =
+			text ..
+			"<" ..
+				os.date() ..
+					"> " ..
+						player.name .. "(" .. player.ID .. "): '" .. speech .. "' | @" .. player.mapTitle .. " (" .. player.m .. ")\n"
 
 		file:write(text .. "")
 		file:flush()
 	end,
-
 	subPathChatLog = function(srcName, speech)
 		if (not Config.loggingEnabled) then
 			return
@@ -147,15 +164,21 @@ characterLog = {
 		srcName = string.lower(srcName)
 		local player = Player(srcName)
 
-		local dir, text = "../rtklua/History/logs/chatlogs/subpath/" .. player.className .. "_full_" .. os.date("%m.%d.%Y") .. ".txt", ""
+		local dir, text =
+			"../rtklua/History/logs/chatlogs/subpath/" .. player.className .. "_full_" .. os.date("%m.%d.%Y") .. ".txt",
+			""
 		local file = io.open(dir, "a+")
 
-		text = text .. "<" .. os.date() .. "> " .. player.name .. "(" .. player.ID .. "): '" .. speech .. "' | @" .. player.mapTitle .. " (" .. player.m .. ")\n"
+		text =
+			text ..
+			"<" ..
+				os.date() ..
+					"> " ..
+						player.name .. "(" .. player.ID .. "): '" .. speech .. "' | @" .. player.mapTitle .. " (" .. player.m .. ")\n"
 
 		file:write(text .. "")
 		file:flush()
 	end,
-
 	exchangeLogWrite = function(player1, player2)
 		if (not Config.loggingEnabled) then
 			return
@@ -186,7 +209,16 @@ characterLog = {
 			end
 		end
 
-		text = "==== [Exchange between " .. player1.name .. " and " .. player2.name .. " | " .. os.date() .. " | @" .. player1.mapTitle .. " (" .. player1.m .. ")] ==================================================================\n"
+		text =
+			"==== [Exchange between " ..
+			player1.name ..
+				" and " ..
+					player2.name ..
+						" | " ..
+							os.date() ..
+								" | @" ..
+									player1.mapTitle ..
+										" (" .. player1.m .. ")] ==================================================================\n"
 		text = text .. player1.name .. " receives " .. Tools.formatNumber(gold2) .. " gold from " .. player2.name .. "\n"
 		text = text .. player2.name .. " receives " .. Tools.formatNumber(gold1) .. " gold from " .. player1.name .. "\n"
 
@@ -194,9 +226,10 @@ characterLog = {
 			text = text .. player1.name .. " receives items from " .. player2.name .. ":\n"
 			for i = 1, #items2 do
 				if items2[i].realName ~= "" then
-					text = text .. i .. ". **" .. items2[i].realName .. "** (" .. items2[
-						i
-					].name .. ") amount: " .. Tools.formatNumber(items2[i].amount)
+					text =
+						text ..
+						i ..
+							". **" .. items2[i].realName .. "** (" .. items2[i].name .. ") amount: " .. Tools.formatNumber(items2[i].amount)
 				else
 					text = text .. i .. ". " .. items2[i].name .. " amount: " .. Tools.formatNumber(items2[i].amount)
 				end
@@ -215,9 +248,10 @@ characterLog = {
 			text = text .. player2.name .. " receives items from " .. player1.name .. ":\n"
 			for i = 1, #items1 do
 				if items1[i].realName ~= "" then
-					text = text .. i .. ". **" .. items1[i].realName .. "** (" .. items1[
-						i
-					].name .. ") amount: " .. Tools.formatNumber(items1[i].amount)
+					text =
+						text ..
+						i ..
+							". **" .. items1[i].realName .. "** (" .. items1[i].name .. ") amount: " .. Tools.formatNumber(items1[i].amount)
 				else
 					text = text .. i .. ". " .. items1[i].name .. " amount: " .. Tools.formatNumber(items1[i].amount)
 				end
@@ -235,7 +269,6 @@ characterLog = {
 		file:write(text .. "")
 		file:flush()
 	end,
-
 	massExchangeWrite = function(player1, player1gold, player1items, player2, player2gold, player2items)
 		if (not Config.loggingEnabled) then
 			return
@@ -244,18 +277,32 @@ characterLog = {
 		local dir, text = "../rtklua/History/logs/exchange/mass_exchange_log_" .. os.date("%m.%d.%Y") .. ".txt", ""
 		local file = io.open(dir, "a+")
 
-		text = "==== [Mass Exchange between " .. player1.name .. " and " .. player2.name .. " | " .. os.date() .. " | @" .. player1.mapTitle .. " (" .. player1.m .. ")] ==================================================================\n"
-		text = text .. player1.name .. " receives " .. Tools.formatNumber(player2gold) .. " gold from " .. player2.name .. "\n"
-		text = text .. player2.name .. " receives " .. Tools.formatNumber(player1gold) .. " gold from " .. player1.name .. "\n"
+		text =
+			"==== [Mass Exchange between " ..
+			player1.name ..
+				" and " ..
+					player2.name ..
+						" | " ..
+							os.date() ..
+								" | @" ..
+									player1.mapTitle ..
+										" (" .. player1.m .. ")] ==================================================================\n"
+		text =
+			text .. player1.name .. " receives " .. Tools.formatNumber(player2gold) .. " gold from " .. player2.name .. "\n"
+		text =
+			text .. player2.name .. " receives " .. Tools.formatNumber(player1gold) .. " gold from " .. player1.name .. "\n"
 
 		if #player2items > 0 then
 			text = text .. player1.name .. " receives items from " .. player2.name .. ":\n"
 
 			for i = 1, #player2items do
 				if player2items[i].realName ~= "" then
-					text = text .. i .. ". **" .. player2items[i].realName .. "** (" .. player2items[
-						i
-					].name .. ") amount: " .. Tools.formatNumber(player2items[i].amount)
+					text =
+						text ..
+						i ..
+							". **" ..
+								player2items[i].realName ..
+									"** (" .. player2items[i].name .. ") amount: " .. Tools.formatNumber(player2items[i].amount)
 				else
 					text = text .. i .. ". " .. player2items[i].name .. " amount: " .. Tools.formatNumber(player2items[i].amount)
 				end
@@ -274,9 +321,12 @@ characterLog = {
 			text = text .. player2.name .. " receives items from " .. player1.name .. ":\n"
 			for i = 1, #player1items do
 				if player1items[i].realName ~= "" then
-					text = text .. i .. ". **" .. player1items[i].realName .. "** (" .. player1items[
-						i
-					].name .. ") amount: " .. Tools.formatNumber(player1items[i].amount)
+					text =
+						text ..
+						i ..
+							". **" ..
+								player1items[i].realName ..
+									"** (" .. player1items[i].name .. ") amount: " .. Tools.formatNumber(player1items[i].amount)
 				else
 					text = text .. i .. ". " .. player1items[i].name .. " amount: " .. Tools.formatNumber(player1items[i].amount)
 				end
@@ -294,7 +344,6 @@ characterLog = {
 		file:write(text .. "")
 		file:flush()
 	end,
-
 	carnageTeamChatLog = function(text)
 		if (not Config.loggingEnabled) then
 			return
@@ -308,7 +357,6 @@ characterLog = {
 		file:write(text .. "")
 		file:flush()
 	end,
-
 	bottingLog = function(player, inputText)
 		if (not Config.loggingEnabled) then
 			return
@@ -330,7 +378,6 @@ characterLog = {
 		file2:write(text .. "")
 		file2:flush()
 	end,
-
 	wisdomStarDailyTotal = function()
 		if (not Config.loggingEnabled) then
 			return
@@ -346,7 +393,6 @@ characterLog = {
 		file:write(text .. "")
 		file:flush()
 	end,
-
 	wisdomStar = function(player, amount)
 		if (not Config.loggingEnabled) then
 			return
@@ -355,12 +401,18 @@ characterLog = {
 		local dir, text = "../rtklua/History/logs/wisdom_star/wisdomStarLog_" .. os.date("%m.%d.%Y") .. ".txt", ""
 		local file = io.open(dir, "a+")
 
-		text = text .. "<" .. os.date() .. "> " .. player.name .. "(" .. player.ID .. ") spent " .. amount .. " Kan on Wisdom Star | @" .. player.mapTitle .. " (" .. player.m .. ")\n"
+		text =
+			text ..
+			"<" ..
+				os.date() ..
+					"> " ..
+						player.name ..
+							"(" ..
+								player.ID .. ") spent " .. amount .. " Kan on Wisdom Star | @" .. player.mapTitle .. " (" .. player.m .. ")\n"
 
 		file:write(text .. "")
 		file:flush()
 	end,
-
 	sage = function(player, speech)
 		if (not Config.loggingEnabled) then
 			return
@@ -370,15 +422,20 @@ characterLog = {
 		local file = io.open(dir, "a+")
 
 		if player.gmLevel ~= 0 then
-			text = text .. "<" .. os.date() .. "> [GM " .. player.name .. "]: " .. speech .. " | @" .. player.mapTitle .. " (" .. player.m .. ")\n"
+			text =
+				text ..
+				"<" ..
+					os.date() .. "> [GM " .. player.name .. "]: " .. speech .. " | @" .. player.mapTitle .. " (" .. player.m .. ")\n"
 		else
-			text = text .. "<" .. os.date() .. "> [" .. player.name .. "]: " .. speech .. " | @" .. player.mapTitle .. " (" .. player.m .. ")\n"
+			text =
+				text ..
+				"<" ..
+					os.date() .. "> [" .. player.name .. "]: " .. speech .. " | @" .. player.mapTitle .. " (" .. player.m .. ")\n"
 		end
 
 		file:write(text .. "")
 		file:flush()
 	end,
-
 	localChat = function(player, speech)
 		if (not Config.loggingEnabled) then
 			return
@@ -387,40 +444,56 @@ characterLog = {
 		local dir, text = "../rtklua/History/logs/chatlogs/general/chatLog_full_" .. os.date("%m.%d.%Y") .. ".txt", ""
 		local file = io.open(dir, "a+")
 
-		text = text .. "<" .. os.date() .. "> " .. player.name .. "(" .. player.ID .. "): '" .. speech .. "' | @" .. player.mapTitle .. " (" .. player.m .. ")\n"
+		text =
+			text ..
+			"<" ..
+				os.date() ..
+					"> " ..
+						player.name .. "(" .. player.ID .. "): '" .. speech .. "' | @" .. player.mapTitle .. " (" .. player.m .. ")\n"
 
 		file:write(text .. "")
 		file:flush()
 	end,
-
 	gmSpeechWrite = function(player, speech)
 		if (not Config.loggingEnabled) then
 			return
 		end
 
-		local dir, text = "../rtklua/History/logs/chatlogs/gm/chatLog_" .. player.name .. "_" .. os.date("%m.%d.%Y") .. ".txt", ""
+		local dir, text =
+			"../rtklua/History/logs/chatlogs/gm/chatLog_" .. player.name .. "_" .. os.date("%m.%d.%Y") .. ".txt",
+			""
 		local file = io.open(dir, "a+")
 
-		text = text .. "<" .. os.date() .. "> " .. player.name .. "(" .. player.ID .. "): '" .. speech .. "' | @" .. player.mapTitle .. " (" .. player.m .. ")\n"
+		text =
+			text ..
+			"<" ..
+				os.date() ..
+					"> " ..
+						player.name .. "(" .. player.ID .. "): '" .. speech .. "' | @" .. player.mapTitle .. " (" .. player.m .. ")\n"
 
 		file:write(text .. "")
 		file:flush()
 	end,
-
 	speechWrite = function(player, speech)
 		if (not Config.loggingEnabled) then
 			return
 		end
 
-		local dir, text = "../rtklua/History/logs/chatlogs/characters/chatLog_" .. player.name .. "_" .. os.date("%m.%d.%Y") .. ".txt", ""
+		local dir, text =
+			"../rtklua/History/logs/chatlogs/characters/chatLog_" .. player.name .. "_" .. os.date("%m.%d.%Y") .. ".txt",
+			""
 		local file = io.open(dir, "a+")
 
-		text = text .. "<" .. os.date() .. "> " .. player.name .. "(" .. player.ID .. "): '" .. speech .. "' | @" .. player.mapTitle .. " (" .. player.m .. ")\n"
+		text =
+			text ..
+			"<" ..
+				os.date() ..
+					"> " ..
+						player.name .. "(" .. player.ID .. "): '" .. speech .. "' | @" .. player.mapTitle .. " (" .. player.m .. ")\n"
 
 		file:write(text .. "")
 		file:flush()
 	end,
-
 	loginLog = function(player)
 		if (not Config.loggingEnabled) then
 			return
@@ -442,7 +515,6 @@ characterLog = {
 		file:write(text .. "")
 		file:flush()
 	end,
-
 	logoutLog = function(player)
 		if (not Config.loggingEnabled) then
 			return
@@ -464,7 +536,6 @@ characterLog = {
 		file:write(text .. "")
 		file:flush()
 	end,
-
 	xpSellWrite = function(player, stat, amount, cost)
 		if (not Config.loggingEnabled) then
 			return
@@ -476,12 +547,18 @@ characterLog = {
 		local file = io.open(dir, "a+")
 
 		text = "==== [Stat | Vita/Mana Gain] ==================================================================\n"
-		text = text .. "<" .. os.date() .. "> Sold " .. Tools.formatNumber(cost) .. " experience for " .. Tools.formatNumber(amount) .. " " .. stat .. " | @" .. player.mapTitle .. " (" .. player.m .. ")\n"
+		text =
+			text ..
+			"<" ..
+				os.date() ..
+					"> Sold " ..
+						Tools.formatNumber(cost) ..
+							" experience for " ..
+								Tools.formatNumber(amount) .. " " .. stat .. " | @" .. player.mapTitle .. " (" .. player.m .. ")\n"
 
 		file:write(text .. "")
 		file:flush()
 	end,
-
 	xpSellWrite2 = function(player, stat, amount)
 		if (not Config.loggingEnabled) then
 			return
@@ -492,12 +569,16 @@ characterLog = {
 		local dir, text = "../rtklua/History/logs/characterlog/log_" .. name .. "_" .. os.date("%m.%d.%Y") .. ".txt", ""
 		local file = io.open(dir, "a+")
 
-		text = text .. "<" .. os.date() .. "> Gained " .. Tools.formatNumber(amount) .. " " .. stat .. " while training | @" .. player.mapTitle .. " (" .. player.m .. ")\n"
+		text =
+			text ..
+			"<" ..
+				os.date() ..
+					"> Gained " ..
+						Tools.formatNumber(amount) .. " " .. stat .. " while training | @" .. player.mapTitle .. " (" .. player.m .. ")\n"
 
 		file:write(text .. "")
 		file:flush()
 	end,
-
 	xpWrite = function(player, xp, mob)
 		if (not Config.loggingEnabled) then
 			return
@@ -508,12 +589,16 @@ characterLog = {
 		local dir, text = "../rtklua/History/logs/characterlog/log_" .. name .. "_" .. os.date("%m.%d.%Y") .. ".txt", ""
 		local file = io.open(dir, "a+")
 
-		text = text .. "<" .. os.date() .. "> Gained " .. Tools.formatNumber(xp) .. " from " .. mob.name .. " | @" .. player.mapTitle .. " (" .. player.m .. ")\n"
+		text =
+			text ..
+			"<" ..
+				os.date() ..
+					"> Gained " ..
+						Tools.formatNumber(xp) .. " from " .. mob.name .. " | @" .. player.mapTitle .. " (" .. player.m .. ")\n"
 
 		file:write(text .. "")
 		file:flush()
 	end,
-
 	giveXPWrite = function(player, amount)
 		if (not Config.loggingEnabled) then
 			return
@@ -524,11 +609,14 @@ characterLog = {
 		local dir, text = "../rtklua/History/logs/characterlog/log_" .. name .. "_" .. os.date("%m.%d.%Y") .. ".txt", ""
 		local file = io.open(dir, "a+")
 
-		text = text .. "<" .. os.date() .. "> Gained " .. Tools.formatNumber(amount) .. " experience | @" .. player.mapTitle .. " (" .. player.m .. ")\n"
+		text =
+			text ..
+			"<" ..
+				os.date() ..
+					"> Gained " .. Tools.formatNumber(amount) .. " experience | @" .. player.mapTitle .. " (" .. player.m .. ")\n"
 		file:write(text .. "")
 		file:flush()
 	end,
-
 	nameChangeWrite = function(player, oldName)
 		if (not Config.loggingEnabled) then
 			return
@@ -542,7 +630,12 @@ characterLog = {
 		local dir2 = "../rtklua/History/logs/nameChanges/nameChangeLog_" .. os.date("%m.%d.%Y") .. ".txt"
 		local file2 = io.open(dir2, "a+")
 
-		text = text .. "<" .. os.date() .. "> " .. oldName .. " has changed their name to " .. player.name .. " | @" .. player.mapTitle .. " (" .. player.m .. ")\n"
+		text =
+			text ..
+			"<" ..
+				os.date() ..
+					"> " ..
+						oldName .. " has changed their name to " .. player.name .. " | @" .. player.mapTitle .. " (" .. player.m .. ")\n"
 
 		file1:write(text .. "")
 		file1:flush()
@@ -550,7 +643,6 @@ characterLog = {
 		file2:write(text .. "")
 		file2:flush()
 	end,
-
 	genericWrite = function(player, string)
 		if (not Config.loggingEnabled) then
 			return
@@ -566,7 +658,6 @@ characterLog = {
 		file:write(text .. "")
 		file:flush()
 	end,
-
 	questWrite = function(player, string)
 		if (not Config.loggingEnabled) then
 			return
@@ -582,7 +673,6 @@ characterLog = {
 		file:write(text .. "")
 		file:flush()
 	end,
-
 	spellDamageLog = function(player, target, damage)
 		if (not Config.loggingEnabled) then
 			return
@@ -601,7 +691,6 @@ characterLog = {
 		file:write(text .. "")
 		file:flush()
 	end,
-
 	swingDamageLog = function(player, target, damage)
 		if (not Config.loggingEnabled) then
 			return
@@ -621,7 +710,6 @@ characterLog = {
 		file:write(text .. "")
 		file:flush()
 	end,
-
 	addGoldWrite = function(player, money)
 		if (not Config.loggingEnabled) then
 			return
@@ -632,12 +720,17 @@ characterLog = {
 		local dir, text = "../rtklua/History/logs/characterlog/log_" .. name .. "_" .. os.date("%m.%d.%Y") .. ".txt", ""
 		local file = io.open(dir, "a+")
 
-		text = text .. "<" .. os.date() .. "> ADDED GOLD: " .. Tools.formatNumber(money) .. "  TOTAL GOLD: " .. player.money .. " | @" .. player.mapTitle .. " (" .. player.m .. ")\n"
+		text =
+			text ..
+			"<" ..
+				os.date() ..
+					"> ADDED GOLD: " ..
+						Tools.formatNumber(money) ..
+							"  TOTAL GOLD: " .. player.money .. " | @" .. player.mapTitle .. " (" .. player.m .. ")\n"
 
 		file:write(text .. "")
 		file:flush()
 	end,
-
 	removeGoldWrite = function(player, money)
 		if (not Config.loggingEnabled) then
 			return
@@ -648,12 +741,17 @@ characterLog = {
 		local dir, text = "../rtklua/History/logs/characterlog/log_" .. name .. "_" .. os.date("%m.%d.%Y") .. ".txt", ""
 		local file = io.open(dir, "a+")
 
-		text = text .. "<" .. os.date() .. "> REMOVED GOLD: " .. Tools.formatNumber(money) .. "  TOTAL GOLD: " .. player.money .. " | @" .. player.mapTitle .. " (" .. player.m .. ")\n"
+		text =
+			text ..
+			"<" ..
+				os.date() ..
+					"> REMOVED GOLD: " ..
+						Tools.formatNumber(money) ..
+							"  TOTAL GOLD: " .. player.money .. " | @" .. player.mapTitle .. " (" .. player.m .. ")\n"
 
 		file:write(text .. "")
 		file:flush()
 	end,
-
 	levelUpWrite = function(player, level)
 		if (not Config.loggingEnabled) then
 			return
@@ -664,12 +762,13 @@ characterLog = {
 		local dir, text = "../rtklua/History/logs/characterlog/log_" .. name .. "_" .. os.date("%m.%d.%Y") .. ".txt", ""
 		local file = io.open(dir, "a+")
 
-		text = text .. "<" .. os.date() .. "> LEVELED UP TO: " .. player.level .. " | @" .. player.mapTitle .. " (" .. player.m .. ")\n"
+		text =
+			text ..
+			"<" .. os.date() .. "> LEVELED UP TO: " .. player.level .. " | @" .. player.mapTitle .. " (" .. player.m .. ")\n"
 
 		file:write(text .. "")
 		file:flush()
 	end,
-
 	pickUpWrite = function(player, item, amount)
 		if (not Config.loggingEnabled) then
 			return
@@ -690,12 +789,20 @@ characterLog = {
 			pickup = "Ctrl + Comma"
 		end
 
-		text = text .. "<" .. os.date() .. "> PICKED UP: " .. amount .. " " .. item.name .. " | @" .. player.mapTitle .. " (" .. player.m .. ") | X: " .. player.x .. " Y: " .. player.y .. " | " .. pickup .. "\n"
+		text =
+			text ..
+			"<" ..
+				os.date() ..
+					"> PICKED UP: " ..
+						amount ..
+							" " ..
+								item.name ..
+									" | @" ..
+										player.mapTitle .. " (" .. player.m .. ") | X: " .. player.x .. " Y: " .. player.y .. " | " .. pickup .. "\n"
 
 		file:write(text .. "")
 		file:flush()
 	end,
-
 	dropWrite = function(player, item)
 		if (not Config.loggingEnabled) then
 			return
@@ -706,12 +813,19 @@ characterLog = {
 		local dir, text = "../rtklua/History/logs/characterlog/log_" .. name .. "_" .. os.date("%m.%d.%Y") .. ".txt", ""
 		local file = io.open(dir, "a+")
 
-		text = text .. "<" .. os.date() .. "> DROPPED: " .. item.amount .. " " .. item.name .. " | @" .. player.mapTitle .. " (" .. player.m .. ") | X: " .. player.x .. " Y: " .. player.y .. "\n"
+		text =
+			text ..
+			"<" ..
+				os.date() ..
+					"> DROPPED: " ..
+						item.amount ..
+							" " ..
+								item.name ..
+									" | @" .. player.mapTitle .. " (" .. player.m .. ") | X: " .. player.x .. " Y: " .. player.y .. "\n"
 
 		file:write(text .. "")
 		file:flush()
 	end,
-
 	equipRestore = function(player)
 		if (not Config.loggingEnabled) then
 			return
@@ -733,12 +847,19 @@ characterLog = {
 			name = item.name
 		end
 
-		text = text .. "<" .. os.date() .. "> Equipment restored: " .. name .. "      Protects remaining: " .. item.protected .. " | @" .. player.mapTitle .. " (" .. player.m .. ") | X: " .. player.x .. " Y: " .. player.y .. "\n"
+		text =
+			text ..
+			"<" ..
+				os.date() ..
+					"> Equipment restored: " ..
+						name ..
+							"      Protects remaining: " ..
+								item.protected ..
+									" | @" .. player.mapTitle .. " (" .. player.m .. ") | X: " .. player.x .. " Y: " .. player.y .. "\n"
 
 		file:write(text .. "")
 		file:flush()
 	end,
-
 	equipBreak = function(player)
 		if (not Config.loggingEnabled) then
 			return
@@ -760,12 +881,16 @@ characterLog = {
 			name = item.name
 		end
 
-		text = text .. "<" .. os.date() .. "> Equipment broken/destroyed: " .. name .. " | @" .. player.mapTitle .. " (" .. player.m .. ") | X: " .. player.x .. " Y: " .. player.y .. "\n"
+		text =
+			text ..
+			"<" ..
+				os.date() ..
+					"> Equipment broken/destroyed: " ..
+						name .. " | @" .. player.mapTitle .. " (" .. player.m .. ") | X: " .. player.x .. " Y: " .. player.y .. "\n"
 
 		file:write(text .. "")
 		file:flush()
 	end,
-
 	invRestore = function(player)
 		if (not Config.loggingEnabled) then
 			return
@@ -787,12 +912,19 @@ characterLog = {
 			name = item.name
 		end
 
-		text = text .. "<" .. os.date() .. "> Item restored: " .. name .. "      Protects remaining: " .. item.protected .. " | @" .. player.mapTitle .. " (" .. player.m .. ") | X: " .. player.x .. " Y: " .. player.y .. "\n"
+		text =
+			text ..
+			"<" ..
+				os.date() ..
+					"> Item restored: " ..
+						name ..
+							"      Protects remaining: " ..
+								item.protected ..
+									" | @" .. player.mapTitle .. " (" .. player.m .. ") | X: " .. player.x .. " Y: " .. player.y .. "\n"
 
 		file:write(text .. "")
 		file:flush()
 	end,
-
 	invBreak = function(player)
 		if (not Config.loggingEnabled) then
 			return
@@ -814,12 +946,16 @@ characterLog = {
 			name = item.name
 		end
 
-		text = text .. "<" .. os.date() .. "> Item broken/destroyed: " .. name .. " | @" .. player.mapTitle .. " (" .. player.m .. ") | X: " .. player.x .. " Y: " .. player.y .. "\n"
+		text =
+			text ..
+			"<" ..
+				os.date() ..
+					"> Item broken/destroyed: " ..
+						name .. " | @" .. player.mapTitle .. " (" .. player.m .. ") | X: " .. player.x .. " Y: " .. player.y .. "\n"
 
 		file:write(text .. "")
 		file:flush()
 	end,
-
 	bodLog = function(player)
 		if (not Config.loggingEnabled) then
 			return
@@ -842,19 +978,17 @@ characterLog = {
 		text = "\n==== [Break on Death] ==================================================================\n"
 		text = text .. "Player      : " .. player.name .. " (ID: " .. player.ID .. ")\n"
 		text = text .. "Date & Time : " .. os.date() .. "\n"
-		text = text .. "Location    : " .. player.mapTitle .. " (" .. player.m .. ") | X: " .. player.x .. " Y: " .. player.y .. "\n"
+		text =
+			text ..
+			"Location    : " .. player.mapTitle .. " (" .. player.m .. ") | X: " .. player.x .. " Y: " .. player.y .. "\n"
 		text = text .. "Items       : \n"
 
 		if #items > 0 then
 			for i = 1, #items do
 				if items[i].realName ~= "" then
-					text = text .. i .. ". **" .. items[i].realName .. "** (" .. items[
-						i
-					].name .. ") amount: " .. items[i].amount
+					text = text .. i .. ". **" .. items[i].realName .. "** (" .. items[i].name .. ") amount: " .. items[i].amount
 				else
-					text = text .. i .. ". " .. items[i].name .. " amount: " .. items[
-						i
-					].amount
+					text = text .. i .. ". " .. items[i].name .. " amount: " .. items[i].amount
 				end
 
 				if items[i].owner > 0 then
@@ -871,7 +1005,6 @@ characterLog = {
 		file2:write(text .. "")
 		file2:flush()
 	end,
-
 	deathPileLog = function(player)
 		if (not Config.loggingEnabled) then
 			return
@@ -883,14 +1016,15 @@ characterLog = {
 		text = "\n==== [Death Pile] ==================================================================\n"
 		text = text .. "Player      : " .. player.name .. " (ID: " .. player.ID .. ")\n"
 		text = text .. "Date & Time : " .. os.date() .. "\n"
-		text = text .. "Location    : " .. player.mapTitle .. " (" .. player.m .. ") | X: " .. player.x .. " Y: " .. player.y .. "\n"
+		text =
+			text ..
+			"Location    : " .. player.mapTitle .. " (" .. player.m .. ") | X: " .. player.x .. " Y: " .. player.y .. "\n"
 		text = text .. "Items       : \n"
 		text = characterLog.getDeathPileItems(player, text)
 
 		file:write(text .. "")
 		file:flush()
 	end,
-
 	getDeathPileItems = function(player, text)
 		if (not Config.loggingEnabled) then
 			return
@@ -903,16 +1037,13 @@ characterLog = {
 		if #deathPile > 0 then
 			for i = 1, #deathPile do
 				if player:isYours(deathPile[i]) then
-					text = text .. "" .. i .. ": " .. deathPile[i].name .. " (" .. deathPile[
-						i
-					].amount .. ")\n"
+					text = text .. "" .. i .. ": " .. deathPile[i].name .. " (" .. deathPile[i].amount .. ")\n"
 				end
 			end
 		end
 
 		return text
 	end,
-
 	kanLogs = function(player, item, amount)
 		if (not Config.loggingEnabled) then
 			return
@@ -937,7 +1068,6 @@ characterLog = {
 		file:write(text .. "")
 		file:flush()
 	end,
-
 	kanCertificateAdd = function(player, item)
 		if (not Config.loggingEnabled) then
 			return
@@ -959,7 +1089,6 @@ characterLog = {
 		file:write(text .. "")
 		file:flush()
 	end,
-
 	sellItemWrite = function(player, item, amount, cost)
 		if (not Config.loggingEnabled) then
 			return
@@ -970,12 +1099,18 @@ characterLog = {
 		local dir, text = "../rtklua/History/logs/characterlog/log_" .. name .. "_" .. os.date("%m.%d.%Y") .. ".txt", ""
 		local file = io.open(dir, "a+")
 
-		text = text .. "<" .. os.date() .. "> SOLD: " .. item.name .. " Amount: " .. amount .. " for " .. Tools.formatNumber(cost) .. " gold. | @" .. player.mapTitle .. " (" .. player.m .. ")\n"
+		text =
+			text ..
+			"<" ..
+				os.date() ..
+					"> SOLD: " ..
+						item.name ..
+							" Amount: " ..
+								amount .. " for " .. Tools.formatNumber(cost) .. " gold. | @" .. player.mapTitle .. " (" .. player.m .. ")\n"
 
 		file:write(text .. "")
 		file:flush()
 	end,
-
 	buyItemWrite = function(player, item, amount, cost)
 		if (not Config.loggingEnabled) then
 			return
@@ -986,12 +1121,18 @@ characterLog = {
 		local dir, text = "../rtklua/History/logs/characterlog/log_" .. name .. "_" .. os.date("%m.%d.%Y") .. ".txt", ""
 		local file = io.open(dir, "a+")
 
-		text = text .. "<" .. os.date() .. "> BOUGHT: " .. item.name .. " Amount: " .. amount .. " for " .. Tools.formatNumber(cost) .. " gold. | @" .. player.mapTitle .. " (" .. player.m .. ")\n"
+		text =
+			text ..
+			"<" ..
+				os.date() ..
+					"> BOUGHT: " ..
+						item.name ..
+							" Amount: " ..
+								amount .. " for " .. Tools.formatNumber(cost) .. " gold. | @" .. player.mapTitle .. " (" .. player.m .. ")\n"
 
 		file:write(text .. "")
 		file:flush()
 	end,
-
 	withdrawItemWrite = function(player, item, engrave, amount, owner)
 		if (not Config.loggingEnabled) then
 			return
@@ -1020,7 +1161,6 @@ characterLog = {
 		file:write(text .. "")
 		file:flush()
 	end,
-
 	depositItemWrite = function(player, item, engrave, amount, owner)
 		if (not Config.loggingEnabled) then
 			return
@@ -1049,7 +1189,6 @@ characterLog = {
 		file:write(text .. "")
 		file:flush()
 	end,
-
 	withdrawGoldWrite = function(player, amount)
 		if (not Config.loggingEnabled) then
 			return
@@ -1060,12 +1199,18 @@ characterLog = {
 		local dir, text = "../rtklua/History/logs/characterlog/log_" .. name .. "_" .. os.date("%m.%d.%Y") .. ".txt", ""
 		local file = io.open(dir, "a+")
 
-		text = text .. "<" .. os.date() .. "> WITHDREW GOLD: " .. Tools.formatNumber(amount) .. "  TOTAL DEPOSITED GOLD: " .. Tools.formatNumber(player.bankMoney) .. " | @" .. player.mapTitle .. " (" .. player.m .. ")\n"
+		text =
+			text ..
+			"<" ..
+				os.date() ..
+					"> WITHDREW GOLD: " ..
+						Tools.formatNumber(amount) ..
+							"  TOTAL DEPOSITED GOLD: " ..
+								Tools.formatNumber(player.bankMoney) .. " | @" .. player.mapTitle .. " (" .. player.m .. ")\n"
 
 		file:write(text .. "")
 		file:flush()
 	end,
-
 	depositGoldWrite = function(player, amount)
 		if (not Config.loggingEnabled) then
 			return
@@ -1076,12 +1221,18 @@ characterLog = {
 		local dir, text = "../rtklua/History/logs/characterlog/log_" .. name .. "_" .. os.date("%m.%d.%Y") .. ".txt", ""
 		local file = io.open(dir, "a+")
 
-		text = text .. "<" .. os.date() .. "> DEPOSITED GOLD: " .. Tools.formatNumber(amount) .. "  TOTAL DEPOSITED GOLD: " .. Tools.formatNumber(player.bankMoney) .. " | @" .. player.mapTitle .. " (" .. player.m .. ")\n"
+		text =
+			text ..
+			"<" ..
+				os.date() ..
+					"> DEPOSITED GOLD: " ..
+						Tools.formatNumber(amount) ..
+							"  TOTAL DEPOSITED GOLD: " ..
+								Tools.formatNumber(player.bankMoney) .. " | @" .. player.mapTitle .. " (" .. player.m .. ")\n"
 
 		file:write(text .. "")
 		file:flush()
 	end,
-
 	inputLog = function(player, string)
 		if (not Config.loggingEnabled) then
 			return

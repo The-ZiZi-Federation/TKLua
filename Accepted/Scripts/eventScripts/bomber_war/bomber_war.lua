@@ -14,11 +14,9 @@ BomberWarNpc = {
 		)
 		core.gameRegistry["bomber_war_end_timer"] = os.time() + 5
 	end,
-
 	wallCore = function()
 		BomberWarNpc.wall()
 	end,
-
 	wall = function()
 		local x = 0
 		local y = 0
@@ -26,23 +24,19 @@ BomberWarNpc = {
 		local players = core:getObjectsInMap(m, BL_PC)
 
 		if (core.gameRegistry["bomber_war_playing"] == 1) then
-			core.gameRegistry["bomber_war_wall_timer"] = core.gameRegistry[
-				"bomber_war_wall_timer"
-			] + 1
+			core.gameRegistry["bomber_war_wall_timer"] = core.gameRegistry["bomber_war_wall_timer"] + 1
 
-			if (core.gameRegistry["bomber_war_wall_timer"] == 55 or core.gameRegistry[
-				"bomber_war_wall_timer"
-			] == 115 or core.gameRegistry["bomber_war_wall_timer"] == 175 or core.gameRegistry[
-				"bomber_war_wall_timer"
-			] == 235 or core.gameRegistry["bomber_war_wall_timer"] == 295) then
+			if
+				(core.gameRegistry["bomber_war_wall_timer"] == 55 or core.gameRegistry["bomber_war_wall_timer"] == 115 or
+					core.gameRegistry["bomber_war_wall_timer"] == 175 or
+					core.gameRegistry["bomber_war_wall_timer"] == 235 or
+					core.gameRegistry["bomber_war_wall_timer"] == 295)
+			 then
 				broadcast(
 					15050,
 					"-----------------------------------------------------------------------------------------------------"
 				)
-				broadcast(
-					15050,
-					"WARNING - Play Area Reduction in 5 Seconds. Get Ready!"
-				)
+				broadcast(15050, "WARNING - Play Area Reduction in 5 Seconds. Get Ready!")
 				broadcast(
 					15050,
 					"-----------------------------------------------------------------------------------------------------"
@@ -162,7 +156,6 @@ BomberWarNpc = {
 
 		-- end if playing
 	end,
-
 	drawWall = function(x, y)
 		local m = 15050
 		local lavaTile = 29259
@@ -183,17 +176,9 @@ BomberWarNpc = {
 					players[i]:sendAnimationXY(94, players[i].x, players[i].y)
 
 					if players[i].registry["bomber_war_team"] == 1 then
-						players[i]:warp(
-							m,
-							math.random(1, 34),
-							math.random(1, 2)
-						)
+						players[i]:warp(m, math.random(1, 34), math.random(1, 2))
 					elseif players[i].registry["bomber_war_team"] == 2 then
-						players[i]:warp(
-							m,
-							math.random(1, 34),
-							math.random(39, 40)
-						)
+						players[i]:warp(m, math.random(1, 34), math.random(39, 40))
 					end
 
 					BomberWarNpc.winnerCheck()
@@ -214,7 +199,6 @@ BomberWarNpc = {
 		setTile(m, x, y, lavaTile)
 		setPass(m, x, y, 0)
 	end,
-
 	blueWin = function()
 		local pc = core:getObjectsInMap(15050, BL_PC)
 		core.gameRegistry["bomber_war_playing"] = 0
@@ -230,7 +214,6 @@ BomberWarNpc = {
 		)
 		core.gameRegistry["bomber_war_end_timer"] = os.time() + 5
 	end,
-
 	winnerCheck = function()
 		local pc = core:getObjectsInMap(15050, BL_PC)
 		local livingRed = {}
@@ -262,7 +245,6 @@ BomberWarNpc = {
 			end
 		end
 	end,
-
 	getStartTimer = function()
 		local hour, minute, second = 0, 0, 0
 
@@ -272,150 +254,133 @@ BomberWarNpc = {
 			dif = core.gameRegistry["bomber_war_start"] - os.time()
 			hour = string.format("%02.f", math.floor(dif / 3600))
 			minute = string.format("%02.f", math.floor(dif / 60 - (hour * 60)))
-			second = string.format(
-				"%02.f",
-				math.floor(dif - hour * 3600 - minute * 60)
-			)
+			second = string.format("%02.f", math.floor(dif - hour * 3600 - minute * 60))
 			return hour .. ":" .. minute .. ":" .. second
 		end
 	end,
+	click = async(
+		function(player, npc)
+			local total = {}
 
-	click = async(function(player, npc)
-		local total = {}
+			local pc = player:getObjectsInMap(player.m, BL_PC)
+			local n = "<b>[Bomber War]\n\n"
+			local t = {g = convertGraphic(npc.look, "monster"), c = npc.lookColor}
+			player.npcGraphic = t.g
+			player.npcColor = t.c
+			player.dialogType = 0
 
-		local pc = player:getObjectsInMap(player.m, BL_PC)
-		local n = "<b>[Bomber War]\n\n"
-		local t = {g = convertGraphic(npc.look, "monster"), c = npc.lookColor}
-		player.npcGraphic = t.g
-		player.npcColor = t.c
-		player.dialogType = 0
+			local str, par = "", ""
+			local time = BomberWarNpc.getStartTimer()
 
-		local str, par = "", ""
-		local time = BomberWarNpc.getStartTimer()
-
-		if #pc > 0 then
-			for i = 1, #pc do
-				if pc[i].registry["bomber_war_registered"] > 0 then
-					table.insert(total, pc[i].ID)
+			if #pc > 0 then
+				for i = 1, #pc do
+					if pc[i].registry["bomber_war_registered"] > 0 then
+						table.insert(total, pc[i].ID)
+					end
 				end
 			end
-		end
-		local opts = {}
-		table.insert(opts, "How To Play?")
-		if core.gameRegistry["bomber_war"] == 1 then
-			if player.registry["bomber_war_registered"] == 0 then
-				table.insert(opts, "Register For Bomber War")
-			else
-				par = " participant."
+			local opts = {}
+			table.insert(opts, "How To Play?")
+			if core.gameRegistry["bomber_war"] == 1 then
+				if player.registry["bomber_war_registered"] == 0 then
+					table.insert(opts, "Register For Bomber War")
+				else
+					par = " participant."
+				end
+
+				if player.registry["bomber_war_registered"] > 0 or player.registry["bomber_war_team"] > 0 then
+					table.insert(opts, "I can't register!")
+				end
 			end
 
-			if player.registry["bomber_war_registered"] > 0 or player.registry[
-				"bomber_war_team"
-			] > 0 then
-				table.insert(opts, "I can't register!")
+			table.insert(opts, "Exit")
+
+			if core.gameRegistry["bomber_war_start"] > os.time() then
+				str = "Waiting time: " .. BomberWarNpc.getStartTimer()
 			end
-		end
 
-		table.insert(opts, "Exit")
-
-		if core.gameRegistry["bomber_war_start"] > os.time() then
-			str = "Waiting time: " .. BomberWarNpc.getStartTimer()
-		end
-
-		menu = player:menuString(
-			n .. "Hello," .. par .. " The game will start in few minutes.\n" .. str .. "\nTotal players: " .. #total,
-			opts
-		)
-
-		if menu == "How To Play?" then
-			player:dialogSeq(
-				{
-					t,
-					n .. "Bomber War is an explosive team-based game!",
-					n .. "Your attacks will drop bombs on the ground that will explode in a few seconds. The blast goes 1 tile in 4 directions, so make sure you stay out of the way!",
-					n .. "The explosions will destroy boxes around the map and open up paths. Sometimes, a magic symbol will be left on the ground after a box is destroyed.",
-					n .. "If you walk over one of these symbols, you'll get a powerup! Some will make you move faster, others will make your explosions bigger or let you drop more bombs at once.",
-					n .. "If you're caught in an explosion, you're dead. The team with a living player is the winner."
-				},
-				1
+			menu =
+				player:menuString(
+				n .. "Hello," .. par .. " The game will start in few minutes.\n" .. str .. "\nTotal players: " .. #total,
+				opts
 			)
-			player:freeAsync()
-			BomberWarNpc.click(player, npc)
-		elseif menu == "Register For Bomber War" then
-			if os.time() < player.registry["minigameBan"] then
-				--Check if player is banned from minigames
-				player:popUp("You are currently banned from minigames! Try again later maybe.")
-				return
-			end
-			if player.registry["bomber_war_team"] == 0 then
-				player.registry["bomber_war_registered"] = 1
-				player.registry["bomber_war_team"] = math.random(1, 2)
-				core.gameRegistry["bomber_war_players"] = core.gameRegistry[
-					"bomber_war_players"
-				] + 1
-				player:warp(15051, math.random(2, 14), math.random(2, 12))
-				player:sendAnimation(16)
-				player:playSound(29)
+
+			if menu == "How To Play?" then
 				player:dialogSeq(
 					{
 						t,
-						n .. "Allright, your character is registered for Bomber War.\nPlease wait until the game starts!"
+						n .. "Bomber War is an explosive team-based game!",
+						n ..
+							"Your attacks will drop bombs on the ground that will explode in a few seconds. The blast goes 1 tile in 4 directions, so make sure you stay out of the way!",
+						n ..
+							"The explosions will destroy boxes around the map and open up paths. Sometimes, a magic symbol will be left on the ground after a box is destroyed.",
+						n ..
+							"If you walk over one of these symbols, you'll get a powerup! Some will make you move faster, others will make your explosions bigger or let you drop more bombs at once.",
+						n .. "If you're caught in an explosion, you're dead. The team with a living player is the winner."
 					},
 					1
 				)
-			else
+				player:freeAsync()
+				BomberWarNpc.click(player, npc)
+			elseif menu == "Register For Bomber War" then
+				if os.time() < player.registry["minigameBan"] then
+					--Check if player is banned from minigames
+					player:popUp("You are currently banned from minigames! Try again later maybe.")
+					return
+				end
+				if player.registry["bomber_war_team"] == 0 then
+					player.registry["bomber_war_registered"] = 1
+					player.registry["bomber_war_team"] = math.random(1, 2)
+					core.gameRegistry["bomber_war_players"] = core.gameRegistry["bomber_war_players"] + 1
+					player:warp(15051, math.random(2, 14), math.random(2, 12))
+					player:sendAnimation(16)
+					player:playSound(29)
+					player:dialogSeq(
+						{
+							t,
+							n .. "Allright, your character is registered for Bomber War.\nPlease wait until the game starts!"
+						},
+						1
+					)
+				else
+					player:dialogSeq(
+						{
+							t,
+							n .. "Please be patient!\n\n<b>Waiting time: " .. time .. ""
+						},
+						1
+					)
+					BomberWarNpc.click(player, npc)
+				end
+			elseif menu == "I can't register!" then
+				player.registry["bomber_war_registered"] = 0
+				player.registry["bomber_war_team"] = 0
 				player:dialogSeq(
 					{
 						t,
-						n .. "Please be patient!\n\n<b>Waiting time: " .. time .. ""
+						n .. "Looks like a simple paperwork mixup. You should be all set to register now, have fun at the game!"
 					},
 					1
 				)
+				player:freeAsync()
 				BomberWarNpc.click(player, npc)
 			end
-		elseif menu == "I can't register!" then
-			player.registry["bomber_war_registered"] = 0
-			player.registry["bomber_war_team"] = 0
-			player:dialogSeq(
-				{
-					t,
-					n .. "Looks like a simple paperwork mixup. You should be all set to register now, have fun at the game!"
-				},
-				1
-			)
-			player:freeAsync()
-			BomberWarNpc.click(player, npc)
 		end
-	end),
-
+	),
 	core = function()
 		BomberWarNpc.closed()
 		BomberWarNpc.begin(core)
 		BomberWarNpc.balancing(core)
 		BomberWarNpc.endGame()
 	end,
-
 	open = function()
 		core.gameRegistry["bomber_war"] = 1
 		core.gameRegistry["bomber_war_start"] = os.time() + 900
-		broadcast(
-			-1,
-			"-----------------------------------------------------------------------------------------------------"
-		)
-		broadcast(
-			-1,
-			"                                Bomber War is now open in Kugnae Arena!"
-		)
-		broadcast(
-			-1,
-			"                                    Entry is closing in 15 minutes!"
-		)
-		broadcast(
-			-1,
-			"-----------------------------------------------------------------------------------------------------"
-		)
+		broadcast(-1, "-----------------------------------------------------------------------------------------------------")
+		broadcast(-1, "                                Bomber War is now open in Kugnae Arena!")
+		broadcast(-1, "                                    Entry is closing in 15 minutes!")
+		broadcast(-1, "-----------------------------------------------------------------------------------------------------")
 	end,
-
 	roundTwo = function()
 		--	core.gameRegistry["bomber_war"] = 1
 		--	core.gameRegistry["bomber_war_start"] = os.time()+120
@@ -425,7 +390,6 @@ BomberWarNpc = {
 		--	broadcast(-1, "                                    Entry is closing in 2 minutes!")
 		--	broadcast(-1, "-----------------------------------------------------------------------------------------------------")
 	end,
-
 	closed = function()
 		local diff = core.gameRegistry["bomber_war_start"] - os.time()
 
@@ -437,10 +401,7 @@ BomberWarNpc = {
 							-1,
 							"-----------------------------------------------------------------------------------------------------"
 						)
-						broadcast(
-							-1,
-							"                                 Bomber War entry is closing in 5 minute!"
-						)
+						broadcast(-1, "                                 Bomber War entry is closing in 5 minute!")
 						broadcast(
 							-1,
 							"-----------------------------------------------------------------------------------------------------"
@@ -450,10 +411,7 @@ BomberWarNpc = {
 							-1,
 							"-----------------------------------------------------------------------------------------------------"
 						)
-						broadcast(
-							-1,
-							"                                 Bomber War entry is closing in 10 minutes!"
-						)
+						broadcast(-1, "                                 Bomber War entry is closing in 10 minutes!")
 						broadcast(
 							-1,
 							"-----------------------------------------------------------------------------------------------------"
@@ -463,24 +421,15 @@ BomberWarNpc = {
 							-1,
 							"-----------------------------------------------------------------------------------------------------"
 						)
-						broadcast(
-							-1,
-							"                                 Bomber War entry is closing in 1 minute!"
-						)
+						broadcast(-1, "                                 Bomber War entry is closing in 1 minute!")
 						broadcast(
 							-1,
 							"-----------------------------------------------------------------------------------------------------"
 						)
 					elseif diff == 10 then
-						broadcast(
-							15051,
-							"                                    Bomber War Starts in 10 seconds!"
-						)
+						broadcast(15051, "                                    Bomber War Starts in 10 seconds!")
 					elseif diff <= 3 then
-						broadcast(
-							15051,
-							"                                    Bomber War Starts in " .. diff .. " seconds!"
-						)
+						broadcast(15051, "                                    Bomber War Starts in " .. diff .. " seconds!")
 					end
 				elseif core.gameRegistry["bomber_war_start"] < os.time() then
 					--core.gameRegistry["bomber_war"] = 0
@@ -489,10 +438,7 @@ BomberWarNpc = {
 						-1,
 						"-----------------------------------------------------------------------------------------------------"
 					)
-					broadcast(
-						-1,
-						"                                 Bomber War entry is closed!"
-					)
+					broadcast(-1, "                                 Bomber War entry is closed!")
 					broadcast(
 						-1,
 						"-----------------------------------------------------------------------------------------------------"
@@ -502,14 +448,11 @@ BomberWarNpc = {
 			end
 		end
 	end,
-
 	endGame = function()
 		local pc = core:getObjectsInMap(15050, BL_PC)
 		local arenaPC = core:getObjectsInMap(31, BL_PC)
 
-		if core.gameRegistry["bomber_war_end_timer"] > 0 and core.gameRegistry[
-			"bomber_war_end_timer"
-		] < os.time() then
+		if core.gameRegistry["bomber_war_end_timer"] > 0 and core.gameRegistry["bomber_war_end_timer"] < os.time() then
 			core.gameRegistry["bomber_war_end_timer"] = 0
 			core.gameRegistry["bomber_war_players"] = 0
 			core.gameRegistry["bomber_war"] = 0
@@ -563,7 +506,6 @@ BomberWarNpc = {
 			end
 		end
 	end,
-
 	stop = function()
 		local pc = core:getObjectsInMap(15050, BL_PC)
 
@@ -594,7 +536,6 @@ BomberWarNpc = {
 		end
 		BomberWarNpc.mapReset()
 	end,
-
 	cancel = function()
 		local pc = core:getObjectsInMap(15051, BL_PC)
 
@@ -625,7 +566,6 @@ BomberWarNpc = {
 		end
 		BomberWarNpc.mapReset()
 	end,
-
 	entryLegend = function(player)
 		local reg = player.registry["bomber_war_entries"]
 
@@ -634,9 +574,7 @@ BomberWarNpc = {
 		end
 
 		if reg > 0 then
-			player.registry["bomber_war_entries"] = player.registry[
-				"bomber_war_entries"
-			] + 1
+			player.registry["bomber_war_entries"] = player.registry["bomber_war_entries"] + 1
 			player:addLegend(
 				"Played in " .. player.registry["bomber_war_entries"] .. " Bomber Wars",
 				"bomber_war_entries",
@@ -645,15 +583,9 @@ BomberWarNpc = {
 			)
 		else
 			player.registry["bomber_war_entries"] = 1
-			player:addLegend(
-				"Played in 1 Bomber War",
-				"bomber_war_entries",
-				76,
-				16
-			)
+			player:addLegend("Played in 1 Bomber War", "bomber_war_entries", 76, 16)
 		end
 	end,
-
 	victoryLegend = function(player)
 		local reg = player.registry["bomber_war_wins"]
 
@@ -662,15 +594,8 @@ BomberWarNpc = {
 		end
 
 		if reg > 0 then
-			player.registry["bomber_war_wins"] = player.registry[
-				"bomber_war_wins"
-			] + 1
-			player:addLegend(
-				"Won " .. player.registry["bomber_war_wins"] .. " Bomber Wars",
-				"bomber_war_wins",
-				76,
-				16
-			)
+			player.registry["bomber_war_wins"] = player.registry["bomber_war_wins"] + 1
+			player:addLegend("Won " .. player.registry["bomber_war_wins"] .. " Bomber Wars", "bomber_war_wins", 76, 16)
 		else
 			player.registry["bomber_war_wins"] = 1
 			player:addLegend("Won 1 Bomber War", "bomber_war_wins", 76, 16)
@@ -678,7 +603,6 @@ BomberWarNpc = {
 
 		--player:addMinigamePoint(player)
 	end,
-
 	start = function()
 		local pc = core:getObjectsInMap(15051, BL_PC)
 		if core.gameRegistry["bomber_war_players"] >= 2 then
@@ -699,10 +623,7 @@ BomberWarNpc = {
 				-1,
 				"-----------------------------------------------------------------------------------------------------"
 			)
-			broadcast(
-				-1,
-				"                             Not enough players. Bomber War cancelled!"
-			)
+			broadcast(-1, "                             Not enough players. Bomber War cancelled!")
 			broadcast(
 				-1,
 				"-----------------------------------------------------------------------------------------------------"
@@ -710,7 +631,6 @@ BomberWarNpc = {
 			BomberWarNpc.cancel()
 		end
 	end,
-
 	enterArena = function(player)
 		local map = 15050
 		local x = math.random(1, 34)
@@ -763,7 +683,6 @@ BomberWarNpc = {
 			return BomberWarNpc.enterArena(player)
 		end
 	end,
-
 	wait = function()
 		local pc = core:getObjectsInMap(15050, BL_PC)
 		core.gameRegistry["bomber_war_wait_time"] = os.time() + 30
@@ -778,31 +697,22 @@ BomberWarNpc = {
 			15050,
 			"-----------------------------------------------------------------------------------------------------"
 		)
-		broadcast(
-			15050,
-			"                                    Get Ready! Bomber War starts in 30 seconds!"
-		)
+		broadcast(15050, "                                    Get Ready! Bomber War starts in 30 seconds!")
 		broadcast(
 			15050,
 			"-----------------------------------------------------------------------------------------------------"
 		)
 	end,
-
 	begin = function(npc)
 		local pc = core:getObjectsInMap(15050, BL_PC)
 
-		if core.gameRegistry["bomber_war_wait_time"] > 0 and core.gameRegistry[
-			"bomber_war_wait_time"
-		] < os.time() then
+		if core.gameRegistry["bomber_war_wait_time"] > 0 and core.gameRegistry["bomber_war_wait_time"] < os.time() then
 			if #pc >= 2 then
 				broadcast(
 					15050,
 					"-----------------------------------------------------------------------------------------------------"
 				)
-				broadcast(
-					15050,
-					"                                   The Bomber War has begun!"
-				)
+				broadcast(15050, "                                   The Bomber War has begun!")
 				broadcast(
 					15050,
 					"-----------------------------------------------------------------------------------------------------"
@@ -821,7 +731,6 @@ BomberWarNpc = {
 			core.gameRegistry["bomber_war_wait_time"] = 0
 		end
 	end,
-
 	balancing = function(npc)
 		local red, blue = {}, {}
 		local pc = npc:getObjectsInMap(15051, BL_PC)
@@ -852,7 +761,6 @@ BomberWarNpc = {
 			end
 		end
 	end,
-
 	costume = function(player)
 		local team = player.registry["bomber_war_team"]
 		local dye, str = 0, ""
@@ -880,13 +788,11 @@ BomberWarNpc = {
 		player.gfxClone = 1
 		player:updateState()
 	end,
-
 	draw = function()
 		BomberWarNpc.wait()
 		BomberWarNpc.mapReset()
 		BomberWarNpc.playerReset()
 	end,
-
 	win = function(player)
 		local pc = core:getObjectsInMap(15050, BL_PC)
 
@@ -903,7 +809,6 @@ BomberWarNpc = {
 		)
 		core.gameRegistry["bomber_war_end_timer"] = os.time() + 5
 	end,
-
 	bomb = function(player)
 		local m = player.m
 		local x = player.x
@@ -937,23 +842,13 @@ BomberWarNpc = {
 					player:sendAction(5, 30)
 					player:playSound(406)
 					player:dropItemXY(65004, 1, 0, 0, m, x, y)
-					player:addNPC(
-						"bomber_war_bomb",
-						m,
-						x,
-						y,
-						0,
-						1000,
-						3000,
-						player.ID
-					)
+					player:addNPC("bomber_war_bomb", m, x, y, 0, 1000, 3000, player.ID)
 				else
 					player:sendMinitext("You have too many bombs active to place another one.")
 				end
 			end
 		end
 	end,
-
 	pickups = function(player)
 		local m = 15050
 		local x = player.x
@@ -971,9 +866,7 @@ BomberWarNpc = {
 						for i = 1, #power do
 							if getTile(m, x, y) == power[i] then
 								if player.registry["bomb_distance"] <= 2 then
-									player.registry["bomb_distance"] = player.registry[
-										"bomb_distance"
-									] + 1
+									player.registry["bomb_distance"] = player.registry["bomb_distance"] + 1
 									setTile(m, x, y, 297)
 									player:playSound(503)
 									player:sendAnimation(296)
@@ -989,9 +882,7 @@ BomberWarNpc = {
 						for i = 1, #speed do
 							if getTile(m, x, y) == speed[i] then
 								if player.registry["speed_boost"] <= 4 then
-									player.registry["speed_boost"] = player.registry[
-										"speed_boost"
-									] + 1
+									player.registry["speed_boost"] = player.registry["speed_boost"] + 1
 									player.speed = player.speed - 10
 									player:updateState()
 									setTile(m, x, y, 297)
@@ -1009,9 +900,7 @@ BomberWarNpc = {
 						for i = 1, #count do
 							if getTile(m, x, y) == count[i] then
 								if player.registry["bomb_max"] <= 3 then
-									player.registry["bomb_max"] = player.registry[
-										"bomb_max"
-									] + 1
+									player.registry["bomb_max"] = player.registry["bomb_max"] + 1
 									setTile(m, x, y, 297)
 									player:playSound(505)
 									player:sendAnimation(295)
@@ -1032,24 +921,12 @@ BomberWarNpc = {
 									player.optFlags = 128
 									player:sendStatus()
 									player:updateState()
-									player:sendAnimationXY(
-										94,
-										player.x,
-										player.y
-									)
+									player:sendAnimationXY(94, player.x, player.y)
 
 									if player.registry["bomber_war_team"] == 1 then
-										player:warp(
-											m,
-											math.random(1, 34),
-											math.random(1, 2)
-										)
+										player:warp(m, math.random(1, 34), math.random(1, 2))
 									elseif player.registry["bomber_war_team"] == 2 then
-										player:warp(
-											m,
-											math.random(1, 34),
-											math.random(39, 40)
-										)
+										player:warp(m, math.random(1, 34), math.random(39, 40))
 									end
 
 									BomberWarNpc.winnerCheck()
@@ -1061,15 +938,13 @@ BomberWarNpc = {
 			end
 		end
 	end,
-
 	mapReset = function()
 		for x = 1, 34 do
 			for y = 4, 37 do
-				if getTile(15050, x, y) == 31154 or getTile(15050, x, y) == 31123 or getTile(
-					15050,
-					x,
-					y
-				) == 29745 or getTile(15050, x, y) == 29259 then
+				if
+					getTile(15050, x, y) == 31154 or getTile(15050, x, y) == 31123 or getTile(15050, x, y) == 29745 or
+						getTile(15050, x, y) == 29259
+				 then
 					setTile(15050, x, y, 297)
 				end
 
@@ -1088,7 +963,6 @@ BomberWarNpc = {
 			end
 		end
 	end,
-
 	playerReset = function()
 		local pc = core:getObjectsInMap(15050, BL_PC)
 

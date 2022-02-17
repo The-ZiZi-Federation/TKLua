@@ -1,75 +1,78 @@
-itemCreation = async(function(player)
-	local items = {}
-	local itemAmounts = {}
+itemCreation =
+	async(
+	function(player)
+		local items = {}
+		local itemAmounts = {}
 
-	local i = 1
-	while i < #creationItems do
-		table.insert(items, Item(creationItems[i]).yname)
-		table.insert(itemAmounts, creationItems[i + 1])
-		i = i + 2
-	end
+		local i = 1
+		while i < #creationItems do
+			table.insert(items, Item(creationItems[i]).yname)
+			table.insert(itemAmounts, creationItems[i + 1])
+			i = i + 2
+		end
 
-	local itemsCreated = {
-		"wings_of_fury",
-		"plate_of_metal",
-		"hot_coal",
-		"lantern",
-		"silk_skin",
-		"wing_eye",
-		"evil_warlord_armor"
-	}
+		local itemsCreated = {
+			"wings_of_fury",
+			"plate_of_metal",
+			"hot_coal",
+			"lantern",
+			"silk_skin",
+			"wing_eye",
+			"evil_warlord_armor"
+		}
 
-	local maps = {"desert_map"}
+		local maps = {"desert_map"}
 
-	for i = 1, #maps do
-		table.insert(itemsCreated, maps[i])
-	end
+		for i = 1, #maps do
+			table.insert(itemsCreated, maps[i])
+		end
 
-	--polished stone: 35 grain of sand, 5 heavy rock, 3 rock
+		--polished stone: 35 grain of sand, 5 heavy rock, 3 rock
 
-	local itemHaveMats = ""
+		local itemHaveMats = ""
 
-	local itemReq = {}
-	local itemAmountReq = {}
-	local takeItem = {}
-	local takeAmountReq = {}
-	local giveItem = ""
-	local giveItemAmount = 1
+		local itemReq = {}
+		local itemAmountReq = {}
+		local takeItem = {}
+		local takeAmountReq = {}
+		local giveItem = ""
+		local giveItemAmount = 1
 
-	for i = 1, #itemsCreated do
-		itemReq, itemAmountReq = getItemsForItemCreation(itemsCreated[i])
+		for i = 1, #itemsCreated do
+			itemReq, itemAmountReq = getItemsForItemCreation(itemsCreated[i])
 
-		if itemReq ~= nil then
-			local count = 0
-			for j = 1, #itemReq do
-				for k = 1, #items do
-					if items[k] == itemReq[j] and itemAmounts[k] == itemAmountReq[j] then
-						count = count + 1
-					end
+			if itemReq ~= nil then
+				local count = 0
+				for j = 1, #itemReq do
+					for k = 1, #items do
+						if items[k] == itemReq[j] and itemAmounts[k] == itemAmountReq[j] then
+							count = count + 1
+						end
 
-					if count == #itemReq then
-						-- we matched what is needed
-						takeItem = itemReq
-						takeAmountReq = itemAmountReq
-						giveItem = itemsCreated[i]
-						break
+						if count == #itemReq then
+							-- we matched what is needed
+							takeItem = itemReq
+							takeAmountReq = itemAmountReq
+							giveItem = itemsCreated[i]
+							break
+						end
 					end
 				end
 			end
 		end
-	end
 
-	if #takeItem > 0 then
-		for i = 1, #takeItem do
-			player:removeItem(takeItem[i], takeAmountReq[i])
+		if #takeItem > 0 then
+			for i = 1, #takeItem do
+				player:removeItem(takeItem[i], takeAmountReq[i])
+			end
+
+			player:addItem(giveItem, 1)
+			player:sendMinitext("You were successful!")
+		else
+			player:sendMinitext("You were unsuccessful.")
 		end
-
-		player:addItem(giveItem, 1)
-		player:sendMinitext("You were successful!")
-	else
-		player:sendMinitext("You were unsuccessful.")
 	end
-end)
+)
 
 getItemsForItemCreation = function(itemsCreated)
 	local items = {}

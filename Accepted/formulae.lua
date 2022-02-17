@@ -11,8 +11,8 @@ checkProtection = function(block, target, successRate)
 	local targetWill = 1
 	local targetLevel = 1
 	local targetProtection = 1
-	local minhit =.1
-	local maxhit =.95
+	local minhit = .1
+	local maxhit = .95
 
 	if (target ~= nil) then
 		targetWill = (target.will)
@@ -22,12 +22,12 @@ checkProtection = function(block, target, successRate)
 
 	if (block.blType == BL_PC or block.blType == 1) then
 		--PLAYER hitchance
-		local hitchance =.1 + (blockLevel / 1000) + (blockWill / 100)
+		local hitchance = .1 + (blockLevel / 1000) + (blockWill / 100)
 
 		if (target ~= nil) then
 			hitchance = hitchance - (targetWill / 100) + (targetProtection / 100) + (targetLevel / 1000)
 
-			--target:talk(0,""..hitchance*10000)
+		--target:talk(0,""..hitchance*10000)
 		end
 
 		if (hitchance < minhit) then
@@ -43,7 +43,7 @@ checkProtection = function(block, target, successRate)
 		end
 	elseif (block.blType == BL_MOB) or (block.blType == 2) then
 		--MOBs hitchance
-		local hitchance =.1 + (blockLevel / 1000) + (blockWill / 100)
+		local hitchance = .1 + (blockLevel / 1000) + (blockWill / 100)
 
 		if (target ~= nil) then
 			hitchance = hitchance - (targetWill / 100) + (targetProtection / 100) + (targetLevel / 1000)
