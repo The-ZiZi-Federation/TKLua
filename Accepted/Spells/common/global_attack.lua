@@ -103,17 +103,20 @@ global_attack = {
 			target:playSound(87)
 			target:sendAnimation(60)
 		elseif (pcalign == 104) then -- (104) warr unaligned: slash
+			target:playSound(30)
+			target:sendAnimation(31)
+
 			-- KaTT made all this pretty damn confusing by making new entries for vitas (below)
 			-- without removing the old entries (above). I do not really have the patience
 			-- to properly fix all of this at the moment, so for now:
+			
 			-- Spell (all alignments) --> pcalign
 			-- Berserk 			--> 119
 			-- Whirlwind 		--> 125
 			-- Desperate Attack --> 120
 			-- Lethal Strike	--> 201
+
 			-- KaTT Edits
-			target:playSound(30)
-			target:sendAnimation(31)
 		elseif (pcalign == 119) then -- (UNALIGNED BERSERK)
 			target:playSound(14)
 			target:sendAnimation(9)

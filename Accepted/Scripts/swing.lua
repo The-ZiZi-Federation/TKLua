@@ -1,29 +1,149 @@
 swing = function(player)
 	local rand = math.random(0, 1)
-	local mobUp = player:getObjectsInCell(player.m, player.x, player.y - 1, BL_MOB)
-	local mobLeft = player:getObjectsInCell(player.m, player.x - 1, player.y, BL_MOB)
-	local mobRight = player:getObjectsInCell(player.m, player.x + 1, player.y, BL_MOB)
-	local mobDown = player:getObjectsInCell(player.m, player.x, player.y + 1, BL_MOB)
-	local mobUpExtend = player:getObjectsInCell(player.m, player.x, player.y - 2, BL_MOB)
-	local mobLeftExtend = player:getObjectsInCell(player.m, player.x - 2, player.y, BL_MOB)
-	local mobRightExtend = player:getObjectsInCell(player.m, player.x + 2, player.y, BL_MOB)
-	local mobDownExtend = player:getObjectsInCell(player.m, player.x, player.y + 2, BL_MOB)
-	local mobUpLeftExtend = player:getObjectsInCell(player.m, player.x - 1, player.y - 1, BL_MOB)
-	local mobUpRightExtend = player:getObjectsInCell(player.m, player.x + 1, player.y - 1, BL_MOB)
-	local mobDownLeftExtend = player:getObjectsInCell(player.m, player.x - 1, player.y + 1, BL_MOB)
-	local mobDownRightExtend = player:getObjectsInCell(player.m, player.x + 1, player.y + 1, BL_MOB)
-	local pcUp = player:getObjectsInCell(player.m, player.x, player.y - 1, BL_PC)
-	local pcLeft = player:getObjectsInCell(player.m, player.x - 1, player.y, BL_PC)
-	local pcRight = player:getObjectsInCell(player.m, player.x + 1, player.y, BL_PC)
-	local pcDown = player:getObjectsInCell(player.m, player.x, player.y + 1, BL_PC)
-	local pcUpExtend = player:getObjectsInCell(player.m, player.x, player.y - 2, BL_PC)
-	local pcLeftExtend = player:getObjectsInCell(player.m, player.x - 2, player.y, BL_PC)
-	local pcRightExtend = player:getObjectsInCell(player.m, player.x + 2, player.y, BL_PC)
-	local pcDownExtend = player:getObjectsInCell(player.m, player.x, player.y + 2, BL_PC)
-	local pcUpLeftExtend = player:getObjectsInCell(player.m, player.x - 1, player.y - 1, BL_PC)
-	local pcUpRightExtend = player:getObjectsInCell(player.m, player.x + 1, player.y - 1, BL_PC)
-	local pcDownLeftExtend = player:getObjectsInCell(player.m, player.x - 1, player.y + 1, BL_PC)
-	local pcDownRightExtend = player:getObjectsInCell(player.m, player.x + 1, player.y + 1, BL_PC)
+	local mobUp = player:getObjectsInCell(
+		player.m,
+		player.x,
+		player.y - 1,
+		BL_MOB
+	)
+	local mobLeft = player:getObjectsInCell(
+		player.m,
+		player.x - 1,
+		player.y,
+		BL_MOB
+	)
+	local mobRight = player:getObjectsInCell(
+		player.m,
+		player.x + 1,
+		player.y,
+		BL_MOB
+	)
+	local mobDown = player:getObjectsInCell(
+		player.m,
+		player.x,
+		player.y + 1,
+		BL_MOB
+	)
+	local mobUpExtend = player:getObjectsInCell(
+		player.m,
+		player.x,
+		player.y - 2,
+		BL_MOB
+	)
+	local mobLeftExtend = player:getObjectsInCell(
+		player.m,
+		player.x - 2,
+		player.y,
+		BL_MOB
+	)
+	local mobRightExtend = player:getObjectsInCell(
+		player.m,
+		player.x + 2,
+		player.y,
+		BL_MOB
+	)
+	local mobDownExtend = player:getObjectsInCell(
+		player.m,
+		player.x,
+		player.y + 2,
+		BL_MOB
+	)
+	local mobUpLeftExtend = player:getObjectsInCell(
+		player.m,
+		player.x - 1,
+		player.y - 1,
+		BL_MOB
+	)
+	local mobUpRightExtend = player:getObjectsInCell(
+		player.m,
+		player.x + 1,
+		player.y - 1,
+		BL_MOB
+	)
+	local mobDownLeftExtend = player:getObjectsInCell(
+		player.m,
+		player.x - 1,
+		player.y + 1,
+		BL_MOB
+	)
+	local mobDownRightExtend = player:getObjectsInCell(
+		player.m,
+		player.x + 1,
+		player.y + 1,
+		BL_MOB
+	)
+	local pcUp = player:getObjectsInCell(
+		player.m,
+		player.x,
+		player.y - 1,
+		BL_PC
+	)
+	local pcLeft = player:getObjectsInCell(
+		player.m,
+		player.x - 1,
+		player.y,
+		BL_PC
+	)
+	local pcRight = player:getObjectsInCell(
+		player.m,
+		player.x + 1,
+		player.y,
+		BL_PC
+	)
+	local pcDown = player:getObjectsInCell(
+		player.m,
+		player.x,
+		player.y + 1,
+		BL_PC
+	)
+	local pcUpExtend = player:getObjectsInCell(
+		player.m,
+		player.x,
+		player.y - 2,
+		BL_PC
+	)
+	local pcLeftExtend = player:getObjectsInCell(
+		player.m,
+		player.x - 2,
+		player.y,
+		BL_PC
+	)
+	local pcRightExtend = player:getObjectsInCell(
+		player.m,
+		player.x + 2,
+		player.y,
+		BL_PC
+	)
+	local pcDownExtend = player:getObjectsInCell(
+		player.m,
+		player.x,
+		player.y + 2,
+		BL_PC
+	)
+	local pcUpLeftExtend = player:getObjectsInCell(
+		player.m,
+		player.x - 1,
+		player.y - 1,
+		BL_PC
+	)
+	local pcUpRightExtend = player:getObjectsInCell(
+		player.m,
+		player.x + 1,
+		player.y - 1,
+		BL_PC
+	)
+	local pcDownLeftExtend = player:getObjectsInCell(
+		player.m,
+		player.x - 1,
+		player.y + 1,
+		BL_PC
+	)
+	local pcDownRightExtend = player:getObjectsInCell(
+		player.m,
+		player.x + 1,
+		player.y + 1,
+		BL_PC
+	)
 	local extendHit = player.extendHit
 
 	local objRight = getObject(player.m, player.x + 1, player.y)

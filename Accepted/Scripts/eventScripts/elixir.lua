@@ -6,8 +6,7 @@ elixir = {
 		core.gameRegistry["minigameEventId"] = eventid
 		broadcast(
 			-1,
-			"" ..
-				minigames.eventNameLookUp(core.gameRegistry["minigameEventId"]) .. " doors opening. Nagnang Arena (74,103 Nagnang)"
+			"" .. minigames.eventNameLookUp(core.gameRegistry["minigameEventId"]) .. " doors opening. Nagnang Arena (74,103 Nagnang)"
 		)
 		broadcast(-1, "Elixir starting in 15 minutes.")
 		core.gameRegistry["elixirState"] = 1
@@ -23,11 +22,15 @@ elixir = {
 		elixir.setGameDoors("close")
 		elixir.removePrizeNPC()
 	end,
+
 	closeGame = function()
 		elixir.removePrizeNPC()
 
 		if core.gameRegistry["elixirMap"] > 0 then
-			local pcs = core:getObjectsInMap(core.gameRegistry["elixirMap"], BL_PC)
+			local pcs = core:getObjectsInMap(
+				core.gameRegistry["elixirMap"],
+				BL_PC
+			)
 			if #pcs ~= nil then
 				for i = 1, #pcs do
 					clone.wipe(pcs[i])
@@ -53,6 +56,7 @@ elixir = {
 
 		elixir.clearTeams()
 	end,
+
 	setArenaDoors = function(state)
 		local m = 2590
 		if state == "open" then
@@ -73,6 +77,7 @@ elixir = {
 			end
 		end
 	end,
+
 	setGameDoors = function(state)
 		local m = 3042
 		if state == "open" then
@@ -93,6 +98,7 @@ elixir = {
 			end
 		end
 	end,
+
 	removePrizeNPC = function()
 		for i = 1, #elixirMaps do
 			local npcs = core:getObjectsInMap(elixirMaps[i], BL_NPC)
@@ -106,6 +112,7 @@ elixir = {
 			end
 		end
 	end,
+
 	getElixirTeam = function(team)
 		local rteam = {}
 
@@ -119,6 +126,7 @@ elixir = {
 
 		return rteam
 	end,
+
 	timer = function(eventid)
 		elixir.walkTimer()
 
@@ -126,15 +134,13 @@ elixir = {
 			if (os.time() == core.gameRegistry["elixirStart"] + 300) then
 				broadcast(
 					-1,
-					minigames.eventNameLookUp(core.gameRegistry["minigameEventId"]) ..
-						" doors closing in 10 minutes. Nagnang Arena (74,103 Nagnang)"
+					minigames.eventNameLookUp(core.gameRegistry["minigameEventId"]) .. " doors closing in 10 minutes. Nagnang Arena (74,103 Nagnang)"
 				)
 			end
 			if (os.time() == core.gameRegistry["elixirStart"] + 600) then
 				broadcast(
 					-1,
-					minigames.eventNameLookUp(core.gameRegistry["minigameEventId"]) ..
-						" doors closing in 5 minutes. Nagnang Arena (74,103 Nagnang)"
+					minigames.eventNameLookUp(core.gameRegistry["minigameEventId"]) .. " doors closing in 5 minutes. Nagnang Arena (74,103 Nagnang)"
 				)
 			end
 			if (os.time() == core.gameRegistry["elixirStart"] + 900) then
@@ -143,7 +149,10 @@ elixir = {
 					return
 				end
 
-				broadcast(-1, minigames.eventNameLookUp(core.gameRegistry["minigameEventId"]) .. " doors closed.")
+				broadcast(
+					-1,
+					minigames.eventNameLookUp(core.gameRegistry["minigameEventId"]) .. " doors closed."
+				)
 				elixir.setArenaDoors("close")
 				elixir.clearTeams()
 				core.gameRegistry["elixirState"] = 2
@@ -161,7 +170,10 @@ elixir = {
 		end
 
 		if (core.gameRegistry["elixirState"] == 3) then
-			broadcast(3042, "[Host Monty]: Please be patient while I setup the teams!")
+			broadcast(
+				3042,
+				"[Host Monty]: Please be patient while I setup the teams!"
+			)
 			core.gameRegistry["elixirState"] = 4
 		end
 
@@ -189,11 +201,17 @@ elixir = {
 							if (#blue == #red) then
 								local random = math.random(1, 2)
 								if random == 1 then
-									table.insert(elixirTeams, {id = players[i].id})
+									table.insert(
+										elixirTeams,
+										{id = players[i].id}
+									)
 									elixir.teamDye(players[i], 1)
 									players[i].registry["elixirTeam"] = 1
 								elseif random == 2 then
-									table.insert(elixirTeams, {id = players[i].id})
+									table.insert(
+										elixirTeams,
+										{id = players[i].id}
+									)
 									elixir.teamDye(players[i], 2)
 									players[i].registry["elixirTeam"] = 2
 								end
@@ -213,7 +231,10 @@ elixir = {
 						end
 					end
 				else
-					broadcast(3042, "[Host Monty]: Alright teams are setup, get ready to enter!")
+					broadcast(
+						3042,
+						"[Host Monty]: Alright teams are setup, get ready to enter!"
+					)
 					core.gameRegistry["elixirState"] = 5
 					core.gameRegistry["elixirStart"] = os.time()
 				end
@@ -238,7 +259,9 @@ elixir = {
 		end
 
 		if (core.gameRegistry["elixirState"] == 8) then
-			if (core.gameRegistry["elixirRedScore"] < 2 and core.gameRegistry["elixirBlueScore"] < 2) then
+			if (core.gameRegistry["elixirRedScore"] < 2 and core.gameRegistry[
+				"elixirBlueScore"
+			] < 2) then
 				local players = core:getObjectsInMap(3042, BL_PC)
 
 				if core.gameRegistry["elixirMap"] == 0 then
@@ -253,7 +276,10 @@ elixir = {
 
 				core.gameRegistry["elixirRoundWinner"] = 0
 
-				broadcast2(elixirMaps, "[Host Monty]: Alright arena is setup. Go ahead and enter!")
+				broadcast2(
+					elixirMaps,
+					"[Host Monty]: Alright arena is setup. Go ahead and enter!"
+				)
 				core.gameRegistry["elixirState"] = 9
 				core.gameRegistry["elixirStart"] = os.time()
 			else
@@ -265,7 +291,10 @@ elixir = {
 		if (core.gameRegistry["elixirState"] == 9) then
 			local round = core.gameRegistry["elixirRound"]
 			if (os.time() > core.gameRegistry["elixirStart"] + 30) then
-				broadcast2(elixirMaps, "[Host Monty]: Round " .. round .. " is starting in 30 seconds.")
+				broadcast2(
+					elixirMaps,
+					"[Host Monty]: Round " .. round .. " is starting in 30 seconds."
+				)
 				core.gameRegistry["elixirState"] = 10
 				core.gameRegistry["elixirStart"] = os.time()
 			end
@@ -274,7 +303,10 @@ elixir = {
 		if (core.gameRegistry["elixirState"] == 10) then
 			local round = core.gameRegistry["elixirRound"]
 			if (os.time() > core.gameRegistry["elixirStart"] + 15) then
-				broadcast2(elixirMaps, "[Host Monty]: Round " .. round .. " is starting in 15 seconds.")
+				broadcast2(
+					elixirMaps,
+					"[Host Monty]: Round " .. round .. " is starting in 15 seconds."
+				)
 				core.gameRegistry["elixirState"] = 11
 				core.gameRegistry["elixirStart"] = os.time()
 			end
@@ -283,7 +315,10 @@ elixir = {
 		if (core.gameRegistry["elixirState"] == 11) then
 			local round = core.gameRegistry["elixirRound"]
 			if (os.time() > core.gameRegistry["elixirStart"] + 10) then
-				broadcast2(elixirMaps, "[Host Monty]: Round " .. round .. " is starting in 5 seconds. Get ready!")
+				broadcast2(
+					elixirMaps,
+					"[Host Monty]: Round " .. round .. " is starting in 5 seconds. Get ready!"
+				)
 
 				elixir.setGameDoors("close")
 				elixir.loadArrows()
@@ -338,7 +373,9 @@ elixir = {
 					broadcast2(elixirMaps, "Stalemate imminent.")
 				end
 
-				core.gameRegistry["stalemateCounter"] = core.gameRegistry["stalemateCounter"] + 1
+				core.gameRegistry["stalemateCounter"] = core.gameRegistry[
+					"stalemateCounter"
+				] + 1
 
 				if core.gameRegistry["stalemateCounter"] >= 30 then
 					core.gameRegistry["elixirStart"] = os.time()
@@ -355,11 +392,19 @@ elixir = {
 				end
 
 				if (core.gameRegistry["elixirRoundWinner"] == 2) then
-					broadcast2(elixirMaps, "[Host Monty]: Blue wins the round! ")
+					broadcast2(
+						elixirMaps,
+						"[Host Monty]: Blue wins the round! "
+					)
 				end
 
 				if (core.gameRegistry["elixirRoundWinner"] == 0) then
-					broadcast2(elixirMaps, "[Host Monty]: Stalemate! Round " .. core.gameRegistry["elixirRound"] .. " restarting.")
+					broadcast2(
+						elixirMaps,
+						"[Host Monty]: Stalemate! Round " .. core.gameRegistry[
+							"elixirRound"
+						] .. " restarting."
+					)
 				end
 
 				local m = core.gameRegistry["elixirMap"]
@@ -398,8 +443,14 @@ elixir = {
 				players[z]:sendStatus()
 			end
 			broadcast2(elixirMaps, "[Host Monty]: Current score is...")
-			broadcast2(elixirMaps, "- Red: " .. core.gameRegistry["elixirRedScore"])
-			broadcast2(elixirMaps, "- Blue: " .. core.gameRegistry["elixirBlueScore"])
+			broadcast2(
+				elixirMaps,
+				"- Red: " .. core.gameRegistry["elixirRedScore"]
+			)
+			broadcast2(
+				elixirMaps,
+				"- Blue: " .. core.gameRegistry["elixirBlueScore"]
+			)
 			core.gameRegistry["elixirState"] = 16
 			core.gameRegistry["elixirStart"] = os.time()
 		end
@@ -446,9 +497,14 @@ elixir = {
 
 		if (core.gameRegistry["elixirState"] == 101) then
 			if core.gameRegistry["elixirGameClose"] == 0 then
-				broadcast2(elixirMaps, "Elixir prize option closing in 5 minutes. Choose your prize.")
+				broadcast2(
+					elixirMaps,
+					"Elixir prize option closing in 5 minutes. Choose your prize."
+				)
 			end
-			core.gameRegistry["elixirGameClose"] = core.gameRegistry["elixirGameClose"] + 1
+			core.gameRegistry["elixirGameClose"] = core.gameRegistry[
+				"elixirGameClose"
+			] + 1
 
 			local m = core.gameRegistry["elixirMap"]
 			local pcs = core:getObjectsInMap(m, BL_PC)
@@ -463,6 +519,7 @@ elixir = {
 			end
 		end
 	end,
+
 	loadArrows = function()
 		local m = core.gameRegistry["elixirMap"]
 
@@ -477,6 +534,7 @@ elixir = {
 			pcs[i]:sendMinitext("Good luck!")
 		end
 	end,
+
 	shoot = function(player)
 		--elixir--
 		if player.gfxWeap == 20000 then
@@ -496,7 +554,9 @@ elixir = {
 				if player.registry["elixir_arrows"] > 0 then
 					player:playSound(709)
 					player:sendAction(1, 20)
-					player.registry["elixir_arrows"] = player.registry["elixir_arrows"] - 1
+					player.registry["elixir_arrows"] = player.registry[
+						"elixir_arrows"
+					] - 1
 					player:sendMinitext("Arrows remaining: " .. player.registry["elixir_arrows"])
 
 					for i = 1, 12 do
@@ -548,6 +608,7 @@ elixir = {
 			end
 		end
 	end,
+
 	hit = function(player, target)
 		-- 66 blue
 		-- 50 light blue
@@ -573,6 +634,7 @@ elixir = {
 
 		target:updateState()
 	end,
+
 	sweepGameArea = function()
 		local m = core.gameRegistry["elixirMap"]
 		if m == 0 then
@@ -583,13 +645,16 @@ elixir = {
 
 		if #items > 0 then
 			for i = 1, #items do
-				if items[i].x >= 1 and items[i].x <= 30 and items[i].y >= 6 and items[i].y <= 35 and items[i].yname ~= "barricade" then
+				if items[i].x >= 1 and items[i].x <= 30 and items[i].y >= 6 and items[i].y <= 35 and items[
+					i
+				].yname ~= "barricade" then
 					--Player(2):talk(0,""..items[i].x.." "..items[i].y)
 					items[i]:delete()
 				end
 			end
 		end
 	end,
+
 	walkTimer = function()
 		if core.gameRegistry["elixirState"] < 13 then
 			return
@@ -611,7 +676,7 @@ elixir = {
 						pc[1].registry["elixirHitBy"] = 0
 						elixir.warpToSidelines(pc[1])
 
-					--[[if pc[1].registry["elixirWalkTime"] == 0 then
+						--[[if pc[1].registry["elixirWalkTime"] == 0 then
 						pc[1].registry["elixirWalkTime"] = os.time() + 3
 					else
 						if os.time() < pc[1].registry["elixirWalkTime"] then
@@ -625,7 +690,7 @@ elixir = {
 						end
 
 					end]]
-					--
+						--
 					end
 				end
 			end
@@ -642,7 +707,7 @@ elixir = {
 						pc[1].registry["elixirHitBy"] = 0
 						elixir.warpToSidelines(pc[1])
 
-					--[[if pc[1].registry["elixirWalkTime"] == 0 then
+						--[[if pc[1].registry["elixirWalkTime"] == 0 then
 						pc[1].registry["elixirWalkTime"] = os.time() + 3
 					else
 						if os.time() < pc[1].registry["elixirWalkTime"] then
@@ -656,7 +721,7 @@ elixir = {
 						end
 
 					end]]
-					--
+						--
 					end
 				end
 			end
@@ -677,6 +742,7 @@ elixir = {
 			end
 		end
 	end,
+
 	warpToSidelines = function(player)
 		local m = core.gameRegistry["elixirMap"]
 
@@ -704,10 +770,14 @@ elixir = {
 
 		if player.registry["elixirHitBy"] > 0 then
 			if (core.gameRegistry["elixirState"] == 13) then
-				broadcast2(elixirMaps, player.name .. " has fallen in battle to " .. getOfflineID(player.registry["elixirHitBy"]))
+				broadcast2(
+					elixirMaps,
+					player.name .. " has fallen in battle to " .. getOfflineID(player.registry["elixirHitBy"])
+				)
 			end
 		end
 	end,
+
 	walk = function(player)
 		local onElixirMap = false
 		for i = 1, #elixirMaps do
@@ -738,7 +808,11 @@ elixir = {
 
 			if core.gameRegistry["elixirState"] ~= 101 then
 				-- end state
-				local confirm = player:menuSeq("Are you sure you wish to abandon your team?", {"Yes", "No"}, {})
+				local confirm = player:menuSeq(
+					"Are you sure you wish to abandon your team?",
+					{"Yes", "No"},
+					{}
+				)
 				if confirm == 1 then
 					--abandon
 					clone.wipe(player)
@@ -819,6 +893,7 @@ elixir = {
 			end
 		end
 	end,
+
 	blueMsg = function(msg)
 		local m = core.gameRegistry["elixirMap"]
 		local pcs = core:getObjectsInMap(m, BL_PC)
@@ -827,6 +902,7 @@ elixir = {
 			pcs[i]:talk(2, msg)
 		end
 	end,
+
 	gameStartBroadcast = function()
 		local pcs = core:getObjectsInMap(3042, BL_PC)
 
@@ -838,12 +914,15 @@ elixir = {
 			pcs[i]:guitext("Pre elixir session has ended. Teams balanced.\nProceed through the doors.")
 		end
 	end,
+
 	resetRound = function()
 		core.gameRegistry["elixirRoundTimer"] = 0
 	end,
+
 	chooseMap = function()
 		return elixirMaps[math.random(1, #elixirMaps)]
 	end,
+
 	setSidelinesBarricade = function()
 		local m = core.gameRegistry["elixirMap"]
 		local x = 2
@@ -873,6 +952,7 @@ elixir = {
 
 		------------------------------
 	end,
+
 	removeSidelinesBarricade = function()
 		local m = core.gameRegistry["elixirMap"]
 		local x = 2
@@ -924,6 +1004,7 @@ elixir = {
 
 		------------------------------
 	end,
+
 	setBarricade = function()
 		local m = core.gameRegistry["elixirMap"]
 
@@ -945,6 +1026,7 @@ elixir = {
 			y = y - 1
 		end
 	end,
+
 	removeBarricade = function()
 		local m = core.gameRegistry["elixirMap"]
 
@@ -976,6 +1058,7 @@ elixir = {
 			y = y - 1
 		end
 	end,
+
 	removeOfflinePlayers = function()
 		local i = 1
 		while i <= #elixirTeams do
@@ -986,6 +1069,7 @@ elixir = {
 			end
 		end
 	end,
+
 	teamDye = function(player, team)
 		local armor = {}
 
@@ -1018,6 +1102,7 @@ elixir = {
 
 		player:updateState()
 	end,
+
 	clearTeams = function()
 		for i = 1, #elixirTeams do
 			elixirTeams[i] = nil

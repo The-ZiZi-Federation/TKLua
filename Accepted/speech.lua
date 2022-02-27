@@ -39,16 +39,28 @@ onSay = function(player)
 		local roll = math.random(0, 100)
 		broadcast(player.m, player.name .. " rolled 0-100, result: " .. roll)
 		printf = 0
-	elseif (string.match(lspeech, "/roll %d+") ~= nil and string.match(lspeech, "/roll %d+%-%d+") == nil) then
+	elseif (string.match(lspeech, "/roll %d+") ~= nil and string.match(
+		lspeech,
+		"/roll %d+%-%d+"
+	) == nil) then
 		local number = tonumber(string.match(lspeech, "/roll (%d+)"))
 		local roll = math.random(0, number)
-		broadcast(player.m, player.name .. " rolled 0-" .. number .. ", result: " .. roll)
+		broadcast(
+			player.m,
+			player.name .. " rolled 0-" .. number .. ", result: " .. roll
+		)
 		printf = 0
-	elseif (string.match(lspeech, "/roll %d+") ~= nil and string.match(lspeech, "/roll %d+%-%d+") ~= nil) then
+	elseif (string.match(lspeech, "/roll %d+") ~= nil and string.match(
+		lspeech,
+		"/roll %d+%-%d+"
+	) ~= nil) then
 		local number1 = tonumber(string.match(lspeech, "(%d+)"))
 		local number2 = tonumber(string.match(lspeech, "%-(%d+)"))
 		local roll = math.random(number1, number2)
-		broadcast(player.m, player.name .. " rolled " .. number1 .. "-" .. number2 .. ", result: " .. roll)
+		broadcast(
+			player.m,
+			player.name .. " rolled " .. number1 .. "-" .. number2 .. ", result: " .. roll
+		)
 		printf = 0
 	end
 
@@ -65,8 +77,7 @@ onSay = function(player)
 
 		player:talk(
 			0,
-			player.name ..
-				": I am " .. days .. " days, " .. hour .. " hours, " .. minute .. " minutes, " .. second .. " seconds old."
+			player.name .. ": I am " .. days .. " days, " .. hour .. " hours, " .. minute .. " minutes, " .. second .. " seconds old."
 		)
 
 		printf = 0
@@ -104,13 +115,41 @@ onSay = function(player)
 	end
 
 	if string.match(lspeech, "/help") ~= nil then
-		player:msg(4, "/whisper <name> <message> - send a private message", player.ID)
-		player:msg(4, "/clanchat <message> - send a message to your clan", player.ID)
-		player:msg(4, "/subpathchat (/sp) <message> - send a message to your subpath", player.ID)
-		player:msg(4, "/whisper <name> <message> - send a private message", player.ID)
-		player:msg(4, "/shout <message> - shout a message to everyone around you", player.ID)
-		player:msg(4, "/novice <message> - send a message to the new player channel", player.ID)
-		player:msg(4, "/random <number>-<number> - rolls a random number", player.ID)
+		player:msg(
+			4,
+			"/whisper <name> <message> - send a private message",
+			player.ID
+		)
+		player:msg(
+			4,
+			"/clanchat <message> - send a message to your clan",
+			player.ID
+		)
+		player:msg(
+			4,
+			"/subpathchat (/sp) <message> - send a message to your subpath",
+			player.ID
+		)
+		player:msg(
+			4,
+			"/whisper <name> <message> - send a private message",
+			player.ID
+		)
+		player:msg(
+			4,
+			"/shout <message> - shout a message to everyone around you",
+			player.ID
+		)
+		player:msg(
+			4,
+			"/novice <message> - send a message to the new player channel",
+			player.ID
+		)
+		player:msg(
+			4,
+			"/random <number>-<number> - rolls a random number",
+			player.ID
+		)
 		printf = 0
 	end
 
@@ -133,16 +172,11 @@ onSay = function(player)
 		for i = 1, 4 do
 			for j = 1, #carnageTeams do
 				if carnageTeams[j].team == i and Player(carnageTeams[j].ID) ~= nil then
-					text =
-						text ..
-						i ..
-							"        " ..
-								Player(carnageTeams[j].ID).name ..
-									"        " ..
-										carnageTeams[j].kills ..
-											"          " ..
-												carnageTeams[j].deaths ..
-													"            " .. carnageTeams[j].damage .. "           " .. carnageTeams[j].healing .. "\n"
+					text = text .. i .. "        " .. Player(carnageTeams[j].ID).name .. "        " .. carnageTeams[
+						j
+					].kills .. "          " .. carnageTeams[j].deaths .. "            " .. carnageTeams[
+						j
+					].damage .. "           " .. carnageTeams[j].healing .. "\n"
 				end
 			end
 		end
@@ -171,12 +205,12 @@ onSay = function(player)
 		for i = 1, #carnageTeams do
 			if carnageTeams[i].team == team then
 				if Player(carnageTeams[i].ID) ~= nil then
-					characterLog.carnageTeamChatLog(
-						"@" ..
-							player.mapTitle ..
-								" (" .. player.m .. ") [Team " .. team .. "]" .. player.name .. " (" .. player.className .. ")> " .. text
+					characterLog.carnageTeamChatLog("@" .. player.mapTitle .. " (" .. player.m .. ") [Team " .. team .. "]" .. player.name .. " (" .. player.className .. ")> " .. text)
+					Player(carnageTeams[i].ID):msg(
+						4,
+						"[Team]" .. player.name .. " (" .. player.className .. ")> " .. text,
+						player.ID
 					)
-					Player(carnageTeams[i].ID):msg(4, "[Team]" .. player.name .. " (" .. player.className .. ")> " .. text, player.ID)
 				end
 			end
 		end
@@ -225,15 +259,25 @@ onSay = function(player)
 
 	-- Time Played (added 8-7-16)
 	if (lspeech == "/played") then
-		player:msg(4, "This session: " .. getSessionTimePlayed(player), player.ID)
-		player:msg(4, "Total time played: " .. getTotalTimePlayed(player), player.ID)
+		player:msg(
+			4,
+			"This session: " .. getSessionTimePlayed(player),
+			player.ID
+		)
+		player:msg(
+			4,
+			"Total time played: " .. getTotalTimePlayed(player),
+			player.ID
+		)
 
 		printf = 0
 	end
 
 	if lspeech == "packetn" then
 		player.registry["packetid"] = player.registry["packetid"] + 1
-		player:sendMinitext("packet id: " .. player.registry["packetid"] .. " subtype: " .. player.registry["packetsubtype"])
+		player:sendMinitext("packet id: " .. player.registry["packetid"] .. " subtype: " .. player.registry[
+			"packetsubtype"
+		])
 		local packet = {
 			170,
 			7,
@@ -247,7 +291,9 @@ onSay = function(player)
 	end
 	if lspeech == "packetp" then
 		player.registry["packetid"] = player.registry["packetid"] - 1
-		player:sendMinitext("packet id: " .. player.registry["packetid"] .. " subtype: " .. player.registry["packetsubtype"])
+		player:sendMinitext("packet id: " .. player.registry["packetid"] .. " subtype: " .. player.registry[
+			"packetsubtype"
+		])
 		local packet = {
 			170,
 			7,
@@ -262,7 +308,9 @@ onSay = function(player)
 
 	if lspeech == "packetsubn" then
 		player.registry["packetsubtype"] = player.registry["packetsubtype"] + 1
-		player:sendMinitext("packet id: " .. player.registry["packetid"] .. " subtype: " .. player.registry["packetsubtype"])
+		player:sendMinitext("packet id: " .. player.registry["packetid"] .. " subtype: " .. player.registry[
+			"packetsubtype"
+		])
 		local packet = {
 			170,
 			7,
@@ -276,7 +324,9 @@ onSay = function(player)
 	end
 	if lspeech == "packetsubp" then
 		player.registry["packetsubtype"] = player.registry["packetsubtype"] - 1
-		player:sendMinitext("packet id: " .. player.registry["packetid"] .. " subtype: " .. player.registry["packetsubtype"])
+		player:sendMinitext("packet id: " .. player.registry["packetid"] .. " subtype: " .. player.registry[
+			"packetsubtype"
+		])
 		local packet = {
 			170,
 			7,
@@ -391,6 +441,7 @@ onSay = function(player)
 				amount = math.min(amount, 201)
 			else
 				amount = 1
+
 			end
 
 			player:addItem(item, amount)
@@ -555,7 +606,11 @@ onSay = function(player)
 			if lspeech == reload[i] then
 				for x = 1, #online do
 					if online[x].gmLevel > 0 then
-						online[x]:msg(11, "[System] " .. text[i] .. " Reloaded   By: " .. player.name .. "", online[x].ID)
+						online[x]:msg(
+							11,
+							"[System] " .. text[i] .. " Reloaded   By: " .. player.name .. "",
+							online[x].ID
+						)
 					end
 				end
 			end
@@ -602,7 +657,10 @@ onSay = function(player)
 			printf = 0
 		end
 
-		if (string.match(lspeech, "/shutdown (%d+)") ~= nil and string.match(lspeech, "/shutdown %d+ (%d+)") == nil) then
+		if (string.match(lspeech, "/shutdown (%d+)") ~= nil and string.match(
+			lspeech,
+			"/shutdown %d+ (%d+)"
+		) == nil) then
 			local time = tonumber(string.match(lspeech, "/shutdown (%d+)")) / 1000
 			core.gameRegistry["server_reset_timer"] = os.time() + time
 			local allPlayers = player:getUsers()
@@ -610,7 +668,7 @@ onSay = function(player)
 				allPlayers[i]:setTimer(2, time)
 			end
 
-		--printf = 0
+			--printf = 0
 		end
 
 		if string.match(lspeech, "/warp (%d+)") ~= nil then
@@ -693,7 +751,10 @@ onSay = function(player)
 		end
 
 		if lspeech == "/kill" then
-			mob, pc = getTargetFacing(player, BL_MOB), getTargetFacing(player, BL_PC)
+			mob, pc = getTargetFacing(player, BL_MOB), getTargetFacing(
+				player,
+				BL_PC
+			)
 			if mob ~= nil then
 				if mob.state ~= 1 then
 					mob.attacker = 0
@@ -756,7 +817,10 @@ onSay = function(player)
 			printf = 0
 		end
 
-		if (string.match(lspeech, "/mon ([%a_]+)") ~= nil and string.match(lspeech, "/mon ([%a_]+) (%d+)") == nil) then
+		if (string.match(lspeech, "/mon ([%a_]+)") ~= nil and string.match(
+			lspeech,
+			"/mon ([%a_]+) (%d+)"
+		) == nil) then
 			local id = string.match(lspeech, "/mon ([%a_]+)")
 			local id = string.lower(id)
 
@@ -776,7 +840,10 @@ onSay = function(player)
 			printf = 0
 		end
 
-		if (string.match(lspeech, "/mon (%d+)") ~= nil and string.match(lspeech, "/mon %d+ (%d+)") == nil) then
+		if (string.match(lspeech, "/mon (%d+)") ~= nil and string.match(
+			lspeech,
+			"/mon %d+ (%d+)"
+		) == nil) then
 			local id = tonumber(string.match(lspeech, "/mon (%d+)"))
 
 			player:spawn(id, player.x, player.y, 1)
@@ -807,7 +874,10 @@ onSay = function(player)
 		end
 
 		-- Get spells --
-		if string.match(lspeech, "/s (.+)") ~= nil and string.match(lspeech, "/s (.+) %a+") == nil then
+		if string.match(lspeech, "/s (.+)") ~= nil and string.match(
+			lspeech,
+			"/s (.+) %a+"
+		) == nil then
 			s = string.match(lspeech, "/s (.+)")
 			if not player:hasSpell(s) then
 				player:addSpell(s)
@@ -818,11 +888,18 @@ onSay = function(player)
 			end
 			printf = 0
 		elseif string.match(lspeech, "/s .+ (%a+)") ~= nil then
-			s, t = string.match(lspeech, "/s (.+) %a+"), string.match(lspeech, "/s .+ (%a+)")
+			s, t = string.match(lspeech, "/s (.+) %a+"), string.match(
+				lspeech,
+				"/s .+ (%a+)"
+			)
 			if Player(t) ~= nil then
 				if not Player(t):hasSpell(s) then
 					Player(t):addSpell(s)
-					Player(t):msg(4, "[Operator] Added a new spell!", Player(t).ID)
+					Player(t):msg(
+						4,
+						"[Operator] Added a new spell!",
+						Player(t).ID
+					)
 					player:sendMinitext("Done!!")
 				else
 					anim(player)
@@ -836,15 +913,27 @@ onSay = function(player)
 		end
 
 		if lspeech == "udis" then
-			npc, pc, mob = getTargetFacing(player, BL_NPC), getTargetFacing(player, BL_PC), getTargetFacing(player, BL_MOB)
+			npc, pc, mob = getTargetFacing(player, BL_NPC), getTargetFacing(
+				player,
+				BL_PC
+			), getTargetFacing(player, BL_MOB)
 			if npc ~= nil then
-				npc:talk(2, "Dis : " .. npc.look .. ", Color: " .. npc.lookColor)
+				npc:talk(
+					2,
+					"Dis : " .. npc.look .. ", Color: " .. npc.lookColor
+				)
 			end
 			if pc ~= nil then
-				pc:talk(2, "Dis : " .. pc.disguise .. ", Color: " .. pc.disguiseColor)
+				pc:talk(
+					2,
+					"Dis : " .. pc.disguise .. ", Color: " .. pc.disguiseColor
+				)
 			end
 			if mob ~= nil then
-				mob:talk(2, "Dis : " .. mob.look .. ", Color: " .. mob.lookColor)
+				mob:talk(
+					2,
+					"Dis : " .. mob.look .. ", Color: " .. mob.lookColor
+				)
 			end
 			printf = 0
 		end
@@ -882,7 +971,11 @@ onSay = function(player)
 				player:flushDuration()
 				player:sendMinitext("Flushed durations!")
 			else
-				player:msg(0, "[INFO] /flush 1 : Aethers, 2 : Duration", player.ID)
+				player:msg(
+					0,
+					"[INFO] /flush 1 : Aethers, 2 : Duration",
+					player.ID
+				)
 			end
 			printf = 0
 		end
@@ -894,7 +987,10 @@ onSay = function(player)
 				target:sendAnimation(16)
 				target:playSound(29)
 				player:sendMinitext(target.name .. " has been jailed!")
-				broadcast(-1, "[JUSTICE] " .. target.name .. " has been jailed !!")
+				broadcast(
+					-1,
+					"[JUSTICE] " .. target.name .. " has been jailed !!"
+				)
 			else
 				anim(player)
 				player:sendMinitext("user not found!")
@@ -972,10 +1068,7 @@ onSay = function(player)
 
 		-- Add Gold
 		if tonumber(string.match(lspeech, "/gold (%d+)")) ~= nil then
-			if
-				tonumber(string.match(lspeech, "/gold (%d+)")) < 0 or
-					player.money + tonumber(string.match(lspeech, "(%d+)")) > 3000000000
-			 then
+			if tonumber(string.match(lspeech, "/gold (%d+)")) < 0 or player.money + tonumber(string.match(lspeech, "(%d+)")) > 3000000000 then
 				anim(player)
 				player:sendMinitext("Over limit!")
 				return
@@ -986,8 +1079,8 @@ onSay = function(player)
 			printf = 0
 		end
 	elseif player.gmLevel ~= 99 and string.sub(lspeech, 1, 1) == "/" then
-	--player:msg(5,"Invalid command",player.ID)
-	--printf = 0
+		--player:msg(5,"Invalid command",player.ID)
+		--printf = 0
 	end
 
 	if player.gmLevel > 0 then
@@ -1523,11 +1616,12 @@ onSay = function(player)
 
 		if ok == true then
 			for x = 1, #say do
-				if
-					(lspeech == "" .. say[x] or string.match(lspeech, "" .. say[x] .. " (%d+)") ~= nil or
-						string.match(lspeech, "" .. say[x] .. " %d+ (%d+)") ~= nil) and
-						string.sub(lspeech, 0, string.len(say[x])) == say[x]
-				 then
+				if (lspeech == "" .. say[x] or string.match(lspeech, "" .. say[x] .. " (%d+)") ~= nil or string.match(
+					lspeech,
+					"" .. say[x] .. " %d+ (%d+)"
+				) ~= nil) and string.sub(lspeech, 0, string.len(say[x])) == say[
+					x
+				] then
 					local nn = 0
 					local x2 = x - 2
 
@@ -1700,7 +1794,10 @@ onSay = function(player)
 		end
 
 		-- Icon viewer
-		if (string.match(lspeech, "/icon (%d+)") ~= nil and string.match(lspeech, "/icon %d+ (%d+)") == nil) then
+		if (string.match(lspeech, "/icon (%d+)") ~= nil and string.match(
+			lspeech,
+			"/icon %d+ (%d+)"
+		) == nil) then
 			local x = tonumber(string.match(lspeech, "/icon (%d+)"))
 			player.registry["gfx_icons"] = x
 			player.registry["gfx_icons_color"] = 0
@@ -1724,9 +1821,10 @@ onSay = function(player)
 			iconViewer(player, "nc")
 			printf = 0
 		elseif (lspeech == "piconc") then
-			-- Change disguise / mob look (must on state 4)
 			iconViewer(player, "pc")
 			printf = 0
+
+			-- Change disguise / mob look (must on state 4)
 		elseif (speech == "ndis") then
 			local oldstate = player.state
 
@@ -1764,19 +1862,17 @@ onSay = function(player)
 			player:sendMinitext("Disguise #: " .. player.disguise)
 			printf = 0
 		elseif (speech == "dis") then
-			--Disguise Color
 			player:sendMinitext("Disguise #: " .. player.disguise)
 			printf = 0
+
+			--Disguise Color
 		elseif (string.match(speech, "dis (%d+)") ~= nil and string.sub(speech, 0, 3) == "dis") then
 			local oldstate = player.state
 
 			player.state = 0
 			player:updateState()
 
-			if
-				(tonumber(string.match(speech, "dis (%d+)")) < 0 or tonumber(string.match(speech, "dis (%d+)")) == 1342 or
-					tonumber(string.match(speech, "dis (%d+)")) == 1394)
-			 then
+			if (tonumber(string.match(speech, "dis (%d+)")) < 0 or tonumber(string.match(speech, "dis (%d+)")) == 1342 or tonumber(string.match(speech, "dis (%d+)")) == 1394) then
 				player:sendMinitext("Disguise not allowed.")
 			else
 				player.disguise = tonumber(string.match(speech, "dis (%d+)"))
@@ -1805,9 +1901,10 @@ onSay = function(player)
 				printf = 0
 			end
 		elseif (speech == "disc") then
-			-- Change armor color / dye	--
 			player:sendMinitext("Disguise Color #: " .. player.disguiseColor)
 			printf = 0
+
+			-- Change armor color / dye	--
 		elseif (speech == "ndye") then
 			if (player.gfxClone == 1) then
 				player.gfxDye = player.gfxDye + 1
@@ -1862,7 +1959,6 @@ onSay = function(player)
 			end
 			printf = 0
 		elseif (string.match(speech, "dye (%d+)") ~= nil and string.sub(speech, 0, 3) == "dye") then
-			-- Change skin color
 			if (player.gfxClone == 1) then
 				player.gfxDye = tonumber(string.match(speech, "dye (%d+)"))
 			else
@@ -1870,6 +1966,8 @@ onSay = function(player)
 			end
 			player:refresh()
 			printf = 0
+
+			-- Change skin color
 		elseif (speech == "nskin") then
 			if (player.gfxClone == 1) then
 				player.gfxSkinC = player.gfxSkinC + 1
@@ -1899,7 +1997,6 @@ onSay = function(player)
 			player:refresh()
 			printf = 0
 		elseif (string.match(speech, "skin (%d+)") ~= nil and string.sub(speech, 0, 4) == "skin") then
-			-- Browse spells animation
 			if (player.gfxClone == 1) then
 				player.gfxSkinC = tonumber(string.match(speech, "skin (%d+)"))
 			else
@@ -1907,6 +2004,8 @@ onSay = function(player)
 			end
 			player:refresh()
 			printf = 0
+
+			-- Browse spells animation
 		elseif (speech == "nspell") then
 			if (player.registry["gfx_spell"] == 648) then
 				player:sendMinitext("You may not go over 648 on spell graphics.")
@@ -1939,12 +2038,13 @@ onSay = function(player)
 			--	player:sendAnimation(player.registry["gfx_spell"])
 			printf = 0
 		elseif (string.match(speech, "spell (%d+)") ~= nil and string.sub(speech, 0, 5) == "spell") then
-			-- Browse sound effect
 			player.registry["gfx_spell"] = tonumber(string.match(speech, "spell (%d+)"))
 			player:selfAnimation(player.ID, player.registry["gfx_spell"], 0)
 
 			--	player:sendAnimation(player.registry["gfx_spell"])
 			printf = 0
+
+			-- Browse sound effect
 		elseif (speech == "nsound") then
 			if (player.registry["gfx_sound"] == 750) then
 				player:sendMinitext("You may not go over 750 on sound effects.")
@@ -2022,19 +2122,14 @@ onSay = function(player)
 	-- Calculator
 	if (string.byte(speech, 1) == 61) then
 		--== 99)then
-		if
-			((string.byte(speech, 2) >= 48) and (string.byte(speech, 2) <= 57)) or
-				((string.byte(speech, 2) == 40) and ((string.byte(speech, 3) >= 48) and (string.byte(speech, 3) <= 57))) or
-				((string.byte(speech, 2) == 46) and ((string.byte(speech, 3) >= 48) and (string.byte(speech, 3) <= 57)))
-		 then
+		if ((string.byte(speech, 2) >= 48) and (string.byte(speech, 2) <= 57)) or ((string.byte(speech, 2) == 40) and ((string.byte(speech, 3) >= 48) and (string.byte(speech, 3) <= 57))) or ((string.byte(speech, 2) == 46) and ((string.byte(speech, 3) >= 48) and (string.byte(speech, 3) <= 57))) then
 			local eq = string.gsub(speech, "=", "")
 			local f, l, x
 			f = ""
 			for l in string.gmatch(eq, ".") do
 				f = f .. l
 			end
-			x =
-				string.gsub(
+			x = string.gsub(
 				"" .. f .. " = $return " .. f .. "$",
 				"%$(.-)%$",
 				function(s)
@@ -2053,7 +2148,11 @@ onSay = function(player)
 			return
 		end
 
-		if (string.match(player.speech, "/testmap (.+)") ~= nil and string.sub(player.speech, 1, 8) == "/testmap") then
+		if (string.match(player.speech, "/testmap (.+)") ~= nil and string.sub(
+			player.speech,
+			1,
+			8
+		) == "/testmap") then
 			local map = string.match(player.speech, "/testmap (.+)")
 			local mapNum = 50000 + player.ID
 
@@ -2073,47 +2172,77 @@ onSay = function(player)
 		if (lspeech == "reload") or (lspeech == "/reload") then
 			os.execute("cd ../rtkmaps;svn up;cd ../rtklua; svn up; cd ../rtk; svn up")
 			player.speech = "/reload"
-			player:gmMsg("<Console>: " .. player.name .. " has svn up and reloaded the server.", 50)
+			player:gmMsg(
+				"<Console>: " .. player.name .. " has svn up and reloaded the server.",
+				50
+			)
 			os.execute("echo " .. player.name .. " has SVN UP and RELOADED server.")
 		elseif (lspeech == "svn up") then
 			os.execute("cd ../rtkmaps;svn up;cd ../rtklua; svn up; cd ../rtk; svn up")
-			player:gmMsg("<Console>: " .. player.name .. " has svn up the server.", 50)
+			player:gmMsg(
+				"<Console>: " .. player.name .. " has svn up the server.",
+				50
+			)
 			os.execute("echo " .. player.name .. " has SVN UP the server.")
 			printf = 0
 		elseif lspeech == "/metan" then
 			os.execute("./metan")
-			player:gmMsg("<Console>: " .. player.name .. " has used ./metan", 50)
+			player:gmMsg(
+				"<Console>: " .. player.name .. " has used ./metan",
+				50
+			)
 			os.execute("echo " .. player.name .. " has used ./metan")
 			printf = 0
 		elseif lspeech == "/make map" then
 			os.execute("svn up")
-			player:gmMsg("<Console>: " .. player.name .. " has begun SVN UP + MAP compile.", 50)
+			player:gmMsg(
+				"<Console>: " .. player.name .. " has begun SVN UP + MAP compile.",
+				50
+			)
 			player.gameRegistry["make"] = os.time()
 			os.execute("make map")
 			local make = os.difftime(os.time(), player.gameRegistry["make"])
 			if (make < 4) then
-				player:gmMsg("<Console>: Compilation ERROR on MAP by " .. player.name .. " (" .. make .. ")", 50)
+				player:gmMsg(
+					"<Console>: Compilation ERROR on MAP by " .. player.name .. " (" .. make .. ")",
+					50
+				)
 			else
-				player:gmMsg("<Console>: " .. player.name .. " has SVN UP & compiled map in " .. make .. " seconds.", 50)
+				player:gmMsg(
+					"<Console>: " .. player.name .. " has SVN UP & compiled map in " .. make .. " seconds.",
+					50
+				)
 				os.execute("echo " .. player.name .. " has svn up and compiled map.")
 			end
 			printf = 0
 		elseif (lspeech == "/make char") then
 			os.execute("svn up")
-			player:gmMsg("<Console>: " .. player.name .. " has begun SVN UP + CHAR compile.", 50)
+			player:gmMsg(
+				"<Console>: " .. player.name .. " has begun SVN UP + CHAR compile.",
+				50
+			)
 			player.gameRegistry["make"] = os.time()
 			os.execute("make char")
 			local make = os.difftime(os.time(), player.gameRegistry["make"])
-			player:gmMsg("<Console>: " .. player.name .. " has SVN UP & compiled char in " .. make .. " seconds.", 50)
+			player:gmMsg(
+				"<Console>: " .. player.name .. " has SVN UP & compiled char in " .. make .. " seconds.",
+				50
+			)
 			os.execute("echo " .. player.name .. " has svn up and compiled char.")
 			printf = 0
 		elseif (lspeech == "/make login") then
 			os.execute("svn up")
-			player:gmMsg("<Console>: " .. player.name .. " has begun SVN UP + LOGIN compile.", 50)
+			player:gmMsg(
+				"<Console>: " .. player.name .. " has begun SVN UP + LOGIN compile.",
+				50
+			)
 			player.gameRegistry["make"] = os.time()
 			os.execute("make login")
 			local make = os.difftime(os.time(), player.gameRegistry["make"])
-			player:gmMsg("<Console>: " .. player.name .. " has SVN UP & compiled LOGIN in " .. make .. " seconds.", 50)
+			player:gmMsg(
+				"<Console>: " .. player.name .. " has SVN UP & compiled LOGIN in " .. make .. " seconds.",
+				50
+			)
 			os.execute("echo " .. player.name .. " has svn up and compiled login.")
 			printf = 0
 		end
@@ -2124,12 +2253,6 @@ onSay = function(player)
 	if printf == 0 then
 		return
 	else
-		--if player:hasDuration("reverse_talk") then
-		--	player:speak(string.reverse(player.speech..""), talkType)
-		--else
-		--player:speak(player.speech, talkType)
-		--end
-		--snoop.showChat(player, player.speech, talkType)
 		local npcs = player:getObjectsInArea(BL_NPC)
 
 		if player.gmLevel == 0 then
@@ -2182,5 +2305,12 @@ onSay = function(player)
 		else
 			characterLog.speechWrite(player, player.speech)
 		end
+
+		--if player:hasDuration("reverse_talk") then
+		--	player:speak(string.reverse(player.speech..""), talkType)
+		--else
+		--player:speak(player.speech, talkType)
+		--end
+		--snoop.showChat(player, player.speech, talkType)
 	end
 end

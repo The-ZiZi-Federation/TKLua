@@ -2,7 +2,6 @@ lore_board = {
 	check = function(player)
 		local del = 0
 		local write = 0
-
 		if (player:staff("lore", 3) >= 3) then
 			del = 1
 		end

@@ -46,11 +46,13 @@ function Player.addHealthExtend(player, amount, sleep, deduction, ac, ds, print)
 		local ac_amt = player.armor
 
 		if ac_amt > 0 then
-			-- positive AC adds to damage
 			amount = amount * (1 + (ac_amt * 0.01))
+
+			-- positive AC adds to damage
 		else
-			-- negative AC reduces damage
 			amount = amount * (1 - (ac_amt * 0.01))
+
+			-- negative AC reduces damage
 		end
 	end
 
@@ -160,11 +162,10 @@ function Player.addHealth2(player, amount, type)
 end
 
 function Player.removeHealthExtend(player, amount, sleep, deduction, ac, damageShield, print)
-	if
-		player:hasDuration("harden_body_poet") or player:hasDuration("deaths_guard_poet") or
-			player:hasDuration("lifes_protection_poet") or
-			player:hasDuration("body_of_alignment_poet")
-	 then
+	if player:hasDuration("harden_body_poet") or
+		player:hasDuration("deaths_guard_poet") or
+		player:hasDuration("lifes_protection_poet") or
+		player:hasDuration("body_of_alignment_poet") then
 		return
 	end
 
@@ -205,7 +206,7 @@ end
 function Player.calculateNetDamage(player, amount, sleep, deduction, ac, damageShield, print, resetChanges)
 	local originalDmgShield = player.dmgShield
 	local originalSleep = player.sleep
-
+	
 	if (sleep > 0 and print == 2) then
 		amount = amount * player.sleep
 	elseif (sleep == 1) then
@@ -307,12 +308,10 @@ function Player.addMagicExtend(player, amount)
 	local temp_magic
 	local ded = 0
 
-	ded =
-		1 *
-		string.format(
-			"%.2f",
-			player.armor / (player.armor + 400 + 95 * (attacker.level + attacker.tier ^ 2 + attacker.mark ^ 3))
-		)
+	ded = 1 * string.format(
+		"%.2f",
+		player.armor / (player.armor + 400 + 95 * (attacker.level + attacker.tier ^ 2 + attacker.mark ^ 3))
+	)
 
 	if (player.sleep ~= nil) then
 		amount = amount * player.sleep
@@ -322,10 +321,10 @@ function Player.addMagicExtend(player, amount)
 		amount = amount * player.deduction
 	end
 
-	if (ded < .85) then
+	if (ded <.85) then
 		amount = amount * (1 - ded)
 	else
-		amount = amount * .15
+		amount = amount *.15
 	end
 
 	temp_magic = player.magic + amount
@@ -349,8 +348,8 @@ end
 function Player.addShield(player, shielding, maxShield)
 	local shield = player.dmgShield
 
-	if (maxShield == nil or maxShield > player.maxHealth * .5) then
-		maxShield = player.maxHealth * .5
+	if (maxShield == nil or maxShield > player.maxHealth *.5) then
+		maxShield = player.maxHealth *.5
 	end
 
 	if (shield + shielding > maxShield) then
@@ -379,7 +378,8 @@ Player.dialogSeq = function(player, commands, continue)
 
 	local pos = 1
 
-	local messages, state, options = {},
+	local messages, state, options =
+		{},
 		{
 			graphic = player.npcGraphic,
 			color = player.npcColor
@@ -391,7 +391,10 @@ Player.dialogSeq = function(player, commands, continue)
 			state.graphic = command.graphic
 			state.color = command.color
 		elseif type(command) == "string" then
-			table.insert(messages, {graphic = state.graphic, color = state.color, text = command})
+			table.insert(
+				messages,
+				{graphic = state.graphic, color = state.color, text = command}
+			)
 		end
 	end
 
@@ -510,11 +513,26 @@ function Player.bankItemsList(player, banktype)
 	end
 
 	local sortedbankItemTable = sort_relative(bankItemTableNames, bankItemTable)
-	local sortedbankCountTable = sort_relative(bankItemTableNames, bankCountTable)
-	local sortedbankOwnerTable = sort_relative(bankItemTableNames, bankOwnerTable)
-	local sortedbankEngraveTable = sort_relative(bankItemTableNames, bankEngraveTable)
-	local sortedbankTimerTable = sort_relative(bankItemTableNames, bankTimerTable)
-	local sortedbankItemTableNames = sort_relative(bankItemTableNames, bankItemTableNames)
+	local sortedbankCountTable = sort_relative(
+		bankItemTableNames,
+		bankCountTable
+	)
+	local sortedbankOwnerTable = sort_relative(
+		bankItemTableNames,
+		bankOwnerTable
+	)
+	local sortedbankEngraveTable = sort_relative(
+		bankItemTableNames,
+		bankEngraveTable
+	)
+	local sortedbankTimerTable = sort_relative(
+		bankItemTableNames,
+		bankTimerTable
+	)
+	local sortedbankItemTableNames = sort_relative(
+		bankItemTableNames,
+		bankItemTableNames
+	)
 
 	bankItemTable = sortedbankItemTable
 	bankCountTable = sortedbankCountTable
@@ -537,8 +555,7 @@ function Player.showBankWithdraw(player, npc, bankOwnerName)
 		return false
 	end
 
-	local bankItemTable, bankCountTable, bankOwnerTable, bankEngraveTable, bankTimerTable, bankItemTableNames =
-		bankOwner:bankItemsList(0)
+	local bankItemTable, bankCountTable, bankOwnerTable, bankEngraveTable, bankTimerTable, bankItemTableNames = bankOwner:bankItemsList(0)
 
 	local found = 0
 	local amount = 0
@@ -559,8 +576,7 @@ function Player.showBankWithdraw(player, npc, bankOwnerName)
 		table.insert(buytext, text)
 	end
 
-	local temp =
-		player:buy(
+	local temp = player:buy(
 		bankOwner.name .. "... Here's what I have.\nWhat do you want back?",
 		bankItemTable,
 		bankCountTable,
@@ -612,15 +628,17 @@ function Player.showBankWithdraw(player, npc, bankOwnerName)
 		end
 
 		if hasAmount >= Item(bankItemTable[found]).maxAmount or hasAmount + amount > Item(bankItemTable[found]).maxAmount then
-			player:sendMinitext(
-				"(" ..
-					Item(bankItemTable[found]).name .. "). You can't have more than (" .. Item(bankItemTable[found]).maxAmount .. ")."
-			)
+			player:sendMinitext("(" .. Item(bankItemTable[found]).name .. "). You can't have more than (" .. Item(bankItemTable[found]).maxAmount .. ").")
 			return false
 		end
 	end
 
-	if (player:hasSpace(bankItemTable[found], amount, bankOwnerTable[found], bankEngraveTable[found]) ~= true) then
+	if (player:hasSpace(
+		bankItemTable[found],
+		amount,
+		bankOwnerTable[found],
+		bankEngraveTable[found]
+	) ~= true) then
 		player:menu(
 			"You don't have enough hands to carry all that, free up some space in your inventory then come back to me.",
 			{},
@@ -645,8 +663,14 @@ function Player.showBankWithdraw(player, npc, bankOwnerName)
 		return false
 	end
 
-	local worked =
-		player:addItem(bankItemTable[found], amount, 0, bankOwnerTable[found], bankTimerTable[found], bankEngraveTable[found])
+	local worked = player:addItem(
+		bankItemTable[found],
+		amount,
+		0,
+		bankOwnerTable[found],
+		bankTimerTable[found],
+		bankEngraveTable[found]
+	)
 
 	if (worked == true) then
 		bankOwner:bankWithdraw(
@@ -664,9 +688,15 @@ function Player.showBankWithdraw(player, npc, bankOwnerName)
 	characterLog.withdrawItemWrite(bankOwner, itemName, engrave, amount, owner)
 
 	if amount == 1 then
-		npc:talk(0, npc.name .. ": Here's your " .. Item(bankItemTable[found]).name .. ".")
+		npc:talk(
+			0,
+			npc.name .. ": Here's your " .. Item(bankItemTable[found]).name .. "."
+		)
 	elseif amount > 1 then
-		npc:talk(0, npc.name .. ": Here's your " .. Item(bankItemTable[found]).name .. " (" .. amount .. ").")
+		npc:talk(
+			0,
+			npc.name .. ": Here's your " .. Item(bankItemTable[found]).name .. " (" .. amount .. ")."
+		)
 	end
 
 	return true
@@ -682,7 +712,7 @@ function Player.showBankDeposit(player, npc, bankOwnerName)
 	if (bankOwner == nil) then
 		return false
 	end
-
+	
 	local amountCheck = 0
 	local itemTable = {}
 	local amount = 0
@@ -711,7 +741,10 @@ function Player.showBankDeposit(player, npc, bankOwnerName)
 		end
 	end
 
-	local choice = player:sell("Deposit for " .. bankOwner.name .. ". What would you like me to hold onto?", itemTable)
+	local choice = player:sell(
+		"Deposit for " .. bankOwner.name .. ". What would you like me to hold onto?",
+		itemTable
+	)
 	local dItem = player:getInventoryItem(choice - 1)
 	local itemName = dItem.name
 	local engrave = dItem.realName
@@ -755,24 +788,31 @@ function Player.showBankDeposit(player, npc, bankOwnerName)
 	end
 
 	if (dItem.dura == dItem.maxDura) then
+
 		moneyAmount = math.ceil(dItem.sell * 0.10 * amount)
 
 		if (player:hasItem(dItem.id, amount, dItem.dura, dItem.owner, dItem.realName) == true) then
 			if (player.money >= moneyAmount) then
 				-- Get bankOwner again to ensure he/she has not logged out since the transaction started
 				bankOwner = bank.get_bankOwner(player, bankOwnerName)
-
+			
 				if (bankOwner == nil) then
 					return false
 				end
-
+			
 				if (bank.is_bank_locked(player, bankOwner)) then
 					bank.show_bank_locked(player)
 					return false
 				end
 
 				player.money = player.money - moneyAmount
-				bankOwner:bankDeposit(dItem.id, amount, dItem.owner, dItem.time, dItem.realName)
+				bankOwner:bankDeposit(
+					dItem.id,
+					amount,
+					dItem.owner,
+					dItem.time,
+					dItem.realName
+				)
 
 				if (amount == 1) then
 					player:removeItemSlot((choice - 1), amount, 9)
@@ -796,7 +836,10 @@ function Player.showBankDeposit(player, npc, bankOwnerName)
 
 	characterLog.depositItemWrite(bankOwner, itemName, engrave, amount, owner)
 
-	npc:talk(0, npc.name .. ": I'll take your " .. itemName .. ". " .. amount .. " of them.")
+	npc:talk(
+		0,
+		npc.name .. ": I'll take your " .. itemName .. ". " .. amount .. " of them."
+	)
 
 	if moneyAmount > 0 then
 		npc:talk(0, npc.name .. ": The fee is " .. moneyAmount .. " coins.")
@@ -815,17 +858,10 @@ function Player.bankAddMoney(player, npc, bankOwnerName)
 	if (bankOwner == nil) then
 		return false
 	end
-
+	
 	local maxamount = 100000000
 
-	local amount =
-		player:inputNumberCheck(
-		player:input(
-			bankOwner.name ..
-				"... I show a balance of " ..
-					Tools.formatNumber(bankOwner.bankMoney) .. " coins. How much more will you deposit today?"
-		)
-	)
+	local amount = player:inputNumberCheck(player:input(bankOwner.name .. "... I show a balance of " .. Tools.formatNumber(bankOwner.bankMoney) .. " coins. How much more will you deposit today?"))
 
 	-- Get bankOwner again to ensure he/she has not logged out since the transaction started
 	bankOwner = bank.get_bankOwner(player, bankOwnerName)
@@ -844,13 +880,9 @@ function Player.bankAddMoney(player, npc, bankOwnerName)
 		amount = maxamount - bankOwner.bankMoney
 	end
 	if (bankOwner.bankMoney == maxamount) then
-		player:dialogSeq(
-			{
-				bankOwner.name ..
-					"... Looks like the account is maxed out. I can't take any more. (Current maximum: " ..
-						Tools.formatNumber(maxamount) .. ")"
-			}
-		)
+		player:dialogSeq({
+			bankOwner.name .. "... Looks like the account is maxed out. I can't take any more. (Current maximum: " .. Tools.formatNumber(maxamount) .. ")"
+		})
 	end
 
 	if (bank.is_bank_locked(player, bankOwner)) then
@@ -886,13 +918,7 @@ function Player.bankWithdrawMoney(player, npc, bankOwnerName)
 		return
 	end
 
-	local amount =
-		player:inputNumberCheck(
-		player:input(
-			bankOwner.name ..
-				"... I show a balance of " .. Tools.formatNumber(inBank) .. " coins.  How much will you be taking out?"
-		)
-	)
+	local amount = player:inputNumberCheck(player:input(bankOwner.name .. "... I show a balance of " .. Tools.formatNumber(inBank) .. " coins.  How much will you be taking out?"))
 
 	if (amount > inBank) then
 		amount = inBank
@@ -982,8 +1008,7 @@ function Player.inventorySelect(player, npc, dialog, items, prices)
 end
 
 function Player.showClanBankWithdraw(player, npc)
-	local bankItemTable, bankCountTable, bankOwnerTable, bankEngraveTable, bankTimerTable, bankItemTableNames =
-		player:bankItemsList(2)
+	local bankItemTable, bankCountTable, bankOwnerTable, bankEngraveTable, bankTimerTable, bankItemTableNames = player:bankItemsList(2)
 
 	-- type 2 = clan bank
 
@@ -1015,8 +1040,7 @@ function Player.showClanBankWithdraw(player, npc)
 		table.insert(buytext, text)
 	end
 
-	local temp =
-		player:buy(
+	local temp = player:buy(
 		"Here's what I've been holding for your clan.\nWhat do you want back?",
 		bankItemTable,
 		bankCountTable,
@@ -1070,15 +1094,17 @@ function Player.showClanBankWithdraw(player, npc)
 		--if hasAmount == 0 then player:popUp("Bug encountered. Contact TKR staff.") return end
 
 		if hasAmount >= Item(bankItemTable[found]).maxAmount or hasAmount + amount > Item(bankItemTable[found]).maxAmount then
-			player:sendMinitext(
-				"(" ..
-					Item(bankItemTable[found]).name .. "). You can't have more than (" .. Item(bankItemTable[found]).maxAmount .. ")."
-			)
+			player:sendMinitext("(" .. Item(bankItemTable[found]).name .. "). You can't have more than (" .. Item(bankItemTable[found]).maxAmount .. ").")
 			return
 		end
 	end
 
-	if (player:hasSpace(bankItemTable[found], amount, bankOwnerTable[found], bankEngraveTable[found]) ~= true) then
+	if (player:hasSpace(
+		bankItemTable[found],
+		amount,
+		bankOwnerTable[found],
+		bankEngraveTable[found]
+	) ~= true) then
 		player:menu(
 			"You don't have enough hands to carry all that, free up some space in your inventory then come back to me.",
 			{},
@@ -1091,8 +1117,14 @@ function Player.showClanBankWithdraw(player, npc)
 	local engrave = bankEngraveTable[found]
 	local owner = bankOwnerTable[found]
 
-	local worked =
-		player:addItem(bankItemTable[found], amount, 0, bankOwnerTable[found], bankTimerTable[found], bankEngraveTable[found])
+	local worked = player:addItem(
+		bankItemTable[found],
+		amount,
+		0,
+		bankOwnerTable[found],
+		bankTimerTable[found],
+		bankEngraveTable[found]
+	)
 
 	if (worked == true) then
 		player:clanBankWithdraw(
@@ -1110,9 +1142,15 @@ function Player.showClanBankWithdraw(player, npc)
 	characterLog.withdrawItemWrite(player, itemName, engrave, amount, owner)
 
 	if amount == 1 then
-		npc:talk(0, npc.name .. ": Here's your " .. Item(bankItemTable[found]).name .. ".")
+		npc:talk(
+			0,
+			npc.name .. ": Here's your " .. Item(bankItemTable[found]).name .. "."
+		)
 	elseif amount > 1 then
-		npc:talk(0, npc.name .. ": Here's your " .. Item(bankItemTable[found]).name .. " (" .. amount .. ").")
+		npc:talk(
+			0,
+			npc.name .. ": Here's your " .. Item(bankItemTable[found]).name .. " (" .. amount .. ")."
+		)
 	end
 
 	return true
@@ -1147,7 +1185,10 @@ function Player.showClanBankDeposit(player, npc)
 		end
 	end
 
-	local choice = player:sell("What would you like me to deposit in your clan's bank?", itemTable)
+	local choice = player:sell(
+		"What would you like me to deposit in your clan's bank?",
+		itemTable
+	)
 	local dItem = player:getInventoryItem(choice - 1)
 	local itemName = dItem.name
 	local engrave = dItem.realName
@@ -1193,7 +1234,13 @@ function Player.showClanBankDeposit(player, npc)
 		if (player:hasItem(dItem.id, amount, dItem.dura, dItem.owner, dItem.realName) == true) then
 			if (player.money >= moneyAmount) then
 				player.money = player.money - moneyAmount
-				player:clanBankDeposit(dItem.id, amount, dItem.owner, dItem.time, dItem.realName)
+				player:clanBankDeposit(
+					dItem.id,
+					amount,
+					dItem.owner,
+					dItem.time,
+					dItem.realName
+				)
 
 				if (amount == 1) then
 					player:removeItemSlot((choice - 1), amount, 9)
@@ -1217,7 +1264,10 @@ function Player.showClanBankDeposit(player, npc)
 
 	characterLog.depositItemWrite(player, itemName, engrave, amount, owner)
 
-	npc:talk(0, npc.name .. ": I'll take your " .. itemName .. ". " .. amount .. " of them.")
+	npc:talk(
+		0,
+		npc.name .. ": I'll take your " .. itemName .. ". " .. amount .. " of them."
+	)
 
 	if moneyAmount > 0 then
 		npc:talk(0, npc.name .. ": The fee is " .. moneyAmount .. " coins.")
@@ -1286,8 +1336,7 @@ function Player.sellExtend(player, dialog, items, prices)
 
 	local cost = math.floor(sell_item.sell * amount * duracheck)
 
-	local choice =
-		player:menuString(
+	local choice = player:menuString(
 		"I will buy your " .. amount .. " " .. sell_item.name .. " for " .. cost .. " gold.  Deal?",
 		{"Yes", "No"}
 	)
@@ -1364,8 +1413,7 @@ function Player.buyExtend(player, dialog, items, prices, maxamounts)
 	amount = math.abs(amount)
 	local cost = prices[x] * amount
 
-	local newChoice =
-		player:menuString(
+	local newChoice = player:menuString(
 		"I will sell you " .. amount .. " " .. Item(choice).name .. " for " .. cost .. " gold. Deal?",
 		{"Yes", "No"}
 	)
@@ -1425,7 +1473,10 @@ function Player.kanBuyExtend(player, dialog, items, prices, maxamounts)
 	end
 
 	if (maxamounts ~= nil and maxamounts[x] ~= nil and maxamounts[x] < amount) then
-		player:dialog("I can only sell you " .. maxamounts[x] .. " more " .. Item(choice).name .. ".", t)
+		player:dialog(
+			"I can only sell you " .. maxamounts[x] .. " more " .. Item(choice).name .. ".",
+			t
+		)
 	end
 
 	if (player.registry["kan"] < (prices[x] * amount)) then
@@ -1435,8 +1486,7 @@ function Player.kanBuyExtend(player, dialog, items, prices, maxamounts)
 	amount = math.abs(amount)
 	local cost = prices[x] * amount
 
-	local newChoice =
-		player:menuString(
+	local newChoice = player:menuString(
 		"I will sell you " .. amount .. " " .. Item(choice).name .. " for " .. Tools.formatNumber(cost) .. " Kan. Deal?",
 		{"Yes", "No"}
 	)
@@ -1482,7 +1532,11 @@ function Player.repairExtend(player)
 	end
 
 	if next(list) == nil then
-		player:menuSeq("I can't make any of your items better than they already are.", {"Go Back"}, {})
+		player:menuSeq(
+			"I can't make any of your items better than they already are.",
+			{"Go Back"},
+			{}
+		)
 		return
 	end
 
@@ -1497,13 +1551,20 @@ function Player.repairExtend(player)
 			return
 		end
 		cost = math.ceil(((choice.price / choice.maxDura) * (choice.maxDura - choice.dura)) * 0.5)
-		confirm = player:menuString("I'll need atleast " .. cost .. " gold to fix that, Ok?", {"Yes", "No"})
+		confirm = player:menuString(
+			"I'll need atleast " .. cost .. " gold to fix that, Ok?",
+			{"Yes", "No"}
+		)
 		if confirm == "Yes" then
 			if choice.id == chosenItem and choice.dura == chosenItemDura then
 				if player:removeGold(cost) == true or cost == 0 then
 					choice.dura = choice.maxDura
 					player:updateInv()
-					player:menuSeq("Klank  Klank...\nEverything's done.\n\nTotal Cost: " .. cost .. " Coins", {"Go back"}, {})
+					player:menuSeq(
+						"Klank  Klank...\nEverything's done.\n\nTotal Cost: " .. cost .. " Coins",
+						{"Go back"},
+						{}
+					)
 				else
 					player:menuSeq(
 						"This is my job, and it's hard work. I will need to be paid for it. Come back when you have the gold to pay for my services.",
@@ -1560,8 +1621,7 @@ function Player.repairAll(player, npc)
 	if (playerFaceAcc ~= nil) then
 		if (playerFaceAcc.repairable == 1) then
 			if (playerFaceAcc.dura < playerFaceAcc.maxDura) then
-				playerFaceAccCost =
-					math.ceil(((playerFaceAcc.price / playerFaceAcc.maxDura) * (playerFaceAcc.maxDura - playerFaceAcc.dura)) * 0.5)
+				playerFaceAccCost = math.ceil(((playerFaceAcc.price / playerFaceAcc.maxDura) * (playerFaceAcc.maxDura - playerFaceAcc.dura)) * 0.5)
 			end
 		else
 			player:sendMinitext("" .. playerFaceAcc.name .. " is not a repairable item.")
@@ -1581,8 +1641,7 @@ function Player.repairAll(player, npc)
 	if (playerCrown ~= nil) then
 		if (playerCrown.repairable == 1) then
 			if (playerCrown.dura < playerCrown.maxDura) then
-				playerCrownCost =
-					math.ceil(((playerCrown.price / playerCrown.maxDura) * (playerCrown.maxDura - playerCrown.dura)) * 0.5)
+				playerCrownCost = math.ceil(((playerCrown.price / playerCrown.maxDura) * (playerCrown.maxDura - playerCrown.dura)) * 0.5)
 			end
 		else
 			player:sendMinitext("" .. playerCrown.name .. " is not a repairable item.")
@@ -1591,8 +1650,7 @@ function Player.repairAll(player, npc)
 	if (playerWeapon ~= nil) then
 		if (playerWeapon.repairable == 1) then
 			if (playerWeapon.dura < playerWeapon.maxDura) then
-				playerWeaponCost =
-					math.ceil(((playerWeapon.price / playerWeapon.maxDura) * (playerWeapon.maxDura - playerWeapon.dura)) * 0.5)
+				playerWeaponCost = math.ceil(((playerWeapon.price / playerWeapon.maxDura) * (playerWeapon.maxDura - playerWeapon.dura)) * 0.5)
 			end
 		else
 			player:sendMinitext("" .. playerWeapon.name .. " is not a repairable item.")
@@ -1602,8 +1660,7 @@ function Player.repairAll(player, npc)
 	if (playerArmor ~= nil) then
 		if (playerArmor.repairable == 1) then
 			if (playerArmor.dura < playerArmor.maxDura) then
-				playerArmorCost =
-					math.ceil(((playerArmor.price / playerArmor.maxDura) * (playerArmor.maxDura - playerArmor.dura)) * 0.5)
+				playerArmorCost = math.ceil(((playerArmor.price / playerArmor.maxDura) * (playerArmor.maxDura - playerArmor.dura)) * 0.5)
 			end
 		else
 			player:sendMinitext("" .. playerArmor.name .. " is not a repairable item.")
@@ -1613,8 +1670,7 @@ function Player.repairAll(player, npc)
 	if (playerShield ~= nil) then
 		if (playerShield.repairable == 1) then
 			if (playerShield.dura < playerShield.maxDura) then
-				playerShieldCost =
-					math.ceil(((playerShield.price / playerShield.maxDura) * (playerShield.maxDura - playerShield.dura)) * 0.5)
+				playerShieldCost = math.ceil(((playerShield.price / playerShield.maxDura) * (playerShield.maxDura - playerShield.dura)) * 0.5)
 			end
 		else
 			player:sendMinitext("" .. playerShield.name .. " is not a repairable item.")
@@ -1634,8 +1690,7 @@ function Player.repairAll(player, npc)
 	if (playerRight ~= nil) then
 		if (playerRight.repairable == 1) then
 			if (playerRight.dura < playerRight.maxDura) then
-				playerRightCost =
-					math.ceil(((playerRight.price / playerRight.maxDura) * (playerRight.maxDura - playerRight.dura)) * 0.5)
+				playerRightCost = math.ceil(((playerRight.price / playerRight.maxDura) * (playerRight.maxDura - playerRight.dura)) * 0.5)
 			end
 		else
 			player:sendMinitext("" .. playerRight.name .. " is not a repairable item.")
@@ -1645,8 +1700,7 @@ function Player.repairAll(player, npc)
 	if (playerMantle ~= nil) then
 		if (playerMantle.repairable == 1) then
 			if (playerMantle.dura < playerMantle.maxDura) then
-				playerMantleCost =
-					math.ceil(((playerMantle.price / playerMantle.maxDura) * (playerMantle.maxDura - playerMantle.dura)) * 0.5)
+				playerMantleCost = math.ceil(((playerMantle.price / playerMantle.maxDura) * (playerMantle.maxDura - playerMantle.dura)) * 0.5)
 			end
 		else
 			player:sendMinitext("" .. playerMantle.name .. " is not a repairable item.")
@@ -1656,8 +1710,7 @@ function Player.repairAll(player, npc)
 	if (playerSubLeft ~= nil) then
 		if (playerSubLeft.repairable == 1) then
 			if (playerSubLeft.dura < playerSubLeft.maxDura) then
-				playerSubLeftCost =
-					math.ceil(((playerSubLeft.price / playerSubLeft.maxDura) * (playerSubLeft.maxDura - playerSubLeft.dura)) * 0.5)
+				playerSubLeftCost = math.ceil(((playerSubLeft.price / playerSubLeft.maxDura) * (playerSubLeft.maxDura - playerSubLeft.dura)) * 0.5)
 			end
 		else
 			player:sendMinitext("" .. playerSubLeft.name .. " is not a repairable item.")
@@ -1667,8 +1720,7 @@ function Player.repairAll(player, npc)
 	if (playerSubRight ~= nil) then
 		if (playerSubRight.repairable == 1) then
 			if (playerSubRight.dura < playerSubRight.maxDura) then
-				playerSubRightCost =
-					math.ceil(((playerSubRight.price / playerSubRight.maxDura) * (playerSubRight.maxDura - playerSubRight.dura)) * 0.5)
+				playerSubRightCost = math.ceil(((playerSubRight.price / playerSubRight.maxDura) * (playerSubRight.maxDura - playerSubRight.dura)) * 0.5)
 			end
 		else
 			player:sendMinitext("" .. playerSubRight.name .. " is not a repairable item.")
@@ -1678,8 +1730,7 @@ function Player.repairAll(player, npc)
 	if (playerNecklace ~= nil) then
 		if (playerNecklace.repairable == 1) then
 			if (playerNecklace.dura < playerNecklace.maxDura) then
-				playerNecklaceCost =
-					math.ceil(((playerNecklace.price / playerNecklace.maxDura) * (playerNecklace.maxDura - playerNecklace.dura)) * 0.5)
+				playerNecklaceCost = math.ceil(((playerNecklace.price / playerNecklace.maxDura) * (playerNecklace.maxDura - playerNecklace.dura)) * 0.5)
 			end
 		else
 			player:sendMinitext("" .. playerNecklace.name .. " is not a repairable item.")
@@ -1689,8 +1740,7 @@ function Player.repairAll(player, npc)
 	if (playerBoots ~= nil) then
 		if (playerBoots.repairable == 1) then
 			if (playerBoots.dura < playerBoots.maxDura) then
-				playerBootsCost =
-					math.ceil(((playerBoots.price / playerBoots.maxDura) * (playerBoots.maxDura - playerBoots.dura)) * 0.5)
+				playerBootsCost = math.ceil(((playerBoots.price / playerBoots.maxDura) * (playerBoots.maxDura - playerBoots.dura)) * 0.5)
 			end
 		else
 			player:sendMinitext("" .. playerBoots.name .. " is not a repairable item.")
@@ -1724,35 +1774,22 @@ function Player.repairAll(player, npc)
 
 	if #inventoryItems > 0 then
 		for i = 1, #inventoryItems do
-			inventoryItemsCost =
-				inventoryItemsCost +
-				math.ceil(
-					((inventoryItems[i].price / inventoryItems[i].maxDura) * (inventoryItems[i].maxDura - inventoryItems[i].dura)) *
-						0.5
-				)
+			inventoryItemsCost = inventoryItemsCost + math.ceil(((inventoryItems[i].price / inventoryItems[i].maxDura) * (inventoryItems[i].maxDura - inventoryItems[i].dura)) * 0.5)
 		end
 	end
 
-	totalCost =
-		(playerFaceAccCost + playerHelmCost + playerCrownCost + playerWeaponCost + playerArmorCost + playerShieldCost +
-		playerLeftCost +
-		playerRightCost +
-		playerMantleCost +
-		playerSubLeftCost +
-		playerSubRightCost +
-		playerNecklaceCost +
-		playerBootsCost +
-		playerCoatCost +
-		inventoryItemsCost)
+	totalCost = (playerFaceAccCost + playerHelmCost + playerCrownCost + playerWeaponCost + playerArmorCost + playerShieldCost + playerLeftCost + playerRightCost + playerMantleCost + playerSubLeftCost + playerSubRightCost + playerNecklaceCost + playerBootsCost + playerCoatCost + inventoryItemsCost)
 
 	if totalCost > 0 then
-		menu =
-			player:menuString(
+		menu = player:menuString(
 			"Let's see... That will be about " .. totalCost .. " gold for everything, you willing to pay that?",
 			{"Yes", "No"}
 		)
 	elseif totalCost == 0 then
-		menu = player:menuString("Let's see... That will be no charge for everything, continue?", {"Yes", "No"})
+		menu = player:menuString(
+			"Let's see... That will be no charge for everything, continue?",
+			{"Yes", "No"}
+		)
 	end
 
 	if menu == "Yes" then
@@ -1879,9 +1916,17 @@ function Player.repairAll(player, npc)
 		player:updateInv()
 
 		if totalCost > 0 then
-			player:menuSeq("Klank  Klank...\nEverything's done.\n\nTotal Cost: " .. totalCost .. " Coins", {"Go back"}, {})
+			player:menuSeq(
+				"Klank  Klank...\nEverything's done.\n\nTotal Cost: " .. totalCost .. " Coins",
+				{"Go back"},
+				{}
+			)
 		elseif totalCost == 0 then
-			player:menuSeq("Klank  Klank...\nEverything's done.\n\nTotal Cost: free", {"Go back"}, {})
+			player:menuSeq(
+				"Klank  Klank...\nEverything's done.\n\nTotal Cost: free",
+				{"Go back"},
+				{}
+			)
 		end
 	else
 	end
@@ -1934,20 +1979,20 @@ function Player.repairAllNoConfirm(player, npc)
 	if (playerFaceAcc ~= nil) then
 		if (playerFaceAcc.repairable == 1) then
 			if (playerFaceAcc.dura < playerFaceAcc.maxDura) then
-				playerFaceAccCost =
-					math.ceil(((playerFaceAcc.price / playerFaceAcc.maxDura) * (playerFaceAcc.maxDura - playerFaceAcc.dura)) * 0.5)
+				playerFaceAccCost = math.ceil(((playerFaceAcc.price / playerFaceAcc.maxDura) * (playerFaceAcc.maxDura - playerFaceAcc.dura)) * 0.5)
 
 				if player.money < playerFaceAccCost then
 					npc:talk(
 						0,
-						npc.name ..
-							": Your " ..
-								playerFaceAcc.name .. " is pretty worn out, I'll need at least " .. playerFaceAccCost .. " gold to repair it."
+						npc.name .. ": Your " .. playerFaceAcc.name .. " is pretty worn out, I'll need at least " .. playerFaceAccCost .. " gold to repair it."
 					)
 				else
 					playerFaceAcc.dura = playerFaceAcc.maxDura
 					playerFaceAcc.repairCheck = 0
-					npc:talk(0, npc.name .. ": I patched up your " .. playerFaceAcc.name .. " for " .. playerFaceAccCost .. " gold.")
+					npc:talk(
+						0,
+						npc.name .. ": I patched up your " .. playerFaceAcc.name .. " for " .. playerFaceAccCost .. " gold."
+					)
 					player.money = player.money - playerFaceAccCost
 					player:sendStatus()
 				end
@@ -1965,14 +2010,15 @@ function Player.repairAllNoConfirm(player, npc)
 				if player.money < playerHelmCost then
 					npc:talk(
 						0,
-						npc.name ..
-							": Your " ..
-								playerHelm.name .. " is pretty worn out, I'll need at least " .. playerHelmCost .. " gold to repair it."
+						npc.name .. ": Your " .. playerHelm.name .. " is pretty worn out, I'll need at least " .. playerHelmCost .. " gold to repair it."
 					)
 				else
 					playerHelm.dura = playerHelm.maxDura
 					playerHelm.repairCheck = 0
-					npc:talk(0, npc.name .. ": I patched up your " .. playerHelm.name .. " for " .. playerHelmCost .. " gold.")
+					npc:talk(
+						0,
+						npc.name .. ": I patched up your " .. playerHelm.name .. " for " .. playerHelmCost .. " gold."
+					)
 					player.money = player.money - playerHelmCost
 					player:sendStatus()
 				end
@@ -1985,20 +2031,20 @@ function Player.repairAllNoConfirm(player, npc)
 	if (playerCrown ~= nil) then
 		if (playerCrown.repairable == 1) then
 			if (playerCrown.dura < playerCrown.maxDura) then
-				playerCrownCost =
-					math.ceil(((playerCrown.price / playerCrown.maxDura) * (playerCrown.maxDura - playerCrown.dura)) * 0.5)
+				playerCrownCost = math.ceil(((playerCrown.price / playerCrown.maxDura) * (playerCrown.maxDura - playerCrown.dura)) * 0.5)
 
 				if player.money < playerCrownCost then
 					npc:talk(
 						0,
-						npc.name ..
-							": Your " ..
-								playerCrown.name .. " is pretty worn out, I'll need at least " .. playerCrownCost .. " gold to repair it."
+						npc.name .. ": Your " .. playerCrown.name .. " is pretty worn out, I'll need at least " .. playerCrownCost .. " gold to repair it."
 					)
 				else
 					playerCrown.dura = playerCrown.maxDura
 					playerCrown.repairCheck = 0
-					npc:talk(0, npc.name .. ": I patched up your " .. playerCrown.name .. " for " .. playerCrownCost .. " gold.")
+					npc:talk(
+						0,
+						npc.name .. ": I patched up your " .. playerCrown.name .. " for " .. playerCrownCost .. " gold."
+					)
 					player.money = player.money - playerCrownCost
 					player:sendStatus()
 				end
@@ -2010,20 +2056,20 @@ function Player.repairAllNoConfirm(player, npc)
 	if (playerWeapon ~= nil) then
 		if (playerWeapon.repairable == 1) then
 			if (playerWeapon.dura < playerWeapon.maxDura) then
-				playerWeaponCost =
-					math.ceil(((playerWeapon.price / playerWeapon.maxDura) * (playerWeapon.maxDura - playerWeapon.dura)) * 0.5)
+				playerWeaponCost = math.ceil(((playerWeapon.price / playerWeapon.maxDura) * (playerWeapon.maxDura - playerWeapon.dura)) * 0.5)
 
 				if player.money < playerWeaponCost then
 					npc:talk(
 						0,
-						npc.name ..
-							": Your " ..
-								playerWeapon.name .. " is pretty worn out, I'll need at least " .. playerWeaponCost .. " gold to repair it."
+						npc.name .. ": Your " .. playerWeapon.name .. " is pretty worn out, I'll need at least " .. playerWeaponCost .. " gold to repair it."
 					)
 				else
 					playerWeapon.dura = playerWeapon.maxDura
 					playerWeapon.repairCheck = 0
-					npc:talk(0, npc.name .. ": I patched up your " .. playerWeapon.name .. " for " .. playerWeaponCost .. " gold.")
+					npc:talk(
+						0,
+						npc.name .. ": I patched up your " .. playerWeapon.name .. " for " .. playerWeaponCost .. " gold."
+					)
 					player.money = player.money - playerWeaponCost
 					player:sendStatus()
 				end
@@ -2036,20 +2082,20 @@ function Player.repairAllNoConfirm(player, npc)
 	if (playerArmor ~= nil) then
 		if (playerArmor.repairable == 1) then
 			if (playerArmor.dura < playerArmor.maxDura) then
-				playerArmorCost =
-					math.ceil(((playerArmor.price / playerArmor.maxDura) * (playerArmor.maxDura - playerArmor.dura)) * 0.5)
+				playerArmorCost = math.ceil(((playerArmor.price / playerArmor.maxDura) * (playerArmor.maxDura - playerArmor.dura)) * 0.5)
 
 				if player.money < playerArmorCost then
 					npc:talk(
 						0,
-						npc.name ..
-							": Your " ..
-								playerArmor.name .. " is pretty worn out, I'll need at least " .. playerArmorCost .. " gold to repair it."
+						npc.name .. ": Your " .. playerArmor.name .. " is pretty worn out, I'll need at least " .. playerArmorCost .. " gold to repair it."
 					)
 				else
 					playerArmor.dura = playerArmor.maxDura
 					playerArmor.repairCheck = 0
-					npc:talk(0, npc.name .. ": I patched up your " .. playerArmor.name .. " for " .. playerArmorCost .. " gold.")
+					npc:talk(
+						0,
+						npc.name .. ": I patched up your " .. playerArmor.name .. " for " .. playerArmorCost .. " gold."
+					)
 					player.money = player.money - playerArmorCost
 					player:sendStatus()
 				end
@@ -2062,20 +2108,20 @@ function Player.repairAllNoConfirm(player, npc)
 	if (playerShield ~= nil) then
 		if (playerShield.repairable == 1) then
 			if (playerShield.dura < playerShield.maxDura) then
-				playerShieldCost =
-					math.ceil(((playerShield.price / playerShield.maxDura) * (playerShield.maxDura - playerShield.dura)) * 0.5)
+				playerShieldCost = math.ceil(((playerShield.price / playerShield.maxDura) * (playerShield.maxDura - playerShield.dura)) * 0.5)
 
 				if player.money < playerShieldCost then
 					npc:talk(
 						0,
-						npc.name ..
-							": Your " ..
-								playerShield.name .. " is pretty worn out, I'll need at least " .. playerShieldCost .. " gold to repair it."
+						npc.name .. ": Your " .. playerShield.name .. " is pretty worn out, I'll need at least " .. playerShieldCost .. " gold to repair it."
 					)
 				else
 					playerShield.dura = playerShield.maxDura
 					playerShield.repairCheck = 0
-					npc:talk(0, npc.name .. ": I patched up your " .. playerShield.name .. " for " .. playerShieldCost .. " gold.")
+					npc:talk(
+						0,
+						npc.name .. ": I patched up your " .. playerShield.name .. " for " .. playerShieldCost .. " gold."
+					)
 					player.money = player.money - playerShieldCost
 					player:sendStatus()
 				end
@@ -2093,14 +2139,15 @@ function Player.repairAllNoConfirm(player, npc)
 				if player.money < playerLeftCost then
 					npc:talk(
 						0,
-						npc.name ..
-							": Your " ..
-								playerLeft.name .. " is pretty worn out, I'll need at least " .. playerLeftCost .. " gold to repair it."
+						npc.name .. ": Your " .. playerLeft.name .. " is pretty worn out, I'll need at least " .. playerLeftCost .. " gold to repair it."
 					)
 				else
 					playerLeft.dura = playerLeft.maxDura
 					playerLeft.repairCheck = 0
-					npc:talk(0, npc.name .. ": I patched up your " .. playerLeft.name .. " for " .. playerLeftCost .. " gold.")
+					npc:talk(
+						0,
+						npc.name .. ": I patched up your " .. playerLeft.name .. " for " .. playerLeftCost .. " gold."
+					)
 					player.money = player.money - playerLeftCost
 					player:sendStatus()
 				end
@@ -2113,20 +2160,20 @@ function Player.repairAllNoConfirm(player, npc)
 	if (playerRight ~= nil) then
 		if (playerRight.repairable == 1) then
 			if (playerRight.dura < playerRight.maxDura) then
-				playerRightCost =
-					math.ceil(((playerRight.price / playerRight.maxDura) * (playerRight.maxDura - playerRight.dura)) * 0.5)
+				playerRightCost = math.ceil(((playerRight.price / playerRight.maxDura) * (playerRight.maxDura - playerRight.dura)) * 0.5)
 
 				if player.money < playerRightCost then
 					npc:talk(
 						0,
-						npc.name ..
-							": Your " ..
-								playerRight.name .. " is pretty worn out, I'll need at least " .. playerRightCost .. " gold to repair it."
+						npc.name .. ": Your " .. playerRight.name .. " is pretty worn out, I'll need at least " .. playerRightCost .. " gold to repair it."
 					)
 				else
 					playerRight.dura = playerRight.maxDura
 					playerRight.repairCheck = 0
-					npc:talk(0, npc.name .. ": I patched up your " .. playerRight.name .. " for " .. playerRightCost .. " gold.")
+					npc:talk(
+						0,
+						npc.name .. ": I patched up your " .. playerRight.name .. " for " .. playerRightCost .. " gold."
+					)
 					player.money = player.money - playerRightCost
 					player:sendStatus()
 				end
@@ -2139,20 +2186,20 @@ function Player.repairAllNoConfirm(player, npc)
 	if (playerMantle ~= nil) then
 		if (playerMantle.repairable == 1) then
 			if (playerMantle.dura < playerMantle.maxDura) then
-				playerMantleCost =
-					math.ceil(((playerMantle.price / playerMantle.maxDura) * (playerMantle.maxDura - playerMantle.dura)) * 0.5)
+				playerMantleCost = math.ceil(((playerMantle.price / playerMantle.maxDura) * (playerMantle.maxDura - playerMantle.dura)) * 0.5)
 
 				if player.money < playerMantleCost then
 					npc:talk(
 						0,
-						npc.name ..
-							": Your " ..
-								playerMantle.name .. " is pretty worn out, I'll need at least " .. playerMantleCost .. " gold to repair it."
+						npc.name .. ": Your " .. playerMantle.name .. " is pretty worn out, I'll need at least " .. playerMantleCost .. " gold to repair it."
 					)
 				else
 					playerMantle.dura = playerMantle.maxDura
 					playerMantle.repairCheck = 0
-					npc:talk(0, npc.name .. ": I patched up your " .. playerMantle.name .. " for " .. playerMantleCost .. " gold.")
+					npc:talk(
+						0,
+						npc.name .. ": I patched up your " .. playerMantle.name .. " for " .. playerMantleCost .. " gold."
+					)
 					player.money = player.money - playerMantleCost
 					player:sendStatus()
 				end
@@ -2165,20 +2212,20 @@ function Player.repairAllNoConfirm(player, npc)
 	if (playerSubLeft ~= nil) then
 		if (playerSubLeft.repairable == 1) then
 			if (playerSubLeft.dura < playerSubLeft.maxDura) then
-				playerSubLeftCost =
-					math.ceil(((playerSubLeft.price / playerSubLeft.maxDura) * (playerSubLeft.maxDura - playerSubLeft.dura)) * 0.5)
+				playerSubLeftCost = math.ceil(((playerSubLeft.price / playerSubLeft.maxDura) * (playerSubLeft.maxDura - playerSubLeft.dura)) * 0.5)
 
 				if player.money < playerSubLeftCost then
 					npc:talk(
 						0,
-						npc.name ..
-							": Your " ..
-								playerSubLeft.name .. " is pretty worn out, I'll need at least " .. playerSubLeftCost .. " gold to repair it."
+						npc.name .. ": Your " .. playerSubLeft.name .. " is pretty worn out, I'll need at least " .. playerSubLeftCost .. " gold to repair it."
 					)
 				else
 					playerSubLeft.dura = playerSubLeft.maxDura
 					playerSubLeft.repairCheck = 0
-					npc:talk(0, npc.name .. ": I patched up your " .. playerSubLeft.name .. " for " .. playerSubLeftCost .. " gold.")
+					npc:talk(
+						0,
+						npc.name .. ": I patched up your " .. playerSubLeft.name .. " for " .. playerSubLeftCost .. " gold."
+					)
 					player.money = player.money - playerSubLeftCost
 					player:sendStatus()
 				end
@@ -2191,20 +2238,20 @@ function Player.repairAllNoConfirm(player, npc)
 	if (playerSubRight ~= nil) then
 		if (playerSubRight.repairable == 1) then
 			if (playerSubRight.dura < playerSubRight.maxDura) then
-				playerSubRightCost =
-					math.ceil(((playerSubRight.price / playerSubRight.maxDura) * (playerSubRight.maxDura - playerSubRight.dura)) * 0.5)
+				playerSubRightCost = math.ceil(((playerSubRight.price / playerSubRight.maxDura) * (playerSubRight.maxDura - playerSubRight.dura)) * 0.5)
 
 				if player.money < playerSubRightCost then
 					npc:talk(
 						0,
-						npc.name ..
-							": Your " ..
-								playerSubRight.name .. " is pretty worn out, I'll need at least " .. playerSubRightCost .. " gold to repair it."
+						npc.name .. ": Your " .. playerSubRight.name .. " is pretty worn out, I'll need at least " .. playerSubRightCost .. " gold to repair it."
 					)
 				else
 					playerSubRight.dura = playerSubRight.maxDura
 					playerSubRight.repairCheck = 0
-					npc:talk(0, npc.name .. ": I patched up your " .. playerSubRight.name .. " for " .. playerSubRightCost .. " gold.")
+					npc:talk(
+						0,
+						npc.name .. ": I patched up your " .. playerSubRight.name .. " for " .. playerSubRightCost .. " gold."
+					)
 					player.money = player.money - playerSubRightCost
 					player:sendStatus()
 				end
@@ -2217,20 +2264,20 @@ function Player.repairAllNoConfirm(player, npc)
 	if (playerNecklace ~= nil) then
 		if (playerNecklace.repairable == 1) then
 			if (playerNecklace.dura < playerNecklace.maxDura) then
-				playerNecklaceCost =
-					math.ceil(((playerNecklace.price / playerNecklace.maxDura) * (playerNecklace.maxDura - playerNecklace.dura)) * 0.5)
+				playerNecklaceCost = math.ceil(((playerNecklace.price / playerNecklace.maxDura) * (playerNecklace.maxDura - playerNecklace.dura)) * 0.5)
 
 				if player.money < playerNecklaceCost then
 					npc:talk(
 						0,
-						npc.name ..
-							": Your " ..
-								playerNecklace.name .. " is pretty worn out, I'll need at least " .. playerNecklaceCost .. " gold to repair it."
+						npc.name .. ": Your " .. playerNecklace.name .. " is pretty worn out, I'll need at least " .. playerNecklaceCost .. " gold to repair it."
 					)
 				else
 					playerNecklace.dura = playerNecklace.maxDura
 					playerNecklace.repairCheck = 0
-					npc:talk(0, npc.name .. ": I patched up your " .. playerNecklace.name .. " for " .. playerNecklaceCost .. " gold.")
+					npc:talk(
+						0,
+						npc.name .. ": I patched up your " .. playerNecklace.name .. " for " .. playerNecklaceCost .. " gold."
+					)
 					player.money = player.money - playerNecklaceCost
 					player:sendStatus()
 				end
@@ -2243,20 +2290,20 @@ function Player.repairAllNoConfirm(player, npc)
 	if (playerBoots ~= nil) then
 		if (playerBoots.repairable == 1) then
 			if (playerBoots.dura < playerBoots.maxDura) then
-				playerBootsCost =
-					math.ceil(((playerBoots.price / playerBoots.maxDura) * (playerBoots.maxDura - playerBoots.dura)) * 0.5)
+				playerBootsCost = math.ceil(((playerBoots.price / playerBoots.maxDura) * (playerBoots.maxDura - playerBoots.dura)) * 0.5)
 
 				if player.money < playerBootsCost then
 					npc:talk(
 						0,
-						npc.name ..
-							": Your " ..
-								playerBoots.name .. " is pretty worn out, I'll need at least " .. playerBootsCost .. " gold to repair it."
+						npc.name .. ": Your " .. playerBoots.name .. " is pretty worn out, I'll need at least " .. playerBootsCost .. " gold to repair it."
 					)
 				else
 					playerBoots.dura = playerBoots.maxDura
 					playerBoots.repairCheck = 0
-					npc:talk(0, npc.name .. ": I patched up your " .. playerBoots.name .. " for " .. playerBootsCost .. " gold.")
+					npc:talk(
+						0,
+						npc.name .. ": I patched up your " .. playerBoots.name .. " for " .. playerBootsCost .. " gold."
+					)
 					player.money = player.money - playerBootsCost
 					player:sendStatus()
 				end
@@ -2274,14 +2321,15 @@ function Player.repairAllNoConfirm(player, npc)
 				if player.money < playerCoatCost then
 					npc:talk(
 						0,
-						npc.name ..
-							": Your " ..
-								playerCoat.name .. " is pretty worn out, I'll need at least " .. playerCoatCost .. " gold to repair it."
+						npc.name .. ": Your " .. playerCoat.name .. " is pretty worn out, I'll need at least " .. playerCoatCost .. " gold to repair it."
 					)
 				else
 					playerCoat.dura = playerCoat.maxDura
 					playerCoat.repairCheck = 0
-					npc:talk(0, npc.name .. ": I patched up your " .. playerCoat.name .. " for " .. playerCoatCost .. " gold.")
+					npc:talk(
+						0,
+						npc.name .. ": I patched up your " .. playerCoat.name .. " for " .. playerCoatCost .. " gold."
+					)
 					player.money = player.money - playerCoatCost
 					player:sendStatus()
 				end
@@ -2304,13 +2352,15 @@ function Player.repairAllNoConfirm(player, npc)
 						if player.money < invCost then
 							npc:talk(
 								0,
-								npc.name ..
-									": Your " .. invItem.name .. " is pretty worn out, I'll need at least " .. invCost .. " gold to repair it."
+								npc.name .. ": Your " .. invItem.name .. " is pretty worn out, I'll need at least " .. invCost .. " gold to repair it."
 							)
 						else
 							invItem.dura = invItem.maxDura
 							invItem.repairCheck = 0
-							npc:talk(0, npc.name .. ": I patched up your " .. invItem.name .. " for " .. invCost .. " gold.")
+							npc:talk(
+								0,
+								npc.name .. ": I patched up your " .. invItem.name .. " for " .. invCost .. " gold."
+							)
 							player.money = player.money - invCost
 							player:sendStatus()
 						end
@@ -2333,7 +2383,10 @@ function Player.repairItemNoConfirm(player, npc, itemName)
 	local item = Item(itemName)
 
 	if item == nil then
-		npc:talk(0, npc.name .. ": Well, where is it? I can't see it any place.")
+		npc:talk(
+			0,
+			npc.name .. ": Well, where is it? I can't see it any place."
+		)
 		return
 	end
 
@@ -2373,20 +2426,20 @@ function Player.repairItemNoConfirm(player, npc, itemName)
 		if (playerFaceAcc.name == item.name) then
 			if (playerFaceAcc.repairable == 1) then
 				if (playerFaceAcc.dura < playerFaceAcc.maxDura) then
-					playerFaceAccCost =
-						math.ceil(((playerFaceAcc.price / playerFaceAcc.maxDura) * (playerFaceAcc.maxDura - playerFaceAcc.dura)) * 0.5)
+					playerFaceAccCost = math.ceil(((playerFaceAcc.price / playerFaceAcc.maxDura) * (playerFaceAcc.maxDura - playerFaceAcc.dura)) * 0.5)
 
 					if player.money < playerFaceAccCost then
 						npc:talk(
 							0,
-							npc.name ..
-								": Your " ..
-									playerFaceAcc.name .. " is pretty worn out, I'll need at least " .. playerFaceAccCost .. " gold to repair it."
+							npc.name .. ": Your " .. playerFaceAcc.name .. " is pretty worn out, I'll need at least " .. playerFaceAccCost .. " gold to repair it."
 						)
 					else
 						playerFaceAcc.dura = playerFaceAcc.maxDura
 						playerFaceAcc.repairCheck = 0
-						npc:talk(0, npc.name .. ": I patched up your " .. playerFaceAcc.name .. " for " .. playerFaceAccCost .. " gold.")
+						npc:talk(
+							0,
+							npc.name .. ": I patched up your " .. playerFaceAcc.name .. " for " .. playerFaceAccCost .. " gold."
+						)
 						player.money = player.money - playerFaceAccCost
 						player:sendStatus()
 					end
@@ -2401,20 +2454,20 @@ function Player.repairItemNoConfirm(player, npc, itemName)
 		if (playerHelm.name == item.name) then
 			if (playerHelm.repairable == 1) then
 				if (playerHelm.dura < playerHelm.maxDura) then
-					playerHelmCost =
-						math.ceil(((playerHelm.price / playerHelm.maxDura) * (playerHelm.maxDura - playerHelm.dura)) * 0.5)
+					playerHelmCost = math.ceil(((playerHelm.price / playerHelm.maxDura) * (playerHelm.maxDura - playerHelm.dura)) * 0.5)
 
 					if player.money < playerHelmCost then
 						npc:talk(
 							0,
-							npc.name ..
-								": Your " ..
-									playerHelm.name .. " is pretty worn out, I'll need at least " .. playerHelmCost .. " gold to repair it."
+							npc.name .. ": Your " .. playerHelm.name .. " is pretty worn out, I'll need at least " .. playerHelmCost .. " gold to repair it."
 						)
 					else
 						playerHelm.dura = playerHelm.maxDura
 						playerHelm.repairCheck = 0
-						npc:talk(0, npc.name .. ": I patched up your " .. playerHelm.name .. " for " .. playerHelmCost .. " gold.")
+						npc:talk(
+							0,
+							npc.name .. ": I patched up your " .. playerHelm.name .. " for " .. playerHelmCost .. " gold."
+						)
 						player.money = player.money - playerHelmCost
 						player:sendStatus()
 					end
@@ -2429,20 +2482,20 @@ function Player.repairItemNoConfirm(player, npc, itemName)
 		if (playerCrown.name == item.name) then
 			if (playerCrown.repairable == 1) then
 				if (playerCrown.dura < playerCrown.maxDura) then
-					playerCrownCost =
-						math.ceil(((playerCrown.price / playerCrown.maxDura) * (playerCrown.maxDura - playerCrown.dura)) * 0.5)
+					playerCrownCost = math.ceil(((playerCrown.price / playerCrown.maxDura) * (playerCrown.maxDura - playerCrown.dura)) * 0.5)
 
 					if player.money < playerCrownCost then
 						npc:talk(
 							0,
-							npc.name ..
-								": Your " ..
-									playerCrown.name .. " is pretty worn out, I'll need at least " .. playerCrownCost .. " gold to repair it."
+							npc.name .. ": Your " .. playerCrown.name .. " is pretty worn out, I'll need at least " .. playerCrownCost .. " gold to repair it."
 						)
 					else
 						playerCrown.dura = playerCrown.maxDura
 						playerCrown.repairCheck = 0
-						npc:talk(0, npc.name .. ": I patched up your " .. playerCrown.name .. " for " .. playerCrownCost .. " gold.")
+						npc:talk(
+							0,
+							npc.name .. ": I patched up your " .. playerCrown.name .. " for " .. playerCrownCost .. " gold."
+						)
 						player.money = player.money - playerCrownCost
 						player:sendStatus()
 					end
@@ -2456,20 +2509,20 @@ function Player.repairItemNoConfirm(player, npc, itemName)
 		if (playerWeapon.name == item.name) then
 			if (playerWeapon.repairable == 1) then
 				if (playerWeapon.dura < playerWeapon.maxDura) then
-					playerWeaponCost =
-						math.ceil(((playerWeapon.price / playerWeapon.maxDura) * (playerWeapon.maxDura - playerWeapon.dura)) * 0.5)
+					playerWeaponCost = math.ceil(((playerWeapon.price / playerWeapon.maxDura) * (playerWeapon.maxDura - playerWeapon.dura)) * 0.5)
 
 					if player.money < playerWeaponCost then
 						npc:talk(
 							0,
-							npc.name ..
-								": Your " ..
-									playerWeapon.name .. " is pretty worn out, I'll need at least " .. playerWeaponCost .. " gold to repair it."
+							npc.name .. ": Your " .. playerWeapon.name .. " is pretty worn out, I'll need at least " .. playerWeaponCost .. " gold to repair it."
 						)
 					else
 						playerWeapon.dura = playerWeapon.maxDura
 						playerWeapon.repairCheck = 0
-						npc:talk(0, npc.name .. ": I patched up your " .. playerWeapon.name .. " for " .. playerWeaponCost .. " gold.")
+						npc:talk(
+							0,
+							npc.name .. ": I patched up your " .. playerWeapon.name .. " for " .. playerWeaponCost .. " gold."
+						)
 						player.money = player.money - playerWeaponCost
 						player:sendStatus()
 					end
@@ -2484,20 +2537,20 @@ function Player.repairItemNoConfirm(player, npc, itemName)
 		if (playerArmor.name == item.name) then
 			if (playerArmor.repairable == 1) then
 				if (playerArmor.dura < playerArmor.maxDura) then
-					playerArmorCost =
-						math.ceil(((playerArmor.price / playerArmor.maxDura) * (playerArmor.maxDura - playerArmor.dura)) * 0.5)
+					playerArmorCost = math.ceil(((playerArmor.price / playerArmor.maxDura) * (playerArmor.maxDura - playerArmor.dura)) * 0.5)
 
 					if player.money < playerArmorCost then
 						npc:talk(
 							0,
-							npc.name ..
-								": Your " ..
-									playerArmor.name .. " is pretty worn out, I'll need at least " .. playerArmorCost .. " gold to repair it."
+							npc.name .. ": Your " .. playerArmor.name .. " is pretty worn out, I'll need at least " .. playerArmorCost .. " gold to repair it."
 						)
 					else
 						playerArmor.dura = playerArmor.maxDura
 						playerArmor.repairCheck = 0
-						npc:talk(0, npc.name .. ": I patched up your " .. playerArmor.name .. " for " .. playerArmorCost .. " gold.")
+						npc:talk(
+							0,
+							npc.name .. ": I patched up your " .. playerArmor.name .. " for " .. playerArmorCost .. " gold."
+						)
 						player.money = player.money - playerArmorCost
 						player:sendStatus()
 					end
@@ -2512,20 +2565,20 @@ function Player.repairItemNoConfirm(player, npc, itemName)
 		if (playerShield.name == item.name) then
 			if (playerShield.repairable == 1) then
 				if (playerShield.dura < playerShield.maxDura) then
-					playerShieldCost =
-						math.ceil(((playerShield.price / playerShield.maxDura) * (playerShield.maxDura - playerShield.dura)) * 0.5)
+					playerShieldCost = math.ceil(((playerShield.price / playerShield.maxDura) * (playerShield.maxDura - playerShield.dura)) * 0.5)
 
 					if player.money < playerShieldCost then
 						npc:talk(
 							0,
-							npc.name ..
-								": Your " ..
-									playerShield.name .. " is pretty worn out, I'll need at least " .. playerShieldCost .. " gold to repair it."
+							npc.name .. ": Your " .. playerShield.name .. " is pretty worn out, I'll need at least " .. playerShieldCost .. " gold to repair it."
 						)
 					else
 						playerShield.dura = playerShield.maxDura
 						playerShield.repairCheck = 0
-						npc:talk(0, npc.name .. ": I patched up your " .. playerShield.name .. " for " .. playerShieldCost .. " gold.")
+						npc:talk(
+							0,
+							npc.name .. ": I patched up your " .. playerShield.name .. " for " .. playerShieldCost .. " gold."
+						)
 						player.money = player.money - playerShieldCost
 						player:sendStatus()
 					end
@@ -2540,20 +2593,20 @@ function Player.repairItemNoConfirm(player, npc, itemName)
 		if (playerLeft.name == item.name) then
 			if (playerLeft.repairable == 1) then
 				if (playerLeft.dura < playerLeft.maxDura) then
-					playerLeftCost =
-						math.ceil(((playerLeft.price / playerLeft.maxDura) * (playerLeft.maxDura - playerLeft.dura)) * 0.5)
+					playerLeftCost = math.ceil(((playerLeft.price / playerLeft.maxDura) * (playerLeft.maxDura - playerLeft.dura)) * 0.5)
 
 					if player.money < playerLeftCost then
 						npc:talk(
 							0,
-							npc.name ..
-								": Your " ..
-									playerLeft.name .. " is pretty worn out, I'll need at least " .. playerLeftCost .. " gold to repair it."
+							npc.name .. ": Your " .. playerLeft.name .. " is pretty worn out, I'll need at least " .. playerLeftCost .. " gold to repair it."
 						)
 					else
 						playerLeft.dura = playerLeft.maxDura
 						playerLeft.repairCheck = 0
-						npc:talk(0, npc.name .. ": I patched up your " .. playerLeft.name .. " for " .. playerLeftCost .. " gold.")
+						npc:talk(
+							0,
+							npc.name .. ": I patched up your " .. playerLeft.name .. " for " .. playerLeftCost .. " gold."
+						)
 						player.money = player.money - playerLeftCost
 						player:sendStatus()
 					end
@@ -2568,20 +2621,20 @@ function Player.repairItemNoConfirm(player, npc, itemName)
 		if (playerRight.name == item.name) then
 			if (playerRight.repairable == 1) then
 				if (playerRight.dura < playerRight.maxDura) then
-					playerRightCost =
-						math.ceil(((playerRight.price / playerRight.maxDura) * (playerRight.maxDura - playerRight.dura)) * 0.5)
+					playerRightCost = math.ceil(((playerRight.price / playerRight.maxDura) * (playerRight.maxDura - playerRight.dura)) * 0.5)
 
 					if player.money < playerRightCost then
 						npc:talk(
 							0,
-							npc.name ..
-								": Your " ..
-									playerRight.name .. " is pretty worn out, I'll need at least " .. playerRightCost .. " gold to repair it."
+							npc.name .. ": Your " .. playerRight.name .. " is pretty worn out, I'll need at least " .. playerRightCost .. " gold to repair it."
 						)
 					else
 						playerRight.dura = playerRight.maxDura
 						playerRight.repairCheck = 0
-						npc:talk(0, npc.name .. ": I patched up your " .. playerRight.name .. " for " .. playerRightCost .. " gold.")
+						npc:talk(
+							0,
+							npc.name .. ": I patched up your " .. playerRight.name .. " for " .. playerRightCost .. " gold."
+						)
 						player.money = player.money - playerRightCost
 						player:sendStatus()
 					end
@@ -2596,20 +2649,20 @@ function Player.repairItemNoConfirm(player, npc, itemName)
 		if (playerMantle.name == item.name) then
 			if (playerMantle.repairable == 1) then
 				if (playerMantle.dura < playerMantle.maxDura) then
-					playerMantleCost =
-						math.ceil(((playerMantle.price / playerMantle.maxDura) * (playerMantle.maxDura - playerMantle.dura)) * 0.5)
+					playerMantleCost = math.ceil(((playerMantle.price / playerMantle.maxDura) * (playerMantle.maxDura - playerMantle.dura)) * 0.5)
 
 					if player.money < playerMantleCost then
 						npc:talk(
 							0,
-							npc.name ..
-								": Your " ..
-									playerMantle.name .. " is pretty worn out, I'll need at least " .. playerMantleCost .. " gold to repair it."
+							npc.name .. ": Your " .. playerMantle.name .. " is pretty worn out, I'll need at least " .. playerMantleCost .. " gold to repair it."
 						)
 					else
 						playerMantle.dura = playerMantle.maxDura
 						playerMantle.repairCheck = 0
-						npc:talk(0, npc.name .. ": I patched up your " .. playerMantle.name .. " for " .. playerMantleCost .. " gold.")
+						npc:talk(
+							0,
+							npc.name .. ": I patched up your " .. playerMantle.name .. " for " .. playerMantleCost .. " gold."
+						)
 						player.money = player.money - playerMantleCost
 						player:sendStatus()
 					end
@@ -2624,20 +2677,20 @@ function Player.repairItemNoConfirm(player, npc, itemName)
 		if (playerSubLeft.name == item.name) then
 			if (playerSubLeft.repairable == 1) then
 				if (playerSubLeft.dura < playerSubLeft.maxDura) then
-					playerSubLeftCost =
-						math.ceil(((playerSubLeft.price / playerSubLeft.maxDura) * (playerSubLeft.maxDura - playerSubLeft.dura)) * 0.5)
+					playerSubLeftCost = math.ceil(((playerSubLeft.price / playerSubLeft.maxDura) * (playerSubLeft.maxDura - playerSubLeft.dura)) * 0.5)
 
 					if player.money < playerSubLeftCost then
 						npc:talk(
 							0,
-							npc.name ..
-								": Your " ..
-									playerSubLeft.name .. " is pretty worn out, I'll need at least " .. playerSubLeftCost .. " gold to repair it."
+							npc.name .. ": Your " .. playerSubLeft.name .. " is pretty worn out, I'll need at least " .. playerSubLeftCost .. " gold to repair it."
 						)
 					else
 						playerSubLeft.dura = playerSubLeft.maxDura
 						playerSubLeft.repairCheck = 0
-						npc:talk(0, npc.name .. ": I patched up your " .. playerSubLeft.name .. " for " .. playerSubLeftCost .. " gold.")
+						npc:talk(
+							0,
+							npc.name .. ": I patched up your " .. playerSubLeft.name .. " for " .. playerSubLeftCost .. " gold."
+						)
 						player.money = player.money - playerSubLeftCost
 						player:sendStatus()
 					end
@@ -2652,18 +2705,12 @@ function Player.repairItemNoConfirm(player, npc, itemName)
 		if (playerSubRight.name == item.name) then
 			if (playerSubRight.repairable == 1) then
 				if (playerSubRight.dura < playerSubRight.maxDura) then
-					playerSubRightCost =
-						math.ceil(
-						((playerSubRight.price / playerSubRight.maxDura) * (playerSubRight.maxDura - playerSubRight.dura)) * 0.5
-					)
+					playerSubRightCost = math.ceil(((playerSubRight.price / playerSubRight.maxDura) * (playerSubRight.maxDura - playerSubRight.dura)) * 0.5)
 
 					if player.money < playerSubRightCost then
 						npc:talk(
 							0,
-							npc.name ..
-								": Your " ..
-									playerSubRight.name ..
-										" is pretty worn out, I'll need at least " .. playerSubRightCost .. " gold to repair it."
+							npc.name .. ": Your " .. playerSubRight.name .. " is pretty worn out, I'll need at least " .. playerSubRightCost .. " gold to repair it."
 						)
 					else
 						playerSubRight.dura = playerSubRight.maxDura
@@ -2686,18 +2733,12 @@ function Player.repairItemNoConfirm(player, npc, itemName)
 		if (playerNecklace.name == item.name) then
 			if (playerNecklace.repairable == 1) then
 				if (playerNecklace.dura < playerNecklace.maxDura) then
-					playerNecklaceCost =
-						math.ceil(
-						((playerNecklace.price / playerNecklace.maxDura) * (playerNecklace.maxDura - playerNecklace.dura)) * 0.5
-					)
+					playerNecklaceCost = math.ceil(((playerNecklace.price / playerNecklace.maxDura) * (playerNecklace.maxDura - playerNecklace.dura)) * 0.5)
 
 					if player.money < playerNecklaceCost then
 						npc:talk(
 							0,
-							npc.name ..
-								": Your " ..
-									playerNecklace.name ..
-										" is pretty worn out, I'll need at least " .. playerNecklaceCost .. " gold to repair it."
+							npc.name .. ": Your " .. playerNecklace.name .. " is pretty worn out, I'll need at least " .. playerNecklaceCost .. " gold to repair it."
 						)
 					else
 						playerNecklace.dura = playerNecklace.maxDura
@@ -2720,20 +2761,20 @@ function Player.repairItemNoConfirm(player, npc, itemName)
 		if (playerBoots.name == item.name) then
 			if (playerBoots.repairable == 1) then
 				if (playerBoots.dura < playerBoots.maxDura) then
-					playerBootsCost =
-						math.ceil(((playerBoots.price / playerBoots.maxDura) * (playerBoots.maxDura - playerBoots.dura)) * 0.5)
+					playerBootsCost = math.ceil(((playerBoots.price / playerBoots.maxDura) * (playerBoots.maxDura - playerBoots.dura)) * 0.5)
 
 					if player.money < playerBootsCost then
 						npc:talk(
 							0,
-							npc.name ..
-								": Your " ..
-									playerBoots.name .. " is pretty worn out, I'll need at least " .. playerBootsCost .. " gold to repair it."
+							npc.name .. ": Your " .. playerBoots.name .. " is pretty worn out, I'll need at least " .. playerBootsCost .. " gold to repair it."
 						)
 					else
 						playerBoots.dura = playerBoots.maxDura
 						playerBoots.repairCheck = 0
-						npc:talk(0, npc.name .. ": I patched up your " .. playerBoots.name .. " for " .. playerBootsCost .. " gold.")
+						npc:talk(
+							0,
+							npc.name .. ": I patched up your " .. playerBoots.name .. " for " .. playerBootsCost .. " gold."
+						)
 						player.money = player.money - playerBootsCost
 						player:sendStatus()
 					end
@@ -2748,20 +2789,20 @@ function Player.repairItemNoConfirm(player, npc, itemName)
 		if (playerCoat.name == item.name) then
 			if (playerCoat.repairable == 1) then
 				if (playerCoat.dura < playerCoat.maxDura) then
-					playerCoatCost =
-						math.ceil(((playerCoat.price / playerCoat.maxDura) * (playerCoat.maxDura - playerCoat.dura)) * 0.5)
+					playerCoatCost = math.ceil(((playerCoat.price / playerCoat.maxDura) * (playerCoat.maxDura - playerCoat.dura)) * 0.5)
 
 					if player.money < playerCoatCost then
 						npc:talk(
 							0,
-							npc.name ..
-								": Your " ..
-									playerCoat.name .. " is pretty worn out, I'll need at least " .. playerCoatCost .. " gold to repair it."
+							npc.name .. ": Your " .. playerCoat.name .. " is pretty worn out, I'll need at least " .. playerCoatCost .. " gold to repair it."
 						)
 					else
 						playerCoat.dura = playerCoat.maxDura
 						playerCoat.repairCheck = 0
-						npc:talk(0, npc.name .. ": I patched up your " .. playerCoat.name .. " for " .. playerCoatCost .. " gold.")
+						npc:talk(
+							0,
+							npc.name .. ": I patched up your " .. playerCoat.name .. " for " .. playerCoatCost .. " gold."
+						)
 						player.money = player.money - playerCoatCost
 						player:sendStatus()
 					end
@@ -2785,13 +2826,15 @@ function Player.repairItemNoConfirm(player, npc, itemName)
 						if player.money < invCost then
 							npc:talk(
 								0,
-								npc.name ..
-									": Your " .. invItem.name .. " is pretty worn out, I'll need at least " .. invCost .. " gold to repair it."
+								npc.name .. ": Your " .. invItem.name .. " is pretty worn out, I'll need at least " .. invCost .. " gold to repair it."
 							)
 						else
 							invItem.dura = invItem.maxDura
 							invItem.repairCheck = 0
-							npc:talk(0, npc.name .. ": I patched up your " .. invItem.name .. " for " .. invCost .. " gold.")
+							npc:talk(
+								0,
+								npc.name .. ": I patched up your " .. invItem.name .. " for " .. invCost .. " gold."
+							)
 							player:removeGold(invCost)
 						end
 					end
@@ -2846,7 +2889,10 @@ function Player.buyNoConfirm(player, npc, itemName, amount, items, prices, maxAm
 	end
 
 	if found == false then
-		npc:talk(0, npc.name .. ": I do not sell " .. item.name .. " here, please check elsewhere.")
+		npc:talk(
+			0,
+			npc.name .. ": I do not sell " .. item.name .. " here, please check elsewhere."
+		)
 		return
 	end
 
@@ -2883,20 +2929,29 @@ function Player.buyNoConfirm(player, npc, itemName, amount, items, prices, maxAm
 	end
 
 	if amount == 0 then
-		npc:talk(0, npc.name .. ": You already have maximum amount of " .. item.name)
+		npc:talk(
+			0,
+			npc.name .. ": You already have maximum amount of " .. item.name
+		)
 		player:sendMinitext(item.name .. ". You can't have more than (" .. item.maxAmount .. ").")
 		return
 	end
 
 	if amount > maxAmount then
-		npc:talk(0, npc.name .. ": Sorry I can only sell (" .. maxAmount .. ") more of " .. item.name)
+		npc:talk(
+			0,
+			npc.name .. ": Sorry I can only sell (" .. maxAmount .. ") more of " .. item.name
+		)
 		return
 	end
 
 	if found == true then
 		if amount == 1 then
 			if player.money < price then
-				npc:talk(0, npc.name .. ": You do not have enough coins to buy " .. item.name)
+				npc:talk(
+					0,
+					npc.name .. ": You do not have enough coins to buy " .. item.name
+				)
 				return
 			end
 
@@ -2904,21 +2959,29 @@ function Player.buyNoConfirm(player, npc, itemName, amount, items, prices, maxAm
 				if core.gameRegistry["red_potions_available"] - amount < 0 then
 					core.gameRegistry["red_potions_available"] = 0
 				else
-					core.gameRegistry["red_potions_available"] = core.gameRegistry["red_potions_available"] - amount
+					core.gameRegistry["red_potions_available"] = core.gameRegistry[
+						"red_potions_available"
+					] - amount
 				end
 			end
 
 			player:addItem(item.yname, amount)
 			player:removeGold(price)
 			characterLog.buyItemWrite(player, item, amount, price)
-			npc:talk(0, npc.name .. ": I sold " .. item.name .. " for " .. price .. " coins.")
+			npc:talk(
+				0,
+				npc.name .. ": I sold " .. item.name .. " for " .. price .. " coins."
+			)
 		end
 
 		if amount > 1 then
 			local totalCost = math.ceil(price * amount)
 
 			if player.money < totalCost then
-				npc:talk(0, npc.name .. ": You do not have enough coins to buy (" .. amount .. ") " .. item.name)
+				npc:talk(
+					0,
+					npc.name .. ": You do not have enough coins to buy (" .. amount .. ") " .. item.name
+				)
 				return
 			end
 
@@ -2926,14 +2989,19 @@ function Player.buyNoConfirm(player, npc, itemName, amount, items, prices, maxAm
 				if core.gameRegistry["red_potions_available"] - amount < 0 then
 					core.gameRegistry["red_potions_available"] = 0
 				else
-					core.gameRegistry["red_potions_available"] = core.gameRegistry["red_potions_available"] - amount
+					core.gameRegistry["red_potions_available"] = core.gameRegistry[
+						"red_potions_available"
+					] - amount
 				end
 			end
 
 			player:addItem(item.yname, amount)
 			player:removeGold(totalCost)
 			characterLog.buyItemWrite(player, item, amount, totalCost)
-			npc:talk(0, npc.name .. ": I sold (" .. amount .. ") " .. item.name .. " for " .. totalCost .. " coins.")
+			npc:talk(
+				0,
+				npc.name .. ": I sold (" .. amount .. ") " .. item.name .. " for " .. totalCost .. " coins."
+			)
 		end
 	end
 end
@@ -2973,7 +3041,10 @@ function Player.sellNoConfirm(player, npc, itemName, amount, items, prices)
 	end
 
 	if found == false then
-		npc:talk(0, npc.name .. ": I do not buy " .. item.name .. " here, please check elsewhere.")
+		npc:talk(
+			0,
+			npc.name .. ": I do not buy " .. item.name .. " here, please check elsewhere."
+		)
 		return
 	end
 
@@ -2988,9 +3059,15 @@ function Player.sellNoConfirm(player, npc, itemName, amount, items, prices)
 			if invItem.yname == item.yname then
 				if invItem.dura ~= invItem.maxDura then
 					if amount == 1 then
-						npc:talk(0, npc.name .. ": You must repair your " .. item.name .. " before I will buy it.")
+						npc:talk(
+							0,
+							npc.name .. ": You must repair your " .. item.name .. " before I will buy it."
+						)
 					elseif amount > 1 then
-						npc:talk(0, npc.name .. ": You must repair your set of " .. item.name .. "s before I will buy them.")
+						npc:talk(
+							0,
+							npc.name .. ": You must repair your set of " .. item.name .. "s before I will buy them."
+						)
 					end
 					return
 				end
@@ -3004,7 +3081,10 @@ function Player.sellNoConfirm(player, npc, itemName, amount, items, prices)
 				player:removeItem(item.yname, amount, 10)
 				player:addGold(price)
 				characterLog.sellItemWrite(player, item, amount, price)
-				npc:talk(0, npc.name .. ": I bought " .. item.name .. " for " .. price .. " coins.")
+				npc:talk(
+					0,
+					npc.name .. ": I bought " .. item.name .. " for " .. price .. " coins."
+				)
 			else
 				npc:talk(0, npc.name .. ": You don't have enough.")
 			end
@@ -3017,7 +3097,10 @@ function Player.sellNoConfirm(player, npc, itemName, amount, items, prices)
 				player:removeItem(item.yname, amount, 10)
 				player:addGold(totalCost)
 				characterLog.sellItemWrite(player, item, amount, totalCost)
-				npc:talk(0, npc.name .. ": I bought (" .. amount .. ") " .. item.name .. " for " .. totalCost .. " coins.")
+				npc:talk(
+					0,
+					npc.name .. ": I bought (" .. amount .. ") " .. item.name .. " for " .. totalCost .. " coins."
+				)
 			else
 				npc:talk(0, npc.name .. ": You don't have enough.")
 			end
@@ -3034,7 +3117,10 @@ function Player.depositNoConfirm(player, npc, itemName, amount)
 	if itemName == "coin" or itemName == "coins" then
 		if player.money < amount then
 			npc:talk(0, npc.name .. ": You don't have enough money.")
-			player:talkSelf(0, "I'll take your money if you want, but getting it back...")
+			player:talkSelf(
+				0,
+				"I'll take your money if you want, but getting it back..."
+			)
 			return
 		end
 
@@ -3093,7 +3179,10 @@ function Player.depositNoConfirm(player, npc, itemName, amount)
 		end
 
 		if (inventoryItem.dura ~= inventoryItem.maxDura) then
-			npc:talk(0, npc.name .. ": Your item has to be at full durability to deposit.")
+			npc:talk(
+				0,
+				npc.name .. ": Your item has to be at full durability to deposit."
+			)
 			return
 		end
 
@@ -3105,7 +3194,13 @@ function Player.depositNoConfirm(player, npc, itemName, amount)
 			if (player:hasItem(item.id, amount) == true) then
 				if (player.money >= moneyAmount) then
 					player:removeGold(moneyAmount)
-					player:bankDeposit(inventoryItem.id, amount, inventoryItem.owner, inventoryItem.time, inventoryItem.realName)
+					player:bankDeposit(
+						inventoryItem.id,
+						amount,
+						inventoryItem.owner,
+						inventoryItem.time,
+						inventoryItem.realName
+					)
 
 					if (amount == 1) then
 						player:removeItemSlot((slot), amount, 9)
@@ -3113,21 +3208,39 @@ function Player.depositNoConfirm(player, npc, itemName, amount)
 						player:removeItem(inventoryItem.id, amount, 9)
 					end
 				else
-					npc:talk(0, npc.name .. ": Excuse me you didn't give me enough. It's " .. moneyAmount .. " coins.")
+					npc:talk(
+						0,
+						npc.name .. ": Excuse me you didn't give me enough. It's " .. moneyAmount .. " coins."
+					)
 					return
 				end
 			else
-				npc:talk(0, npc.name .. ": You do not have what it is you want me to hold for you.")
+				npc:talk(
+					0,
+					npc.name .. ": You do not have what it is you want me to hold for you."
+				)
 				return
 			end
 		else
-			npc:talk(0, npc.name .. ": I don't want your junk. Ask a smith to fix it.")
+			npc:talk(
+				0,
+				npc.name .. ": I don't want your junk. Ask a smith to fix it."
+			)
 			return
 		end
 
-		characterLog.depositItemWrite(player, invItemName, invItemEngrave, amount, invItemOwner)
+		characterLog.depositItemWrite(
+			player,
+			invItemName,
+			invItemEngrave,
+			amount,
+			invItemOwner
+		)
 
-		npc:talk(0, npc.name .. ": I'll take your " .. Item(itemName).name .. ". " .. amount .. " of them.")
+		npc:talk(
+			0,
+			npc.name .. ": I'll take your " .. Item(itemName).name .. ". " .. amount .. " of them."
+		)
 
 		if moneyAmount > 0 then
 			npc:talk(0, npc.name .. ": The fee is " .. moneyAmount .. " coins.")
@@ -3142,7 +3255,10 @@ end
 function Player.withdrawNoConfirm(player, npc, itemName, amount)
 	if itemName == "coin" or itemName == "coins" then
 		if player.bankMoney < amount then
-			npc:talk(0, npc.name .. ": You never deposited that much in the first place.")
+			npc:talk(
+				0,
+				npc.name .. ": You never deposited that much in the first place."
+			)
 			player:talkSelf(0, "Hey! You little thief.")
 			return
 		end
@@ -3167,8 +3283,7 @@ function Player.withdrawNoConfirm(player, npc, itemName, amount)
 		return
 	end
 
-	local bankItemTable, bankCountTable, bankOwnerTable, bankEngraveTable, bankTimerTable, bankItemTableNames =
-		player:bankItemsList(0)
+	local bankItemTable, bankCountTable, bankOwnerTable, bankEngraveTable, bankTimerTable, bankItemTableNames = player:bankItemsList(0)
 
 	local found = 0
 	local counter = 0
@@ -3220,21 +3335,29 @@ function Player.withdrawNoConfirm(player, npc, itemName, amount)
 		--if hasAmount == 0 then player:popUp("Bug encountered. Contact TKR staff.") return end
 
 		if hasAmount >= Item(bankItemTable[found]).maxAmount or hasAmount + amount > Item(bankItemTable[found]).maxAmount then
-			player:sendMinitext(
-				"(" ..
-					Item(bankItemTable[found]).name .. "). You can't have more than (" .. Item(bankItemTable[found]).maxAmount .. ")."
-			)
+			player:sendMinitext("(" .. Item(bankItemTable[found]).name .. "). You can't have more than (" .. Item(bankItemTable[found]).maxAmount .. ").")
 			return
 		end
 	end
 
-	if (player:hasSpace(bankItemTable[found], amount, bankOwnerTable[found], bankEngraveTable[found]) ~= true) then
+	if (player:hasSpace(
+		bankItemTable[found],
+		amount,
+		bankOwnerTable[found],
+		bankEngraveTable[found]
+	) ~= true) then
 		player:sendMinitext("You do not have enough space in your inventory to withdraw that")
 		return
 	end
 
-	local worked =
-		player:addItem(bankItemTable[found], amount, 0, bankOwnerTable[found], bankTimerTable[found], bankEngraveTable[found])
+	local worked = player:addItem(
+		bankItemTable[found],
+		amount,
+		0,
+		bankOwnerTable[found],
+		bankTimerTable[found],
+		bankEngraveTable[found]
+	)
 
 	if (worked == true) then
 		player:bankWithdraw(
@@ -3258,9 +3381,15 @@ function Player.withdrawNoConfirm(player, npc, itemName, amount)
 	)
 
 	if amount == 1 then
-		npc:talk(0, npc.name .. ": Here's your " .. Item(bankItemTable[found]).name .. ".")
+		npc:talk(
+			0,
+			npc.name .. ": Here's your " .. Item(bankItemTable[found]).name .. "."
+		)
 	elseif amount > 1 then
-		npc:talk(0, npc.name .. ": Here's your " .. Item(bankItemTable[found]).name .. " (" .. amount .. ").")
+		npc:talk(
+			0,
+			npc.name .. ": Here's your " .. Item(bankItemTable[found]).name .. " (" .. amount .. ")."
+		)
 	end
 end
 
@@ -3292,8 +3421,7 @@ function Player.withdrawAllNoConfirm(player, npc, itemName)
 		return
 	end
 
-	local bankItemTable, bankCountTable, bankOwnerTable, bankEngraveTable, bankTimerTable, bankItemTableNames =
-		player:bankItemsList(0)
+	local bankItemTable, bankCountTable, bankOwnerTable, bankEngraveTable, bankTimerTable, bankItemTableNames = player:bankItemsList(0)
 
 	local found = 0
 	local amount = 0
@@ -3342,10 +3470,7 @@ function Player.withdrawAllNoConfirm(player, npc, itemName)
 		--if hasAmount == 0 then player:popUp("Bug encountered. Contact TKR staff.") return end
 
 		if hasAmount >= Item(bankItemTable[found]).maxAmount then
-			player:sendMinitext(
-				"(" ..
-					Item(bankItemTable[found]).name .. "). You can't have more than (" .. Item(bankItemTable[found]).maxAmount .. ")."
-			)
+			player:sendMinitext("(" .. Item(bankItemTable[found]).name .. "). You can't have more than (" .. Item(bankItemTable[found]).maxAmount .. ").")
 			return
 		end
 
@@ -3354,13 +3479,24 @@ function Player.withdrawAllNoConfirm(player, npc, itemName)
 		end
 	end
 
-	if (player:hasSpace(bankItemTable[found], amount, bankOwnerTable[found], bankEngraveTable[found]) ~= true) then
+	if (player:hasSpace(
+		bankItemTable[found],
+		amount,
+		bankOwnerTable[found],
+		bankEngraveTable[found]
+	) ~= true) then
 		player:sendMinitext("You do not have enough space in your inventory to withdraw that")
 		return
 	end
 
-	local worked =
-		player:addItem(bankItemTable[found], amount, 0, bankOwnerTable[found], bankTimerTable[found], bankEngraveTable[found])
+	local worked = player:addItem(
+		bankItemTable[found],
+		amount,
+		0,
+		bankOwnerTable[found],
+		bankTimerTable[found],
+		bankEngraveTable[found]
+	)
 
 	if (worked == true) then
 		player:bankWithdraw(
@@ -3384,9 +3520,15 @@ function Player.withdrawAllNoConfirm(player, npc, itemName)
 	)
 
 	if amount == 1 then
-		npc:talk(0, npc.name .. ": Here's your " .. Item(bankItemTable[found]).name .. ".")
+		npc:talk(
+			0,
+			npc.name .. ": Here's your " .. Item(bankItemTable[found]).name .. "."
+		)
 	elseif amount > 1 then
-		npc:talk(0, npc.name .. ": Here's your " .. Item(bankItemTable[found]).name .. " (" .. amount .. ").")
+		npc:talk(
+			0,
+			npc.name .. ": Here's your " .. Item(bankItemTable[found]).name .. " (" .. amount .. ")."
+		)
 	end
 end
 
@@ -3399,7 +3541,10 @@ function Player.hasBankItem(player, npc, itemName)
 			return
 		end
 
-		npc:talk(0, npc.name .. ": You've entrusted me with " .. amount .. " coins.")
+		npc:talk(
+			0,
+			npc.name .. ": You've entrusted me with " .. amount .. " coins."
+		)
 
 		return
 	end
@@ -3416,8 +3561,7 @@ function Player.hasBankItem(player, npc, itemName)
 		return
 	end
 
-	local bankItemTable, bankCountTable, bankOwnerTable, bankEngraveTable, bankTimerTable, bankItemTableNames =
-		player:bankItemsList(0)
+	local bankItemTable, bankCountTable, bankOwnerTable, bankEngraveTable, bankTimerTable, bankItemTableNames = player:bankItemsList(0)
 
 	local found = 0
 	local counter = 0
@@ -3432,7 +3576,10 @@ function Player.hasBankItem(player, npc, itemName)
 	end
 
 	if (found == 0) then
-		npc:talk(0, npc.name .. ": You didn't give me any.." .. Item(itemName).name .. " to hold for you.")
+		npc:talk(
+			0,
+			npc.name .. ": You didn't give me any.." .. Item(itemName).name .. " to hold for you."
+		)
 		return
 	end
 
@@ -3444,8 +3591,7 @@ function Player.hasBankItem(player, npc, itemName)
 
 	npc:talk(
 		0,
-		npc.name ..
-			": Your " .. Item(bankItemTable[found]).name .. " -- I have " .. Tools.formatNumber(amount) .. " of yours."
+		npc.name .. ": Your " .. Item(bankItemTable[found]).name .. " -- I have " .. Tools.formatNumber(amount) .. " of yours."
 	)
 end
 
@@ -3531,16 +3677,7 @@ function Player.calcDPS(player, times)
 	local dps = Tools.formatNumber(Tools.round(damage / times, 0))
 	local avg = Tools.formatNumber(Tools.round(damage / hits, 0))
 
-	player:msg(
-		0,
-		"Hits: " ..
-			Tools.formatNumber(hits) ..
-				" (" ..
-					hitPercentage ..
-						"%) -- Minutes: " ..
-							minutes .. " -- Damage: " .. Tools.formatNumber(damage) .. " -- Avg: " .. avg .. " -- DPS: ==> " .. dps .. " <==",
-		player.ID
-	)
+	player:msg(0, "Hits: " .. Tools.formatNumber(hits) .. " (" .. hitPercentage .. "%) -- Minutes: " .. minutes .. " -- Damage: " .. Tools.formatNumber(damage) .. " -- Avg: " .. avg .. " -- DPS: ==> " .. dps .. " <==", player.ID)
 end
 
 function Player.canAction(player, dead, mount, disguise)
@@ -3652,7 +3789,10 @@ function Player.lookAtEquippedItem(player, target)
 	local dam = ""
 	local classReq = ""
 	local levelReq = "Level " .. block.level .. " Req"
-	local dura_pct = "(" .. string.format("%.0f", (floorItem.dura / block.maxDura * 100)) .. "%)"
+	local dura_pct = "(" .. string.format(
+		"%.0f",
+		(floorItem.dura / block.maxDura * 100)
+	) .. "%)"
 	local durability = "Durability: " .. floorItem.dura .. "/" .. block.maxDura .. " " .. dura_pct
 	local stats = ""
 
@@ -3752,9 +3892,7 @@ function Player.lookAtEquippedItem(player, target)
 
 	------------
 
-	str =
-		block.name ..
-		"\n\n" .. durability .. "\nDamage " .. dam .. "\n" .. stats .. "\n    " .. classReq .. "    " .. levelReq
+	str = block.name .. "\n\n" .. durability .. "\nDamage " .. dam .. "\n" .. stats .. "\n    " .. classReq .. "    " .. levelReq
 
 	player:dialogSeq({t, str}, 0)
 
@@ -3788,7 +3926,10 @@ function Player.lookAtItem(player, block)
 	local dam = ""
 	local classReq = ""
 	local levelReq = "Level " .. block.level .. " Req"
-	local dura_pct = "(" .. string.format("%.0f", (floorItem.dura / block.maxDura * 100)) .. "%)"
+	local dura_pct = "(" .. string.format(
+		"%.0f",
+		(floorItem.dura / block.maxDura * 100)
+	) .. "%)"
 	local durability = "Durability: " .. floorItem.dura .. "/" .. block.maxDura .. " " .. dura_pct
 	local stats = ""
 
@@ -3888,9 +4029,7 @@ function Player.lookAtItem(player, block)
 
 	------------
 
-	str =
-		block.name ..
-		"\n\n" .. durability .. "\nDamage " .. dam .. "\n" .. stats .. "\n    " .. classReq .. "    " .. levelReq
+	str = block.name .. "\n\n" .. durability .. "\nDamage " .. dam .. "\n" .. stats .. "\n    " .. classReq .. "    " .. levelReq
 
 	player:dialogSeq({t, str}, 0)
 
@@ -4045,7 +4184,12 @@ function Player.deathPileDrop(player)
 		end
 	end
 
-	local groundItemsToCurse = player:getObjectsInCell(player.m, player.x, player.y, BL_ITEM)
+	local groundItemsToCurse = player:getObjectsInCell(
+		player.m,
+		player.x,
+		player.y,
+		BL_ITEM
+	)
 	if #groundItemsToCurse > 0 then
 		for i = 1, #groundItemsToCurse do
 			groundItemsToCurse[i].looters = {player.ID}
@@ -4134,7 +4278,7 @@ function Player.giveXPStacked(player, amount, bonus)
 
 		if (player.level >= 5 and player.class == 0) then
 			player:sendMinitext("You cannot increase your level without choosing a path first.")
-			player:sendMinitext('Please visit your Kingdom\'s tutor or press F1 and select "Choose a path" from the list.')
+			player:sendMinitext("Please visit your Kingdom's tutor or press F1 and select \"Choose a path\" from the list.")
 			return
 		end
 
@@ -4200,7 +4344,11 @@ function Player.recoverDeathPile(player)
 			elseif dptable[i].id > 3 then
 				--If it is not coins
 				if player:isYours(dptable[i]) then
-					characterLog.pickUpWrite(player, dptable[i], dptable[i].amount)
+					characterLog.pickUpWrite(
+						player,
+						dptable[i],
+						dptable[i].amount
+					)
 					player:pickUp(dptable[i].ID)
 				end
 			end
@@ -4444,12 +4592,14 @@ Player.returnFunc = function(player)
 			-- sanhae
 			player:warp(1122, 2, 5)
 		elseif player.registry["home"] == 11 then
-			-- haggard mate tavern
 			--hausson
 			player:warp(1027, 4, 5)
+
+			-- haggard mate tavern
 		else
-			-- This is the default location (Wilderness by Rotah, or a City Inn)
 			player:returnToInn()
+
+			-- This is the default location (Wilderness by Rotah, or a City Inn)
 		end
 	end
 end
@@ -4479,56 +4629,64 @@ Player.returnToInn = function(player)
 		-- Kugnae
 		local random = math.random(1, 3)
 		if random == 1 then
-			-- Ginger Tavern
 			player:warp(38, 4, 5)
+
+			-- Ginger Tavern
 		elseif random == 2 then
-			-- Bamboo Tavern
 			player:warp(37, 4, 5)
+
+			-- Bamboo Tavern
 		elseif random == 3 then
 			player:warp(2, 4, 5)
 
-		-- Walsuk Tavern
+			-- Walsuk Tavern
 		end
 	elseif (country == 2) then
 		-- Buya
 		local random = math.random(1, 3)
 		if random == 1 then
-			-- Yunsil Tavern
 			player:warp(362, 4, 5)
+
+			-- Yunsil Tavern
 		elseif random == 2 then
-			-- Spring Tavern
 			player:warp(332, 4, 5)
+
+			-- Spring Tavern
 		elseif random == 3 then
 			player:warp(361, 4, 5)
 
-		-- Pepper Tavern
+			-- Pepper Tavern
 		end
 	elseif (country == 3) then
 		-- Nagnang
 		local random = math.random(1, 5)
 
 		if random == 1 then
-			-- Tavern of Fire
 			player:warp(2501, 4, 6)
+
+			-- Tavern of Fire
 		elseif random == 2 then
-			-- Tavern of Water
 			player:warp(2502, 4, 6)
+
+			-- Tavern of Water
 		elseif random == 3 then
-			-- Tavern of Wind
 			player:warp(2503, 4, 6)
+
+			-- Tavern of Wind
 		elseif random == 4 then
-			-- Tavern of Wood
 			player:warp(2504, 4, 6)
+
+			-- Tavern of Wood
 		elseif random == 5 then
 			player:warp(2505, 4, 6)
 
-		-- Tavern of Metal
+			-- Tavern of Metal
 		end
 	elseif (country == 4) then
 		-- Han
 		player:warp(38, 4, 5)
 
-	-- Ginger Tavern
+		-- Ginger Tavern
 	end
 end
 
@@ -4886,8 +5044,7 @@ function Player.retrieveBankItem(player, itemToCheck)
 		return nil
 	end
 
-	local bankItemTable, bankCountTable, bankOwnerTable, bankEngraveTable, bankTimerTable, bankItemTableNames =
-		player:bankItemsList(0)
+	local bankItemTable, bankCountTable, bankOwnerTable, bankEngraveTable, bankTimerTable, bankItemTableNames = player:bankItemsList(0)
 
 	if (next(bankItemTable) == 0) then
 		return nil
@@ -4989,11 +5146,10 @@ function Player.regen(player)
 		return
 	end
 
-	if
-		(player.timerTick % 25 == 0 and
-			(string.match(player.mapTitle, "Inn") ~= nil or string.match(player.mapTitle, "Tavern") ~= nil)) or
-			player.timerTick % 50 == 0
-	 then
+	if (player.timerTick % 25 == 0 and (string.match(player.mapTitle, "Inn") ~= nil or string.match(
+		player.mapTitle,
+		"Tavern"
+	) ~= nil)) or player.timerTick % 50 == 0 then
 		-- 12.5s & inn/tavern or 25s
 		local regen = player.healing
 
@@ -5004,10 +5160,10 @@ function Player.regen(player)
 		local health = math.ceil(player.maxHealth * 0.02 * (1 + regen / 100))
 		local magic = math.ceil(player.maxMagic * 0.02)
 
-		if
-			string.match(player.mapTitle, "Inn") ~= nil or
-				string.match(player.mapTitle, "Tavern") ~= nil and math.random(1, 20) == 1
-		 then
+		if string.match(player.mapTitle, "Inn") ~= nil or string.match(
+			player.mapTitle,
+			"Tavern"
+		) ~= nil and math.random(1, 20) == 1 then
 			player:sendMinitext("Your wounds heal quickly while you rest in the Inn.")
 		end
 
@@ -5119,7 +5275,11 @@ Player.eventCaveLevelPrompt = function(player, maps, x, y)
 	if #opts == 1 then
 		player:warp(maps[level], x, y)
 	else
-		local choice = player:menuSeq("You see two paths, which do you pick?", opts, {})
+		local choice = player:menuSeq(
+			"You see two paths, which do you pick?",
+			opts,
+			{}
+		)
 
 		if choice == 1 then
 			player:warp(maps[level], x, y)
@@ -5143,10 +5303,7 @@ Player.getEventCaveLevel = function(player)
 			if (160000 - player.baseHealth) < 10000 or (80000 - player.baseMagic) < 5000 then
 				alternateLevel = 4
 			end
-		elseif
-			(player.baseHealth >= 16000 or player.baseMagic >= 80000) and player.baseHealth < 640000 and
-				player.baseMagic < 320000
-		 then
+		elseif (player.baseHealth >= 16000 or player.baseMagic >= 80000) and player.baseHealth < 640000 and player.baseMagic < 320000 then
 			level = 4
 			if (640000 - player.baseHealth) < 10000 or (320000 - player.baseMagic) < 5000 then
 				alternateLevel = 5
@@ -5189,6 +5346,11 @@ Player.alts = function(player, distance)
 	local sortedips = sort_relative(ips, ips)
 
 	for i = 1, #ips do
-		player:talkSelf(0, "" .. sortedips[i] .. " " .. sortednames[i] .. " acctid: " .. sortedaccountid[i])
+		player:talkSelf(
+			0,
+			"" .. sortedips[i] .. " " .. sortednames[i] .. " acctid: " .. sortedaccountid[
+				i
+			]
+		)
 	end
 end

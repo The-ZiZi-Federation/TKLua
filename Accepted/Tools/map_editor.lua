@@ -2,6 +2,7 @@ map_editor = {
 	cast = function(player)
 		map_editor.enter(player)
 	end,
+
 	click = function(player, npc)
 		player.dialogType = 0
 		local opts = {}
@@ -24,7 +25,10 @@ map_editor = {
 		elseif menu == "Quit Editor" then
 			map_editor.quit(player)
 		elseif menu == "Save Map" then
-			confirm = player:menuString(txt .. "\nAre you sure to save change in map?", {"Yes", "No"})
+			confirm = player:menuString(
+				txt .. "\nAre you sure to save change in map?",
+				{"Yes", "No"}
+			)
 			if confirm == "Yes" then
 				saveMap(player.m, "../rtkmaps/Accepted/" .. player.mapfile)
 				player:sendMinitext("Map saved!")
@@ -33,16 +37,20 @@ map_editor = {
 					if gm[i].gmLevel > 0 then
 						gm[i]:msg(
 							4,
-							player.name ..
-								" has made changes to " .. player.mapTitle .. " map (Id: " .. player.m .. ") and saved the map file!",
+							player.name .. " has made changes to " .. player.mapTitle .. " map (Id: " .. player.m .. ") and saved the map file!",
 							gm[i].ID
 						)
-						gm[i]:msg(4, "[SAVED]: " .. player.mapTitle .. " to " .. player.mapfile .. "", gm[i].ID)
+						gm[i]:msg(
+							4,
+							"[SAVED]: " .. player.mapTitle .. " to " .. player.mapfile .. "",
+							gm[i].ID
+						)
 					end
 				end
 			end
 		end
 	end,
+
 	enter = function(player)
 		local spells = player:getSpells()
 		local add = {
@@ -82,6 +90,7 @@ map_editor = {
 		player.registry["map_editor"] = 1
 		player:sendMinitext("Active Map Editor")
 	end,
+
 	quit = function(player)
 		cspells(player)
 		for i = 1, 52 do
@@ -115,11 +124,17 @@ tile = {
 		local tile = getTile(m, x, y)
 		if type == "copy" then
 			player.registry["saved_tile"] = tile
-			player:talkSelf(0, "<Saved> Tile : " .. player.registry["saved_tile"] .. "")
+			player:talkSelf(
+				0,
+				"<Saved> Tile : " .. player.registry["saved_tile"] .. ""
+			)
 			return
 		elseif type == "paste" then
 			setTile(m, x, y, player.registry["saved_tile"])
-			player:talkSelf(0, "<Pasted> Tile : " .. player.registry["saved_tile"] .. "")
+			player:talkSelf(
+				0,
+				"<Pasted> Tile : " .. player.registry["saved_tile"] .. ""
+			)
 			return
 		elseif type == "next" then
 			if tile + 1 <= 47919 then
@@ -138,7 +153,7 @@ tile = {
 			player:talkSelf(0, "Tile : " .. tile)
 		end
 		player:selfAnimationXY(player.ID, 235, x, y)
-	end
+	end,
 }
 
 object = {
@@ -160,11 +175,17 @@ object = {
 
 		if type == "copy" then
 			player.registry["saved_obj"] = obj
-			player:talkSelf(0, "<Saved> Object : " .. player.registry["saved_obj"] .. "")
+			player:talkSelf(
+				0,
+				"<Saved> Object : " .. player.registry["saved_obj"] .. ""
+			)
 			return
 		elseif type == "paste" then
 			setObject(m, x, y, player.registry["saved_obj"])
-			player:talkSelf(0, "<Pasted> Object : " .. player.registry["saved_obj"] .. "")
+			player:talkSelf(
+				0,
+				"<Pasted> Object : " .. player.registry["saved_obj"] .. ""
+			)
 			return
 		elseif type == "next" then
 			if obj + 1 <= 19542 then
@@ -183,7 +204,7 @@ object = {
 			player:talkSelf(0, "Object: " .. obj)
 		end
 		player:selfAnimationXY(player.ID, 228, x, y)
-	end
+	end,
 }
 
 tile_next = {
@@ -272,7 +293,10 @@ tile_copy = {
 		end
 		local tile = getTile(m, x, y)
 		player.registry["saved_tile"] = tile
-		player:talkSelf(0, "<Saved> Tile : " .. player.registry["saved_tile"] .. "")
+		player:talkSelf(
+			0,
+			"<Saved> Tile : " .. player.registry["saved_tile"] .. ""
+		)
 	end
 }
 
@@ -293,7 +317,10 @@ tile_paste = {
 		end
 		local tile = getTile(m, x, y)
 		setTile(m, x, y, player.registry["saved_tile"])
-		player:talkSelf(0, "<Pasted> Tile : " .. player.registry["saved_tile"] .. "")
+		player:talkSelf(
+			0,
+			"<Pasted> Tile : " .. player.registry["saved_tile"] .. ""
+		)
 	end
 }
 
@@ -431,6 +458,7 @@ toggle_highlight_pass = {
 			player:setDuration("toggle_highlight_pass", 100000000)
 		end
 	end,
+
 	while_cast = function(player)
 		local m = player.m
 		local xmax = player.xmax
@@ -459,11 +487,14 @@ editor_save = {
 			if gm[i].gmLevel > 0 then
 				gm[i]:msg(
 					4,
-					player.name ..
-						" has made changes to " .. player.mapTitle .. " map (Id: " .. player.m .. ") and saved the map file!",
+					player.name .. " has made changes to " .. player.mapTitle .. " map (Id: " .. player.m .. ") and saved the map file!",
 					gm[i].ID
 				)
-				gm[i]:msg(4, "[SAVED]: " .. player.mapTitle .. " to " .. player.mapfile .. "", gm[i].ID)
+				gm[i]:msg(
+					4,
+					"[SAVED]: " .. player.mapTitle .. " to " .. player.mapfile .. "",
+					gm[i].ID
+				)
 			end
 		end
 	end

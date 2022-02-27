@@ -33,12 +33,14 @@ summon_healing_totem = {
 			summon_healing_totem.spawn(player)
 		end
 	end,
+
 	spawn = function(player)
 		player:spawn(463, player.x, player.y, 1)
 
 		-- spawn totem
 		player:setAether("healing_totem", 120000)
 	end,
+
 	check = function(player)
 		local mobs = player:getObjectsInSameMap(BL_MOB)
 
@@ -48,6 +50,7 @@ summon_healing_totem = {
 			end
 		end
 	end,
+
 	delete = function(player)
 		local mobs = player:getObjectsInSameMap(BL_MOB)
 
@@ -94,6 +97,7 @@ healing_totem_aura = {
 			level = 6
 		end
 	end,
+
 	while_cast = function(mob)
 		local level = Player(mob.owner).registry["healing_totem_level"]
 
@@ -116,6 +120,7 @@ healing_totem_aura = {
 			end
 		end
 	end,
+
 	uncast = function(mob)
 		mob:flushDuration()
 

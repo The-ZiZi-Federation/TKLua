@@ -7,85 +7,78 @@ onWalk = function(player)
 	end
 end
 
-use =
-	async(
-	function(player)
-	end
-)
+use = async(function(player)
+end)
 
-useBeardItem =
-	async(
-	function(player)
-		local item = player:getInventoryItem(player.invSlot)
+useBeardItem = async(function(player)
+	local item = player:getInventoryItem(player.invSlot)
 
-		local t = {graphic = item.icon, color = item.iconC}
-		player.npcGraphic = t.graphic
-		player.npcColor = t.color
-		player.dialogType = 0
+	local t = {graphic = item.icon, color = item.iconC}
+	player.npcGraphic = t.graphic
+	player.npcColor = t.color
+	player.dialogType = 0
 
-		if player:getEquippedItem(EQ_FACEACCTWO) ~= nil then
-			-- slot 14
-			player:dialogSeq(
-				{
-					t,
-					"You will need to shave your beard before you can get a new style!"
-				},
-				0
-			)
-			return
-		end
-
-		local confirm =
-			player:menuSeq(
-			"Are you sure you want to equip the beard? This is a one time operation and the item disappears upon use.",
-			{"Yes, add my beard.", "No, nevermind."},
-			{}
+	if player:getEquippedItem(EQ_FACEACCTWO) ~= nil then
+		-- slot 14
+		player:dialogSeq(
+			{
+				t,
+				"You will need to shave your beard before you can get a new style!"
+			},
+			0
 		)
-
-		if confirm == 1 then
-			if player:hasItem(item.yname, 1) ~= true then
-				return
-			end
-
-			player:forceEquip(item.id, EQ_FACEACCTWO)
-
-			player:removeItem(item.yname, 1)
-
-			player:updateState()
-
-			player:dialogSeq({t, "I hope you enjoy your new beard."}, 0)
-		end
+		return
 	end
-)
 
-useHairDye =
-	async(
-	function(player)
-		local item = player:getInventoryItem(player.invSlot)
+	local confirm = player:menuSeq(
+		"Are you sure you want to equip the beard? This is a one time operation and the item disappears upon use.",
+		{"Yes, add my beard.", "No, nevermind."},
+		{}
+	)
 
-		local t = {graphic = item.icon, color = item.iconC}
-		player.npcGraphic = t.graphic
-		player.npcColor = t.color
-		player.dialogType = 0
-
-		local confirm =
-			player:menuSeq("Are you sure you want to apply " .. item.name .. " to your hair?", {"Yes, do it.", "Nevermind."}, {})
-
-		if confirm == 1 then
-			if player:hasItem(item.yname, 1) ~= true then
-				return
-			end
-
-			player.hairColor = item.lookC
-			player:updateState()
-
-			player:removeItem(item.yname, 1, 9)
-
-			player:dialogSeq({t, "I hope you enjoy your new hair dye!"}, 0)
+	if confirm == 1 then
+		if player:hasItem(item.yname, 1) ~= true then
 			return
 		end
+
+		player:forceEquip(item.id, EQ_FACEACCTWO)
+
+		player:removeItem(item.yname, 1)
+
+		player:updateState()
+
+		player:dialogSeq({t, "I hope you enjoy your new beard."}, 0)
 	end
-)
+end)
+
+useHairDye = async(function(player)
+	local item = player:getInventoryItem(player.invSlot)
+
+	local t = {graphic = item.icon, color = item.iconC}
+	player.npcGraphic = t.graphic
+	player.npcColor = t.color
+	player.dialogType = 0
+
+	local confirm = player:menuSeq(
+		"Are you sure you want to apply " .. item.name .. " to your hair?",
+		{"Yes, do it.", "Nevermind."},
+		{}
+	)
+
+	if confirm == 1 then
+		if player:hasItem(item.yname, 1) ~= true then
+			return
+		end
+
+		player.hairColor = item.lookC
+		player:updateState()
+
+		player:removeItem(item.yname, 1, 9)
+
+		player:dialogSeq({t, "I hope you enjoy your new hair dye!"}, 0)
+		return
+	end
+end)
 
 useSetItem = function(player)
 	local item = player:getInventoryItem(player.invSlot)
@@ -105,70 +98,69 @@ useSetItem = function(player)
 	end
 
 	for i = 1, #items do
-		player:talkSelf(0, "" .. Item(items[i]).name .. " amount: " .. amounts[i])
+		player:talkSelf(
+			0,
+			"" .. Item(items[i]).name .. " amount: " .. amounts[i]
+		)
 	end
 end
 
-useSkinItem =
-	async(
-	function(player)
-		local item = player:getInventoryItem(player.invSlot)
+useSkinItem = async(function(player)
+	local item = player:getInventoryItem(player.invSlot)
 
-		if item.skinnable >= 3 and item.skinnable <= 17 then
-			-- skins... the skinnable attribute is the equipment slot that it will work for
+	if item.skinnable >= 3 and item.skinnable <= 17 then
+		-- skins... the skinnable attribute is the equipment slot that it will work for
 
-			local t = {graphic = item.icon, color = item.iconC}
-			player.npcGraphic = t.graphic
-			player.npcColor = t.color
-			player.dialogType = 0
+		local t = {graphic = item.icon, color = item.iconC}
+		player.npcGraphic = t.graphic
+		player.npcColor = t.color
+		player.dialogType = 0
 
-			local itemType = item.skinnable - 3
+		local itemType = item.skinnable - 3
 
-			local equip = player:getEquippedItem(itemType)
+		local equip = player:getEquippedItem(itemType)
 
-			if equip == nil then
-				player:dialogSeq(
-					{
-						t,
-						"You are not wearing the base item type the skin is meant for."
-					},
-					0
-				)
+		if equip == nil then
+			player:dialogSeq(
+				{
+					t,
+					"You are not wearing the base item type the skin is meant for."
+				},
+				0
+			)
+			return
+		end
+
+		local name = equip.name
+
+		if equip.realName ~= "" then
+			-- engrave
+			name = equip.realName .. " (" .. equip.name .. ")"
+		end
+
+		local confirm = player:menuSeq(
+			"Are you sure you want to apply this skin to your " .. name .. "?",
+			{"Yes, do it.", "Nevermind."},
+			{}
+		)
+
+		if confirm == 1 then
+			if player:hasItem(item.name, 1) ~= true then
 				return
 			end
 
-			local name = equip.name
+			equip.customLook = item.look
+			equip.customLookColor = item.lookC
+			equip.customIcon = item.icon - 49152
+			equip.customIconColor = item.iconC
+			player:removeItem(item.name, 1)
 
-			if equip.realName ~= "" then
-				-- engrave
-				name = equip.realName .. " (" .. equip.name .. ")"
-			end
-
-			local confirm =
-				player:menuSeq(
-				"Are you sure you want to apply this skin to your " .. name .. "?",
-				{"Yes, do it.", "Nevermind."},
-				{}
-			)
-
-			if confirm == 1 then
-				if player:hasItem(item.name, 1) ~= true then
-					return
-				end
-
-				equip.customLook = item.look
-				equip.customLookColor = item.lookC
-				equip.customIcon = item.icon - 49152
-				equip.customIconColor = item.iconC
-				player:removeItem(item.name, 1)
-
-				player:updateState()
-			end
-
-			return
+			player:updateState()
 		end
+
+		return
 	end
-)
+end)
 
 onMountItem = function(player)
 	local item = player:getInventoryItem(player.invSlot)
@@ -298,18 +290,9 @@ onLook = function(player, block)
 
 	if player.gmLevel > 0 then
 		if block.blType == BL_PC then
-			player:sendMinitext(
-				block.name ..
-					" \a (" .. ((block.health / block.maxHealth) * 100) .. "%) \a (IP: " .. block.ipaddress .. ") \a ID: " .. block.ID
-			)
+			player:sendMinitext(block.name .. " \a (" .. ((block.health / block.maxHealth) * 100) .. "%) \a (IP: " .. block.ipaddress .. ") \a ID: " .. block.ID)
 		elseif block.blType == BL_MOB then
-			player:sendMinitext(
-				block.name ..
-					" (" ..
-						block.yname ..
-							") \a ID: " ..
-								block.mobID .. " \a Lvl: " .. block.level .. " \a Vita: " .. block.health .. " \a AC: " .. block.armor
-			)
+			player:sendMinitext(block.name .. " (" .. block.yname .. ") \a ID: " .. block.mobID .. " \a Lvl: " .. block.level .. " \a Vita: " .. block.health .. " \a AC: " .. block.armor)
 			player:sendMinitext("Exp: " .. Tools.formatNumber(block.experience))
 		elseif block.blType == BL_NPC then
 			player:sendMinitext(block.name .. " (" .. block.yname .. ") \a ID: " .. block.id)
@@ -324,13 +307,9 @@ onLook = function(player, block)
 				local owner = FloorItem(block.ID).owner
 
 				if realName ~= "" then
-					player:sendMinitext(
-						realName .. " (" .. block.yname .. ") (" .. ((dura / block.maxDura) * 100) .. "%) \a Amt: " .. block.amount
-					)
+					player:sendMinitext(realName .. " (" .. block.yname .. ") (" .. ((dura / block.maxDura) * 100) .. "%) \a Amt: " .. block.amount)
 				else
-					player:sendMinitext(
-						block.name .. " (" .. block.yname .. ") (" .. ((dura / block.maxDura) * 100) .. "%) \a Amt: " .. block.amount
-					)
+					player:sendMinitext(block.name .. " (" .. block.yname .. ") (" .. ((dura / block.maxDura) * 100) .. "%) \a Amt: " .. block.amount)
 				end
 			end
 		end

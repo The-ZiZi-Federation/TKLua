@@ -8,11 +8,13 @@ bomber_war_bomb2 = {
 			player:sendAnimationXY(361, x, y)
 		end
 	end,
+
 	uncast = function(player)
 		if player.m == 15050 then
 			bomber_war_bomb2.explode(player)
 		end
 	end,
+
 	explode = function(player)
 		bomber_war_bomb2.breakBoxes(player)
 		bomber_war_bomb2.kill(player)
@@ -20,6 +22,7 @@ bomber_war_bomb2 = {
 		bomber_war_bomb2.cleanup(player)
 		BomberWarNpc.winnerCheck()
 	end,
+
 	animation = function(player)
 		local m = 15050
 		local x = core.gameRegistry["bombx2" .. player.name]
@@ -197,6 +200,7 @@ bomber_war_bomb2 = {
 			end
 		end
 	end,
+
 	kill = function(player)
 		local m = 15050
 		local x = core.gameRegistry["bombx2" .. player.name]
@@ -247,12 +251,24 @@ bomber_war_bomb2 = {
 						target1[i].state = 1
 						target1[i]:sendStatus()
 						target1[i]:updateState()
-						target1[i]:sendAnimationXY(94, target1[i].x, target1[i].y)
+						target1[i]:sendAnimationXY(
+							94,
+							target1[i].x,
+							target1[i].y
+						)
 
 						if target1[i].registry["bomber_war_team"] == 1 then
-							target1[i]:warp(m, math.random(1, 34), math.random(1, 2))
+							target1[i]:warp(
+								m,
+								math.random(1, 34),
+								math.random(1, 2)
+							)
 						elseif target1[i].registry["bomber_war_team"] == 2 then
-							target1[i]:warp(m, math.random(1, 34), math.random(39, 40))
+							target1[i]:warp(
+								m,
+								math.random(1, 34),
+								math.random(39, 40)
+							)
 						end
 					end
 				end
@@ -264,11 +280,23 @@ bomber_war_bomb2 = {
 							target1a[i].state = 1
 							target1a[i]:sendStatus()
 							target1a[i]:updateState()
-							target1a[i]:sendAnimationXY(94, target1a[i].x, target1a[i].y)
+							target1a[i]:sendAnimationXY(
+								94,
+								target1a[i].x,
+								target1a[i].y
+							)
 							if target1a[i].registry["bomber_war_team"] == 1 then
-								target1a[i]:warp(m, math.random(1, 34), math.random(1, 2))
+								target1a[i]:warp(
+									m,
+									math.random(1, 34),
+									math.random(1, 2)
+								)
 							elseif target1a[i].registry["bomber_war_team"] == 2 then
-								target1a[i]:warp(m, math.random(1, 34), math.random(39, 40))
+								target1a[i]:warp(
+									m,
+									math.random(1, 34),
+									math.random(39, 40)
+								)
 							end
 						end
 					end
@@ -281,11 +309,23 @@ bomber_war_bomb2 = {
 							target1b[i].state = 1
 							target1b[i]:sendStatus()
 							target1b[i]:updateState()
-							target1b[i]:sendAnimationXY(94, target1b[i].x, target1b[i].y)
+							target1b[i]:sendAnimationXY(
+								94,
+								target1b[i].x,
+								target1b[i].y
+							)
 							if target1b[i].registry["bomber_war_team"] == 1 then
-								target1b[i]:warp(m, math.random(1, 34), math.random(1, 2))
+								target1b[i]:warp(
+									m,
+									math.random(1, 34),
+									math.random(1, 2)
+								)
 							elseif target1b[i].registry["bomber_war_team"] == 2 then
-								target1b[i]:warp(m, math.random(1, 34), math.random(39, 40))
+								target1b[i]:warp(
+									m,
+									math.random(1, 34),
+									math.random(39, 40)
+								)
 							end
 						end
 					end
@@ -298,11 +338,23 @@ bomber_war_bomb2 = {
 							target1c[i].state = 1
 							target1c[i]:sendStatus()
 							target1c[i]:updateState()
-							target1c[i]:sendAnimationXY(94, target1c[i].x, target1c[i].y)
+							target1c[i]:sendAnimationXY(
+								94,
+								target1c[i].x,
+								target1c[i].y
+							)
 							if target1c[i].registry["bomber_war_team"] == 1 then
-								target1c[i]:warp(m, math.random(1, 34), math.random(1, 2))
+								target1c[i]:warp(
+									m,
+									math.random(1, 34),
+									math.random(1, 2)
+								)
 							elseif target1c[i].registry["bomber_war_team"] == 2 then
-								target1c[i]:warp(m, math.random(1, 34), math.random(39, 40))
+								target1c[i]:warp(
+									m,
+									math.random(1, 34),
+									math.random(39, 40)
+								)
 							end
 						end
 					end
@@ -316,11 +368,23 @@ bomber_war_bomb2 = {
 						target2[i].state = 1
 						target2[i]:sendStatus()
 						target2[i]:updateState()
-						target2[i]:sendAnimationXY(94, target2[i].x, target2[i].y)
+						target2[i]:sendAnimationXY(
+							94,
+							target2[i].x,
+							target2[i].y
+						)
 						if target2[i].registry["bomber_war_team"] == 1 then
-							target2[i]:warp(m, math.random(1, 34), math.random(1, 2))
+							target2[i]:warp(
+								m,
+								math.random(1, 34),
+								math.random(1, 2)
+							)
 						elseif target2[i].registry["bomber_war_team"] == 2 then
-							target2[i]:warp(m, math.random(1, 34), math.random(39, 40))
+							target2[i]:warp(
+								m,
+								math.random(1, 34),
+								math.random(39, 40)
+							)
 						end
 					end
 				end
@@ -332,11 +396,23 @@ bomber_war_bomb2 = {
 							target2a[i].state = 1
 							target2a[i]:sendStatus()
 							target2a[i]:updateState()
-							target2a[i]:sendAnimationXY(94, target2a[i].x, target2a[i].y)
+							target2a[i]:sendAnimationXY(
+								94,
+								target2a[i].x,
+								target2a[i].y
+							)
 							if target2a[i].registry["bomber_war_team"] == 1 then
-								target2a[i]:warp(m, math.random(1, 34), math.random(1, 2))
+								target2a[i]:warp(
+									m,
+									math.random(1, 34),
+									math.random(1, 2)
+								)
 							elseif target2a[i].registry["bomber_war_team"] == 2 then
-								target2a[i]:warp(m, math.random(1, 34), math.random(39, 40))
+								target2a[i]:warp(
+									m,
+									math.random(1, 34),
+									math.random(39, 40)
+								)
 							end
 						end
 					end
@@ -349,11 +425,23 @@ bomber_war_bomb2 = {
 							target2b[i].state = 1
 							target2b[i]:sendStatus()
 							target2b[i]:updateState()
-							target2b[i]:sendAnimationXY(94, target2b[i].x, target2b[i].y)
+							target2b[i]:sendAnimationXY(
+								94,
+								target2b[i].x,
+								target2b[i].y
+							)
 							if target2b[i].registry["bomber_war_team"] == 1 then
-								target2b[i]:warp(m, math.random(1, 34), math.random(1, 2))
+								target2b[i]:warp(
+									m,
+									math.random(1, 34),
+									math.random(1, 2)
+								)
 							elseif target2b[i].registry["bomber_war_team"] == 2 then
-								target2b[i]:warp(m, math.random(1, 34), math.random(39, 40))
+								target2b[i]:warp(
+									m,
+									math.random(1, 34),
+									math.random(39, 40)
+								)
 							end
 						end
 					end
@@ -366,11 +454,23 @@ bomber_war_bomb2 = {
 							target2c[i].state = 1
 							target2c[i]:sendStatus()
 							target2c[i]:updateState()
-							target2c[i]:sendAnimationXY(94, target2c[i].x, target2c[i].y)
+							target2c[i]:sendAnimationXY(
+								94,
+								target2c[i].x,
+								target2c[i].y
+							)
 							if target2c[i].registry["bomber_war_team"] == 1 then
-								target2c[i]:warp(m, math.random(1, 34), math.random(1, 2))
+								target2c[i]:warp(
+									m,
+									math.random(1, 34),
+									math.random(1, 2)
+								)
 							elseif target2c[i].registry["bomber_war_team"] == 2 then
-								target2c[i]:warp(m, math.random(1, 34), math.random(39, 40))
+								target2c[i]:warp(
+									m,
+									math.random(1, 34),
+									math.random(39, 40)
+								)
 							end
 						end
 					end
@@ -384,11 +484,23 @@ bomber_war_bomb2 = {
 						target3[i].state = 1
 						target3[i]:sendStatus()
 						target3[i]:updateState()
-						target3[i]:sendAnimationXY(94, target3[i].x, target3[i].y)
+						target3[i]:sendAnimationXY(
+							94,
+							target3[i].x,
+							target3[i].y
+						)
 						if target3[i].registry["bomber_war_team"] == 1 then
-							target3[i]:warp(m, math.random(1, 34), math.random(1, 2))
+							target3[i]:warp(
+								m,
+								math.random(1, 34),
+								math.random(1, 2)
+							)
 						elseif target3[i].registry["bomber_war_team"] == 2 then
-							target3[i]:warp(m, math.random(1, 34), math.random(39, 40))
+							target3[i]:warp(
+								m,
+								math.random(1, 34),
+								math.random(39, 40)
+							)
 						end
 					end
 				end
@@ -400,11 +512,23 @@ bomber_war_bomb2 = {
 							target3a[i].state = 1
 							target3a[i]:sendStatus()
 							target3a[i]:updateState()
-							target3a[i]:sendAnimationXY(94, target3a[i].x, target3a[i].y)
+							target3a[i]:sendAnimationXY(
+								94,
+								target3a[i].x,
+								target3a[i].y
+							)
 							if target3a[i].registry["bomber_war_team"] == 1 then
-								target3a[i]:warp(m, math.random(1, 34), math.random(1, 2))
+								target3a[i]:warp(
+									m,
+									math.random(1, 34),
+									math.random(1, 2)
+								)
 							elseif target3a[i].registry["bomber_war_team"] == 2 then
-								target3a[i]:warp(m, math.random(1, 34), math.random(39, 40))
+								target3a[i]:warp(
+									m,
+									math.random(1, 34),
+									math.random(39, 40)
+								)
 							end
 						end
 					end
@@ -417,11 +541,23 @@ bomber_war_bomb2 = {
 							target3b[i].state = 1
 							target3b[i]:sendStatus()
 							target3b[i]:updateState()
-							target3b[i]:sendAnimationXY(94, target3b[i].x, target3b[i].y)
+							target3b[i]:sendAnimationXY(
+								94,
+								target3b[i].x,
+								target3b[i].y
+							)
 							if target3b[i].registry["bomber_war_team"] == 1 then
-								target3b[i]:warp(m, math.random(1, 34), math.random(1, 2))
+								target3b[i]:warp(
+									m,
+									math.random(1, 34),
+									math.random(1, 2)
+								)
 							elseif target3b[i].registry["bomber_war_team"] == 2 then
-								target3b[i]:warp(m, math.random(1, 34), math.random(39, 40))
+								target3b[i]:warp(
+									m,
+									math.random(1, 34),
+									math.random(39, 40)
+								)
 							end
 						end
 					end
@@ -434,11 +570,23 @@ bomber_war_bomb2 = {
 							target3c[i].state = 1
 							target3c[i]:sendStatus()
 							target3c[i]:updateState()
-							target3c[i]:sendAnimationXY(94, target3c[i].x, target3c[i].y)
+							target3c[i]:sendAnimationXY(
+								94,
+								target3c[i].x,
+								target3c[i].y
+							)
 							if target3c[i].registry["bomber_war_team"] == 1 then
-								target3c[i]:warp(m, math.random(1, 34), math.random(1, 2))
+								target3c[i]:warp(
+									m,
+									math.random(1, 34),
+									math.random(1, 2)
+								)
 							elseif target3c[i].registry["bomber_war_team"] == 2 then
-								target3c[i]:warp(m, math.random(1, 34), math.random(39, 40))
+								target3c[i]:warp(
+									m,
+									math.random(1, 34),
+									math.random(39, 40)
+								)
 							end
 						end
 					end
@@ -452,11 +600,23 @@ bomber_war_bomb2 = {
 						target4[i].state = 1
 						target4[i]:sendStatus()
 						target4[i]:updateState()
-						target4[i]:sendAnimationXY(94, target4[i].x, target4[i].y)
+						target4[i]:sendAnimationXY(
+							94,
+							target4[i].x,
+							target4[i].y
+						)
 						if target4[i].registry["bomber_war_team"] == 1 then
-							target4[i]:warp(m, math.random(1, 34), math.random(1, 2))
+							target4[i]:warp(
+								m,
+								math.random(1, 34),
+								math.random(1, 2)
+							)
 						elseif target4[i].registry["bomber_war_team"] == 2 then
-							target4[i]:warp(m, math.random(1, 34), math.random(39, 40))
+							target4[i]:warp(
+								m,
+								math.random(1, 34),
+								math.random(39, 40)
+							)
 						end
 					end
 				end
@@ -468,11 +628,23 @@ bomber_war_bomb2 = {
 							target4a[i].state = 1
 							target4a[i]:sendStatus()
 							target4a[i]:updateState()
-							target4a[i]:sendAnimationXY(94, target4a[i].x, targeta4a[i].y)
+							target4a[i]:sendAnimationXY(
+								94,
+								target4a[i].x,
+								targeta4a[i].y
+							)
 							if target4a[i].registry["bomber_war_team"] == 1 then
-								target4a[i]:warp(m, math.random(1, 34), math.random(1, 2))
+								target4a[i]:warp(
+									m,
+									math.random(1, 34),
+									math.random(1, 2)
+								)
 							elseif target4a[i].registry["bomber_war_team"] == 2 then
-								target4a[i]:warp(m, math.random(1, 34), math.random(39, 40))
+								target4a[i]:warp(
+									m,
+									math.random(1, 34),
+									math.random(39, 40)
+								)
 							end
 						end
 					end
@@ -485,11 +657,23 @@ bomber_war_bomb2 = {
 							target4b[i].state = 1
 							target4b[i]:sendStatus()
 							target4b[i]:updateState()
-							target4b[i]:sendAnimationXY(94, target4b[i].x, targeta4b[i].y)
+							target4b[i]:sendAnimationXY(
+								94,
+								target4b[i].x,
+								targeta4b[i].y
+							)
 							if target4b[i].registry["bomber_war_team"] == 1 then
-								target4b[i]:warp(m, math.random(1, 34), math.random(1, 2))
+								target4b[i]:warp(
+									m,
+									math.random(1, 34),
+									math.random(1, 2)
+								)
 							elseif target4b[i].registry["bomber_war_team"] == 2 then
-								target4b[i]:warp(m, math.random(1, 34), math.random(39, 40))
+								target4b[i]:warp(
+									m,
+									math.random(1, 34),
+									math.random(39, 40)
+								)
 							end
 						end
 					end
@@ -502,11 +686,23 @@ bomber_war_bomb2 = {
 							target4c[i].state = 1
 							target4c[i]:sendStatus()
 							target4c[i]:updateState()
-							target4c[i]:sendAnimationXY(94, target4c[i].x, targeta4c[i].y)
+							target4c[i]:sendAnimationXY(
+								94,
+								target4c[i].x,
+								targeta4c[i].y
+							)
 							if target4c[i].registry["bomber_war_team"] == 1 then
-								target4c[i]:warp(m, math.random(1, 34), math.random(1, 2))
+								target4c[i]:warp(
+									m,
+									math.random(1, 34),
+									math.random(1, 2)
+								)
 							elseif target4c[i].registry["bomber_war_team"] == 2 then
-								target4c[i]:warp(m, math.random(1, 34), math.random(39, 40))
+								target4c[i]:warp(
+									m,
+									math.random(1, 34),
+									math.random(39, 40)
+								)
 							end
 						end
 					end
@@ -520,11 +716,23 @@ bomber_war_bomb2 = {
 						target5[i].state = 1
 						target5[i]:sendStatus()
 						target5[i]:updateState()
-						target5[i]:sendAnimationXY(94, target5[i].x, target5[i].y)
+						target5[i]:sendAnimationXY(
+							94,
+							target5[i].x,
+							target5[i].y
+						)
 						if target5[i].registry["bomber_war_team"] == 1 then
-							target5[i]:warp(m, math.random(1, 34), math.random(1, 2))
+							target5[i]:warp(
+								m,
+								math.random(1, 34),
+								math.random(1, 2)
+							)
 						elseif target5[i].registry["bomber_war_team"] == 2 then
-							target5[i]:warp(m, math.random(1, 34), math.random(39, 40))
+							target5[i]:warp(
+								m,
+								math.random(1, 34),
+								math.random(39, 40)
+							)
 						end
 					end
 				end
@@ -537,11 +745,23 @@ bomber_war_bomb2 = {
 						target1[i].state = 1
 						target1[i]:sendStatus()
 						target1[i]:updateState()
-						target1[i]:sendAnimationXY(94, target1[i].x, target1[i].y)
+						target1[i]:sendAnimationXY(
+							94,
+							target1[i].x,
+							target1[i].y
+						)
 						if target1[i].registry["bomber_war_team"] == 1 then
-							target1[i]:warp(m, math.random(1, 34), math.random(1, 2))
+							target1[i]:warp(
+								m,
+								math.random(1, 34),
+								math.random(1, 2)
+							)
 						elseif target1[i].registry["bomber_war_team"] == 2 then
-							target1[i]:warp(m, math.random(1, 34), math.random(39, 40))
+							target1[i]:warp(
+								m,
+								math.random(1, 34),
+								math.random(39, 40)
+							)
 						end
 					end
 				end
@@ -553,11 +773,23 @@ bomber_war_bomb2 = {
 							target1a[i].state = 1
 							target1a[i]:sendStatus()
 							target1a[i]:updateState()
-							target1a[i]:sendAnimationXY(94, target1a[i].x, target1a[i].y)
+							target1a[i]:sendAnimationXY(
+								94,
+								target1a[i].x,
+								target1a[i].y
+							)
 							if target1a[i].registry["bomber_war_team"] == 1 then
-								target1a[i]:warp(m, math.random(1, 34), math.random(1, 2))
+								target1a[i]:warp(
+									m,
+									math.random(1, 34),
+									math.random(1, 2)
+								)
 							elseif target1a[i].registry["bomber_war_team"] == 2 then
-								target1a[i]:warp(m, math.random(1, 34), math.random(39, 40))
+								target1a[i]:warp(
+									m,
+									math.random(1, 34),
+									math.random(39, 40)
+								)
 							end
 						end
 					end
@@ -570,11 +802,23 @@ bomber_war_bomb2 = {
 							target1b[i].state = 1
 							target1b[i]:sendStatus()
 							target1b[i]:updateState()
-							target1b[i]:sendAnimationXY(94, target1b[i].x, target1b[i].y)
+							target1b[i]:sendAnimationXY(
+								94,
+								target1b[i].x,
+								target1b[i].y
+							)
 							if target1b[i].registry["bomber_war_team"] == 1 then
-								target1b[i]:warp(m, math.random(1, 34), math.random(1, 2))
+								target1b[i]:warp(
+									m,
+									math.random(1, 34),
+									math.random(1, 2)
+								)
 							elseif target1b[i].registry["bomber_war_team"] == 2 then
-								target1b[i]:warp(m, math.random(1, 34), math.random(39, 40))
+								target1b[i]:warp(
+									m,
+									math.random(1, 34),
+									math.random(39, 40)
+								)
 							end
 						end
 					end
@@ -588,11 +832,23 @@ bomber_war_bomb2 = {
 						target2[i].state = 1
 						target2[i]:sendStatus()
 						target2[i]:updateState()
-						target2[i]:sendAnimationXY(94, target2[i].x, target2[i].y)
+						target2[i]:sendAnimationXY(
+							94,
+							target2[i].x,
+							target2[i].y
+						)
 						if target2[i].registry["bomber_war_team"] == 1 then
-							target2[i]:warp(m, math.random(1, 34), math.random(1, 2))
+							target2[i]:warp(
+								m,
+								math.random(1, 34),
+								math.random(1, 2)
+							)
 						elseif target2[i].registry["bomber_war_team"] == 2 then
-							target2[i]:warp(m, math.random(1, 34), math.random(39, 40))
+							target2[i]:warp(
+								m,
+								math.random(1, 34),
+								math.random(39, 40)
+							)
 						end
 					end
 				end
@@ -604,11 +860,23 @@ bomber_war_bomb2 = {
 							target2a[i].state = 1
 							target2a[i]:sendStatus()
 							target2a[i]:updateState()
-							target2a[i]:sendAnimationXY(94, target2a[i].x, target2a[i].y)
+							target2a[i]:sendAnimationXY(
+								94,
+								target2a[i].x,
+								target2a[i].y
+							)
 							if target2a[i].registry["bomber_war_team"] == 1 then
-								target2a[i]:warp(m, math.random(1, 34), math.random(1, 2))
+								target2a[i]:warp(
+									m,
+									math.random(1, 34),
+									math.random(1, 2)
+								)
 							elseif target2a[i].registry["bomber_war_team"] == 2 then
-								target2a[i]:warp(m, math.random(1, 34), math.random(39, 40))
+								target2a[i]:warp(
+									m,
+									math.random(1, 34),
+									math.random(39, 40)
+								)
 							end
 						end
 					end
@@ -621,11 +889,23 @@ bomber_war_bomb2 = {
 							target2b[i].state = 1
 							target2b[i]:sendStatus()
 							target2b[i]:updateState()
-							target2b[i]:sendAnimationXY(94, target2b[i].x, target2b[i].y)
+							target2b[i]:sendAnimationXY(
+								94,
+								target2b[i].x,
+								target2b[i].y
+							)
 							if target2b[i].registry["bomber_war_team"] == 1 then
-								target2b[i]:warp(m, math.random(1, 34), math.random(1, 2))
+								target2b[i]:warp(
+									m,
+									math.random(1, 34),
+									math.random(1, 2)
+								)
 							elseif target2b[i].registry["bomber_war_team"] == 2 then
-								target2b[i]:warp(m, math.random(1, 34), math.random(39, 40))
+								target2b[i]:warp(
+									m,
+									math.random(1, 34),
+									math.random(39, 40)
+								)
 							end
 						end
 					end
@@ -639,11 +919,23 @@ bomber_war_bomb2 = {
 						target3[i].state = 1
 						target3[i]:sendStatus()
 						target3[i]:updateState()
-						target3[i]:sendAnimationXY(94, target3[i].x, target3[i].y)
+						target3[i]:sendAnimationXY(
+							94,
+							target3[i].x,
+							target3[i].y
+						)
 						if target3[i].registry["bomber_war_team"] == 1 then
-							target3[i]:warp(m, math.random(1, 34), math.random(1, 2))
+							target3[i]:warp(
+								m,
+								math.random(1, 34),
+								math.random(1, 2)
+							)
 						elseif target3[i].registry["bomber_war_team"] == 2 then
-							target3[i]:warp(m, math.random(1, 34), math.random(39, 40))
+							target3[i]:warp(
+								m,
+								math.random(1, 34),
+								math.random(39, 40)
+							)
 						end
 					end
 				end
@@ -655,12 +947,24 @@ bomber_war_bomb2 = {
 							target3a[i].state = 1
 							target3a[i]:sendStatus()
 							target3a[i]:updateState()
-							target3a[i]:sendAnimationXY(94, target3a[i].x, target3a[i].y)
+							target3a[i]:sendAnimationXY(
+								94,
+								target3a[i].x,
+								target3a[i].y
+							)
 
 							if target3a[i].registry["bomber_war_team"] == 1 then
-								target3a[i]:warp(m, math.random(1, 34), math.random(1, 2))
+								target3a[i]:warp(
+									m,
+									math.random(1, 34),
+									math.random(1, 2)
+								)
 							elseif target3a[i].registry["bomber_war_team"] == 2 then
-								target3a[i]:warp(m, math.random(1, 34), math.random(39, 40))
+								target3a[i]:warp(
+									m,
+									math.random(1, 34),
+									math.random(39, 40)
+								)
 							end
 						end
 					end
@@ -673,11 +977,23 @@ bomber_war_bomb2 = {
 							target3b[i].state = 1
 							target3b[i]:sendStatus()
 							target3b[i]:updateState()
-							target3b[i]:sendAnimationXY(94, target3b[i].x, target3b[i].y)
+							target3b[i]:sendAnimationXY(
+								94,
+								target3b[i].x,
+								target3b[i].y
+							)
 							if target3b[i].registry["bomber_war_team"] == 1 then
-								target3b[i]:warp(m, math.random(1, 34), math.random(1, 2))
+								target3b[i]:warp(
+									m,
+									math.random(1, 34),
+									math.random(1, 2)
+								)
 							elseif target3b[i].registry["bomber_war_team"] == 2 then
-								target3b[i]:warp(m, math.random(1, 34), math.random(39, 40))
+								target3b[i]:warp(
+									m,
+									math.random(1, 34),
+									math.random(39, 40)
+								)
 							end
 						end
 					end
@@ -691,11 +1007,23 @@ bomber_war_bomb2 = {
 						target4[i].state = 1
 						target4[i]:sendStatus()
 						target4[i]:updateState()
-						target4[i]:sendAnimationXY(94, target4[i].x, target4[i].y)
+						target4[i]:sendAnimationXY(
+							94,
+							target4[i].x,
+							target4[i].y
+						)
 						if target4[i].registry["bomber_war_team"] == 1 then
-							target4[i]:warp(m, math.random(1, 34), math.random(1, 2))
+							target4[i]:warp(
+								m,
+								math.random(1, 34),
+								math.random(1, 2)
+							)
 						elseif target4[i].registry["bomber_war_team"] == 2 then
-							target4[i]:warp(m, math.random(1, 34), math.random(39, 40))
+							target4[i]:warp(
+								m,
+								math.random(1, 34),
+								math.random(39, 40)
+							)
 						end
 					end
 				end
@@ -707,12 +1035,24 @@ bomber_war_bomb2 = {
 							target4a[i].state = 1
 							target4a[i]:sendStatus()
 							target4a[i]:updateState()
-							target4a[i]:sendAnimationXY(94, target4a[i].x, targeta4a[i].y)
+							target4a[i]:sendAnimationXY(
+								94,
+								target4a[i].x,
+								targeta4a[i].y
+							)
 
 							if target4a[i].registry["bomber_war_team"] == 1 then
-								target4a[i]:warp(m, math.random(1, 34), math.random(1, 2))
+								target4a[i]:warp(
+									m,
+									math.random(1, 34),
+									math.random(1, 2)
+								)
 							elseif target4a[i].registry["bomber_war_team"] == 2 then
-								target4a[i]:warp(m, math.random(1, 34), math.random(39, 40))
+								target4a[i]:warp(
+									m,
+									math.random(1, 34),
+									math.random(39, 40)
+								)
 							end
 						end
 					end
@@ -725,11 +1065,23 @@ bomber_war_bomb2 = {
 							target4b[i].state = 1
 							target4b[i]:sendStatus()
 							target4b[i]:updateState()
-							target4b[i]:sendAnimationXY(94, target4b[i].x, targeta4b[i].y)
+							target4b[i]:sendAnimationXY(
+								94,
+								target4b[i].x,
+								targeta4b[i].y
+							)
 							if target4b[i].registry["bomber_war_team"] == 1 then
-								target4b[i]:warp(m, math.random(1, 34), math.random(1, 2))
+								target4b[i]:warp(
+									m,
+									math.random(1, 34),
+									math.random(1, 2)
+								)
 							elseif target4b[i].registry["bomber_war_team"] == 2 then
-								target4b[i]:warp(m, math.random(1, 34), math.random(39, 40))
+								target4b[i]:warp(
+									m,
+									math.random(1, 34),
+									math.random(39, 40)
+								)
 							end
 						end
 					end
@@ -743,11 +1095,23 @@ bomber_war_bomb2 = {
 						target5[i].state = 1
 						target5[i]:sendStatus()
 						target5[i]:updateState()
-						target5[i]:sendAnimationXY(94, target5[i].x, target5[i].y)
+						target5[i]:sendAnimationXY(
+							94,
+							target5[i].x,
+							target5[i].y
+						)
 						if target5[i].registry["bomber_war_team"] == 1 then
-							target5[i]:warp(m, math.random(1, 34), math.random(1, 2))
+							target5[i]:warp(
+								m,
+								math.random(1, 34),
+								math.random(1, 2)
+							)
 						elseif target5[i].registry["bomber_war_team"] == 2 then
-							target5[i]:warp(m, math.random(1, 34), math.random(39, 40))
+							target5[i]:warp(
+								m,
+								math.random(1, 34),
+								math.random(39, 40)
+							)
 						end
 					end
 				end
@@ -760,11 +1124,23 @@ bomber_war_bomb2 = {
 						target1[i].state = 1
 						target1[i]:sendStatus()
 						target1[i]:updateState()
-						target1[i]:sendAnimationXY(94, target1[i].x, target1[i].y)
+						target1[i]:sendAnimationXY(
+							94,
+							target1[i].x,
+							target1[i].y
+						)
 						if target1[i].registry["bomber_war_team"] == 1 then
-							target1[i]:warp(m, math.random(1, 34), math.random(1, 2))
+							target1[i]:warp(
+								m,
+								math.random(1, 34),
+								math.random(1, 2)
+							)
 						elseif target1[i].registry["bomber_war_team"] == 2 then
-							target1[i]:warp(m, math.random(1, 34), math.random(39, 40))
+							target1[i]:warp(
+								m,
+								math.random(1, 34),
+								math.random(39, 40)
+							)
 						end
 					end
 				end
@@ -776,11 +1152,23 @@ bomber_war_bomb2 = {
 							target1a[i].state = 1
 							target1a[i]:sendStatus()
 							target1a[i]:updateState()
-							target1a[i]:sendAnimationXY(94, target1a[i].x, target1a[i].y)
+							target1a[i]:sendAnimationXY(
+								94,
+								target1a[i].x,
+								target1a[i].y
+							)
 							if target1a[i].registry["bomber_war_team"] == 1 then
-								target1a[i]:warp(m, math.random(1, 34), math.random(1, 2))
+								target1a[i]:warp(
+									m,
+									math.random(1, 34),
+									math.random(1, 2)
+								)
 							elseif target1a[i].registry["bomber_war_team"] == 2 then
-								target1a[i]:warp(m, math.random(1, 34), math.random(39, 40))
+								target1a[i]:warp(
+									m,
+									math.random(1, 34),
+									math.random(39, 40)
+								)
 							end
 						end
 					end
@@ -794,11 +1182,23 @@ bomber_war_bomb2 = {
 						target2[i].state = 1
 						target2[i]:sendStatus()
 						target2[i]:updateState()
-						target2[i]:sendAnimationXY(94, target2[i].x, target2[i].y)
+						target2[i]:sendAnimationXY(
+							94,
+							target2[i].x,
+							target2[i].y
+						)
 						if target2[i].registry["bomber_war_team"] == 1 then
-							target2[i]:warp(m, math.random(1, 34), math.random(1, 2))
+							target2[i]:warp(
+								m,
+								math.random(1, 34),
+								math.random(1, 2)
+							)
 						elseif target2[i].registry["bomber_war_team"] == 2 then
-							target2[i]:warp(m, math.random(1, 34), math.random(39, 40))
+							target2[i]:warp(
+								m,
+								math.random(1, 34),
+								math.random(39, 40)
+							)
 						end
 					end
 				end
@@ -810,11 +1210,23 @@ bomber_war_bomb2 = {
 							target2a[i].state = 1
 							target2a[i]:sendStatus()
 							target2a[i]:updateState()
-							target2a[i]:sendAnimationXY(94, target2a[i].x, target2a[i].y)
+							target2a[i]:sendAnimationXY(
+								94,
+								target2a[i].x,
+								target2a[i].y
+							)
 							if target2a[i].registry["bomber_war_team"] == 1 then
-								target2a[i]:warp(m, math.random(1, 34), math.random(1, 2))
+								target2a[i]:warp(
+									m,
+									math.random(1, 34),
+									math.random(1, 2)
+								)
 							elseif target2a[i].registry["bomber_war_team"] == 2 then
-								target2a[i]:warp(m, math.random(1, 34), math.random(39, 40))
+								target2a[i]:warp(
+									m,
+									math.random(1, 34),
+									math.random(39, 40)
+								)
 							end
 						end
 					end
@@ -828,11 +1240,23 @@ bomber_war_bomb2 = {
 						target3[i].state = 1
 						target3[i]:sendStatus()
 						target3[i]:updateState()
-						target3[i]:sendAnimationXY(94, target3[i].x, target3[i].y)
+						target3[i]:sendAnimationXY(
+							94,
+							target3[i].x,
+							target3[i].y
+						)
 						if target3[i].registry["bomber_war_team"] == 1 then
-							target3[i]:warp(m, math.random(1, 34), math.random(1, 2))
+							target3[i]:warp(
+								m,
+								math.random(1, 34),
+								math.random(1, 2)
+							)
 						elseif target3[i].registry["bomber_war_team"] == 2 then
-							target3[i]:warp(m, math.random(1, 34), math.random(39, 40))
+							target3[i]:warp(
+								m,
+								math.random(1, 34),
+								math.random(39, 40)
+							)
 						end
 					end
 				end
@@ -844,11 +1268,23 @@ bomber_war_bomb2 = {
 							target3a[i].state = 1
 							target3a[i]:sendStatus()
 							target3a[i]:updateState()
-							target3a[i]:sendAnimationXY(94, target3a[i].x, target3a[i].y)
+							target3a[i]:sendAnimationXY(
+								94,
+								target3a[i].x,
+								target3a[i].y
+							)
 							if target3a[i].registry["bomber_war_team"] == 1 then
-								target3a[i]:warp(m, math.random(1, 34), math.random(1, 2))
+								target3a[i]:warp(
+									m,
+									math.random(1, 34),
+									math.random(1, 2)
+								)
 							elseif target3a[i].registry["bomber_war_team"] == 2 then
-								target3a[i]:warp(m, math.random(1, 34), math.random(39, 40))
+								target3a[i]:warp(
+									m,
+									math.random(1, 34),
+									math.random(39, 40)
+								)
 							end
 						end
 					end
@@ -862,11 +1298,23 @@ bomber_war_bomb2 = {
 						target4[i].state = 1
 						target4[i]:sendStatus()
 						target4[i]:updateState()
-						target4[i]:sendAnimationXY(94, target4[i].x, target4[i].y)
+						target4[i]:sendAnimationXY(
+							94,
+							target4[i].x,
+							target4[i].y
+						)
 						if target4[i].registry["bomber_war_team"] == 1 then
-							target4[i]:warp(m, math.random(1, 34), math.random(1, 2))
+							target4[i]:warp(
+								m,
+								math.random(1, 34),
+								math.random(1, 2)
+							)
 						elseif target4[i].registry["bomber_war_team"] == 2 then
-							target4[i]:warp(m, math.random(1, 34), math.random(39, 40))
+							target4[i]:warp(
+								m,
+								math.random(1, 34),
+								math.random(39, 40)
+							)
 						end
 					end
 				end
@@ -878,11 +1326,23 @@ bomber_war_bomb2 = {
 							target4a[i].state = 1
 							target4a[i]:sendStatus()
 							target4a[i]:updateState()
-							target4a[i]:sendAnimationXY(94, target4a[i].x, target4a[i].y)
+							target4a[i]:sendAnimationXY(
+								94,
+								target4a[i].x,
+								target4a[i].y
+							)
 							if target4a[i].registry["bomber_war_team"] == 1 then
-								target4a[i]:warp(m, math.random(1, 34), math.random(1, 2))
+								target4a[i]:warp(
+									m,
+									math.random(1, 34),
+									math.random(1, 2)
+								)
 							elseif target4a[i].registry["bomber_war_team"] == 2 then
-								target4a[i]:warp(m, math.random(1, 34), math.random(39, 40))
+								target4a[i]:warp(
+									m,
+									math.random(1, 34),
+									math.random(39, 40)
+								)
 							end
 						end
 					end
@@ -896,11 +1356,23 @@ bomber_war_bomb2 = {
 						target5[i].state = 1
 						target5[i]:sendStatus()
 						target5[i]:updateState()
-						target5[i]:sendAnimationXY(94, target5[i].x, target5[i].y)
+						target5[i]:sendAnimationXY(
+							94,
+							target5[i].x,
+							target5[i].y
+						)
 						if target5[i].registry["bomber_war_team"] == 1 then
-							target5[i]:warp(m, math.random(1, 34), math.random(1, 2))
+							target5[i]:warp(
+								m,
+								math.random(1, 34),
+								math.random(1, 2)
+							)
 						elseif target5[i].registry["bomber_war_team"] == 2 then
-							target5[i]:warp(m, math.random(1, 34), math.random(39, 40))
+							target5[i]:warp(
+								m,
+								math.random(1, 34),
+								math.random(39, 40)
+							)
 						end
 					end
 				end
@@ -913,11 +1385,23 @@ bomber_war_bomb2 = {
 						target1[i].state = 1
 						target1[i]:sendStatus()
 						target1[i]:updateState()
-						target1[i]:sendAnimationXY(94, target1[i].x, target1[i].y)
+						target1[i]:sendAnimationXY(
+							94,
+							target1[i].x,
+							target1[i].y
+						)
 						if target1[i].registry["bomber_war_team"] == 1 then
-							target1[i]:warp(m, math.random(1, 34), math.random(1, 2))
+							target1[i]:warp(
+								m,
+								math.random(1, 34),
+								math.random(1, 2)
+							)
 						elseif target1[i].registry["bomber_war_team"] == 2 then
-							target1[i]:warp(m, math.random(1, 34), math.random(39, 40))
+							target1[i]:warp(
+								m,
+								math.random(1, 34),
+								math.random(39, 40)
+							)
 						end
 					end
 				end
@@ -930,11 +1414,23 @@ bomber_war_bomb2 = {
 						target2[i].state = 1
 						target2[i]:sendStatus()
 						target2[i]:updateState()
-						target2[i]:sendAnimationXY(94, target2[i].x, target2[i].y)
+						target2[i]:sendAnimationXY(
+							94,
+							target2[i].x,
+							target2[i].y
+						)
 						if target2[i].registry["bomber_war_team"] == 1 then
-							target2[i]:warp(m, math.random(1, 34), math.random(1, 2))
+							target2[i]:warp(
+								m,
+								math.random(1, 34),
+								math.random(1, 2)
+							)
 						elseif target2[i].registry["bomber_war_team"] == 2 then
-							target2[i]:warp(m, math.random(1, 34), math.random(39, 40))
+							target2[i]:warp(
+								m,
+								math.random(1, 34),
+								math.random(39, 40)
+							)
 						end
 					end
 				end
@@ -947,11 +1443,23 @@ bomber_war_bomb2 = {
 						target3[i].state = 1
 						target3[i]:sendStatus()
 						target3[i]:updateState()
-						target3[i]:sendAnimationXY(94, target3[i].x, target3[i].y)
+						target3[i]:sendAnimationXY(
+							94,
+							target3[i].x,
+							target3[i].y
+						)
 						if target3[i].registry["bomber_war_team"] == 1 then
-							target3[i]:warp(m, math.random(1, 34), math.random(1, 2))
+							target3[i]:warp(
+								m,
+								math.random(1, 34),
+								math.random(1, 2)
+							)
 						elseif target3[i].registry["bomber_war_team"] == 2 then
-							target3[i]:warp(m, math.random(1, 34), math.random(39, 40))
+							target3[i]:warp(
+								m,
+								math.random(1, 34),
+								math.random(39, 40)
+							)
 						end
 					end
 				end
@@ -963,11 +1471,23 @@ bomber_war_bomb2 = {
 						target4[i].state = 1
 						target4[i]:sendStatus()
 						target4[i]:updateState()
-						target4[i]:sendAnimationXY(94, target4[i].x, target4[i].y)
+						target4[i]:sendAnimationXY(
+							94,
+							target4[i].x,
+							target4[i].y
+						)
 						if target4[i].registry["bomber_war_team"] == 1 then
-							target4[i]:warp(m, math.random(1, 34), math.random(1, 2))
+							target4[i]:warp(
+								m,
+								math.random(1, 34),
+								math.random(1, 2)
+							)
 						elseif target4[i].registry["bomber_war_team"] == 2 then
-							target4[i]:warp(m, math.random(1, 34), math.random(39, 40))
+							target4[i]:warp(
+								m,
+								math.random(1, 34),
+								math.random(39, 40)
+							)
 						end
 					end
 				end
@@ -980,17 +1500,30 @@ bomber_war_bomb2 = {
 						target5[i].state = 1
 						target5[i]:sendStatus()
 						target5[i]:updateState()
-						target5[i]:sendAnimationXY(94, target5[i].x, target5[i].y)
+						target5[i]:sendAnimationXY(
+							94,
+							target5[i].x,
+							target5[i].y
+						)
 						if target5[i].registry["bomber_war_team"] == 1 then
-							target5[i]:warp(m, math.random(1, 34), math.random(1, 2))
+							target5[i]:warp(
+								m,
+								math.random(1, 34),
+								math.random(1, 2)
+							)
 						elseif target5[i].registry["bomber_war_team"] == 2 then
-							target5[i]:warp(m, math.random(1, 34), math.random(39, 40))
+							target5[i]:warp(
+								m,
+								math.random(1, 34),
+								math.random(39, 40)
+							)
 						end
 					end
 				end
 			end
 		end
 	end,
+
 	breakBoxes = function(player)
 		local m = 15050
 		local x = core.gameRegistry["bombx2" .. player.name]
@@ -1466,6 +1999,7 @@ bomber_war_bomb2 = {
 			end
 		end
 	end,
+
 	cleanup = function(player)
 		local m = player.m
 		local x = core.gameRegistry["bombx2" .. player.name]

@@ -137,6 +137,7 @@ clone = {
 			block1:updateState()
 		end
 	end,
+
 	registry = function(block, cmd)
 		if cmd == "load" then
 			block.gfxFace = block.registry["gfxFace"]
@@ -198,6 +199,7 @@ clone = {
 			block.registry["gfxNeckC"] = block.gfxNeckC
 		end
 	end,
+
 	playerToPlayer = function(player1, player2)
 		local weap = player2:getEquippedItem(EQ_WEAP)
 		local coat = player2:getEquippedItem(EQ_COAT)
@@ -302,10 +304,12 @@ clone = {
 		player1.gfxClone = 1
 		player1:updateState()
 	end,
+
 	playerSwap = function(player1, player2)
 		clone.playerToPlayer(player1, player2)
 		clone.playerToPlayer(player2, player1)
 	end,
+
 	wipe = function(player)
 		player.gfxFace = 0
 		player.gfxFaceC = 0

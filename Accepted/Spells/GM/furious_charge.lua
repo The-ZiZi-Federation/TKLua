@@ -7,7 +7,7 @@ furious_charge = {
 		local distance = 5
 		local target
 		local damage = ((player.might + player.grace) * player.enchant) * player.rage
-		local magic = math.floor(player.baseMagic * .05)
+		local magic = math.floor(player.baseMagic *.05)
 
 		if (not player:canCast(0, 1, 0)) then
 			return
@@ -38,16 +38,36 @@ furious_charge = {
 
 		for i = 1, 6 do
 			local cpp = getPass(m, x + (i * cx), y + (i * cy))
-			local pcs = player:getObjectsInCell(m, x + (i * cx), y + (i * cy), BL_PC)
-			local mns = player:getObjectsInCell(m, x + (i * cx), y + (i * cy), BL_MOB)
+			local pcs = player:getObjectsInCell(
+				m,
+				x + (i * cx),
+				y + (i * cy),
+				BL_PC
+			)
+			local mns = player:getObjectsInCell(
+				m,
+				x + (i * cx),
+				y + (i * cy),
+				BL_MOB
+			)
 			distance = i - 1
 			if (cpp ~= 0) then
 				break
 			elseif (#mns > 0) then
-				target = player:getObjectsInCell(m, x + (i * cx), y + (i * cy), BL_MOB)
+				target = player:getObjectsInCell(
+					m,
+					x + (i * cx),
+					y + (i * cy),
+					BL_MOB
+				)
 				break
 			elseif (#pcs > 0) then
-				target = player:getObjectsInCell(m, x + (i * cx), y + (i * cy), BL_PC)
+				target = player:getObjectsInCell(
+					m,
+					x + (i * cx),
+					y + (i * cy),
+					BL_PC
+				)
 				break
 			end
 		end
@@ -91,6 +111,7 @@ furious_charge = {
 			end
 		end
 	end,
+
 	requirements = function(player)
 		local l = 99
 		local i = {}

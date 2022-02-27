@@ -1,5 +1,8 @@
 sendDialog = function(player, dialog)
-	player:mapSelection(dialog, {500, 98, "Kugnae", 1142, 7, 7, 0, 0, "test", 1142, 7, 7})
+	player:mapSelection(
+		dialog,
+		{500, 98, "Kugnae", 1142, 7, 7, 0, 0, "test", 1142, 7, 7}
+	)
 
 	--First entry on list is Origin
 

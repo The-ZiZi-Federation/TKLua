@@ -33,110 +33,123 @@ new_years_npc2 = {
 		]]
 		--
 	end,
-	click = async(
-		function(player, npc)
-			local t = {
-				graphic = convertGraphic(npc.look, "monster"),
-				color = npc.lookColor
-			}
-			player.npcGraphic = t.graphic
-			player.npcColor = t.color
-			player.dialogType = 0
-			player.lastClick = npc.ID
 
-			if player.level < 20 then
+	click = async(function(player, npc)
+		local t = {
+			graphic = convertGraphic(npc.look, "monster"),
+			color = npc.lookColor
+		}
+		player.npcGraphic = t.graphic
+		player.npcColor = t.color
+		player.dialogType = 0
+		player.lastClick = npc.ID
+
+		if player.level < 20 then
+			player:dialogSeq(
+				{
+					t,
+					"You are too young for anything I have to offer, return when you are level 20."
+				},
+				0
+			)
+			return
+		end
+
+		if npc.m ~= 41 then
+			if player:hasItem("annual_pass", 1) == true then
+				player:dialogSeq({t, "You have all that I can offer you!"}, 1)
+				return
+			end
+			if player:hasLegend("year_of_the_pig") and player:hasItem("annual_pass", 1) ~= true then
+				player:addItem("annual_pass", 1, 0, 0, os.time() + 3628800)
+				player:dialogSeq(
+					{t, "It seems you lost your pass... let me help you out."},
+					1
+				)
+				return
+			end
+			player:dialogSeq(
+				{
+					t,
+					"You've made it far, adventurer.",
+					"I have an item here that will permit you to pass these portals.",
+					"It will allow you to enter this place every day, until it closes.",
+					"If you bring me 1 Scribe's book and 20 Ambers, I will let you have it.",
+					"I would also accept a Hyun moo key in place of the Scribe's book."
+				},
+				1
+			)
+			local whichitem = "scribes_book"
+			if player:hasItem("scribes_book", 1) ~= true then
+				whichitem = "hyun_moo_key"
+			end
+			if player:hasItem(whichitem, 1) == true and player:hasItem("amber", 20) == true then
+				player:removeItem(whichitem, 1)
+				player:removeItem("amber", 20)
+				if player:hasItem("annual_ticket", 1) == true then
+					player:removeItem("annual_ticket", 1)
+				end
+				player:addItem("annual_pass", 1, 0, 0, os.time() + 3628800)
+				player:addLegend(
+					"Celebrated the year of the Pig (" .. curT() .. ")",
+					"year_of_the_pig",
+					144,
+					9
+				)
 				player:dialogSeq(
 					{
 						t,
-						"You are too young for anything I have to offer, return when you are level 20."
+						"Excellent! Thank you for your efforts, I'll warn you, below this area",
+						"Many dangers await! Proceed with caution."
+					},
+					1
+				)
+			end
+			return
+		end
+
+		if player:hasItem("annual_ticket", 1) == true or player:hasItem(
+			"annual_pass",
+			1
+		) == true then
+			player:warp(59000, 33, 75)
+			return
+		end
+
+		player:dialogSeq(
+			{
+				t,
+				"Greetings, adventurer! To celebrate this coming year of the Pig, the Jade Citadel is open.",
+				"If you would like to enter, bring me 20 snake meat and I will give you a pass."
+			},
+			1
+		)
+		if player:hasItem("snake_meat", 20) == true then
+			local hasRoom = false
+			for i = 0, player.maxInv - 1 do
+				if player:getInventoryItem(i) == nil then
+					hasRoom = true
+					break
+				end
+			end
+			if hasRoom ~= true then
+				player:dialogSeq(
+					{
+						t,
+						"You have no room for this, make some room and talk to me again."
 					},
 					0
 				)
 				return
 			end
-
-			if npc.m ~= 41 then
-				if player:hasItem("annual_pass", 1) == true then
-					player:dialogSeq({t, "You have all that I can offer you!"}, 1)
-					return
-				end
-				if player:hasLegend("year_of_the_pig") and player:hasItem("annual_pass", 1) ~= true then
-					player:addItem("annual_pass", 1, 0, 0, os.time() + 3628800)
-					player:dialogSeq({t, "It seems you lost your pass... let me help you out."}, 1)
-					return
-				end
-				player:dialogSeq(
-					{
-						t,
-						"You've made it far, adventurer.",
-						"I have an item here that will permit you to pass these portals.",
-						"It will allow you to enter this place every day, until it closes.",
-						"If you bring me 1 Scribe's book and 20 Ambers, I will let you have it.",
-						"I would also accept a Hyun moo key in place of the Scribe's book."
-					},
-					1
-				)
-				local whichitem = "scribes_book"
-				if player:hasItem("scribes_book", 1) ~= true then
-					whichitem = "hyun_moo_key"
-				end
-				if player:hasItem(whichitem, 1) == true and player:hasItem("amber", 20) == true then
-					player:removeItem(whichitem, 1)
-					player:removeItem("amber", 20)
-					if player:hasItem("annual_ticket", 1) == true then
-						player:removeItem("annual_ticket", 1)
-					end
-					player:addItem("annual_pass", 1, 0, 0, os.time() + 3628800)
-					player:addLegend("Celebrated the year of the Pig (" .. curT() .. ")", "year_of_the_pig", 144, 9)
-					player:dialogSeq(
-						{
-							t,
-							"Excellent! Thank you for your efforts, I'll warn you, below this area",
-							"Many dangers await! Proceed with caution."
-						},
-						1
-					)
-				end
-				return
-			end
-
-			if player:hasItem("annual_ticket", 1) == true or player:hasItem("annual_pass", 1) == true then
-				player:warp(59000, 33, 75)
-				return
-			end
-
+			player:removeItem("snake_meat", 20)
+			player:addItem("annual_ticket", 1, 0, 0, os.time() + 86400)
 			player:dialogSeq(
-				{
-					t,
-					"Greetings, adventurer! To celebrate this coming year of the Pig, the Jade Citadel is open.",
-					"If you would like to enter, bring me 20 snake meat and I will give you a pass."
-				},
+				{t, "Thank you so much! Here is your pass, it lasts for 1 day."},
 				1
 			)
-			if player:hasItem("snake_meat", 20) == true then
-				local hasRoom = false
-				for i = 0, player.maxInv - 1 do
-					if player:getInventoryItem(i) == nil then
-						hasRoom = true
-						break
-					end
-				end
-				if hasRoom ~= true then
-					player:dialogSeq(
-						{
-							t,
-							"You have no room for this, make some room and talk to me again."
-						},
-						0
-					)
-					return
-				end
-				player:removeItem("snake_meat", 20)
-				player:addItem("annual_ticket", 1, 0, 0, os.time() + 86400)
-				player:dialogSeq({t, "Thank you so much! Here is your pass, it lasts for 1 day."}, 1)
-			end
 		end
-	)
+	end)
 }
 received_fortune = {
 	cast = function(player)
@@ -350,9 +363,7 @@ rich_fortune = {
 		player:removeItem("rich_fortune", 1)
 		local spoil = Item(rewarded).stackAmount
 		if spoil > 1 and player:hasItem(rewarded, spoil) == true then
-			player:sendMinitext(
-				"You would have received " .. spoil .. " " .. Item(rewarded).name .. " but you already had too many!"
-			)
+			player:sendMinitext("You would have received " .. spoil .. " " .. Item(rewarded).name .. " but you already had too many!")
 			return
 		end
 		player:sendMinitext("You received " .. spoil .. " " .. Item(rewarded).name)
@@ -370,15 +381,19 @@ new_years_mob1 = {
 	on_healed = function(mob, healer)
 		mob_ai_basic.on_healed(mob, healer)
 	end,
+
 	on_attacked = function(mob, attacker)
 		mob_ai_basic.on_attacked(mob, attacker)
 	end,
+
 	move = function(mob, target)
 		mob_ai_basic.move(mob, target)
 	end,
+
 	attack = function(mob, target)
 		mob_ai_basic.attack(mob, target)
 	end,
+
 	after_death = function(mob, attacker)
 		local targets = mob:getObjectsInMap(mob.m, BL_PC)
 		for i = 1, #targets do
@@ -401,15 +416,19 @@ new_years_mob2 = {
 	on_healed = function(mob, healer)
 		mob_ai_basic.on_healed(mob, healer)
 	end,
+
 	on_attacked = function(mob, attacker)
 		mob_ai_basic.on_attacked(mob, attacker)
 	end,
+
 	move = function(mob, target)
 		mob_ai_basic.move(mob, target)
 	end,
+
 	attack = function(mob, target)
 		mob_ai_basic.attack(mob, target)
 	end,
+
 	after_death = function(mob, attacker)
 		local targets = mob:getObjectsInMap(mob.m, BL_PC)
 		for i = 1, #targets do
@@ -432,15 +451,19 @@ new_years_mob3 = {
 	on_healed = function(mob, healer)
 		mob_ai_basic.on_healed(mob, healer)
 	end,
+
 	on_attacked = function(mob, attacker)
 		mob_ai_basic.on_attacked(mob, attacker)
 	end,
+
 	move = function(mob, target)
 		mob_ai_basic.move(mob, target)
 	end,
+
 	attack = function(mob, target)
 		mob_ai_basic.attack(mob, target)
 	end,
+
 	after_death = function(mob, attacker)
 		local targets = mob:getObjectsInMap(mob.m, BL_PC)
 		for i = 1, #targets do
@@ -463,15 +486,19 @@ new_years_mob4 = {
 	on_healed = function(mob, healer)
 		mob_ai_basic.on_healed(mob, healer)
 	end,
+
 	on_attacked = function(mob, attacker)
 		mob_ai_basic.on_attacked(mob, attacker)
 	end,
+
 	move = function(mob, target)
 		mob_ai_basic.move(mob, target)
 	end,
+
 	attack = function(mob, target)
 		mob_ai_basic.attack(mob, target)
 	end,
+
 	after_death = function(mob, attacker)
 		local targets = mob:getObjectsInMap(mob.m, BL_PC)
 		for i = 1, #targets do
@@ -494,15 +521,19 @@ new_years_mob5 = {
 	on_healed = function(mob, healer)
 		mob_ai_basic.on_healed(mob, healer)
 	end,
+
 	on_attacked = function(mob, attacker)
 		mob_ai_basic.on_attacked(mob, attacker)
 	end,
+
 	move = function(mob, target)
 		mob_ai_basic.move(mob, target)
 	end,
+
 	attack = function(mob, target)
 		mob_ai_basic.attack(mob, target)
 	end,
+
 	after_death = function(mob, attacker)
 		local targets = mob:getObjectsInMap(mob.m, BL_PC)
 		for i = 1, #targets do
@@ -525,15 +556,19 @@ new_years_mob6 = {
 	on_healed = function(mob, healer)
 		mob_ai_basic.on_healed(mob, healer)
 	end,
+
 	on_attacked = function(mob, attacker)
 		mob_ai_basic.on_attacked(mob, attacker)
 	end,
+
 	move = function(mob, target)
 		mob_ai_basic.move(mob, target)
 	end,
+
 	attack = function(mob, target)
 		mob_ai_basic.attack(mob, target)
 	end,
+
 	after_death = function(mob, attacker)
 		local targets = mob:getObjectsInMap(mob.m, BL_PC)
 		for i = 1, #targets do
@@ -556,15 +591,19 @@ new_years_boss1 = {
 	on_healed = function(mob, healer)
 		mob_ai_basic.on_healed(mob, healer)
 	end,
+
 	on_attacked = function(mob, attacker)
 		mob_ai_mythic.on_attacked(mob, attacker, 0)
 	end,
+
 	move = function(mob, target)
 		mob_ai_mythic.move(mob, target, 0)
 	end,
+
 	attack = function(mob, target)
 		mob_ai_mythic.attack(mob, target, 2)
 	end,
+
 	after_death = function(mob, attacker)
 		local targets = mob:getObjectsInMap(mob.m, BL_PC)
 		for i = 1, #targets do
@@ -588,15 +627,19 @@ new_years_boss2 = {
 	on_healed = function(mob, healer)
 		mob_ai_basic.on_healed(mob, healer)
 	end,
+
 	on_attacked = function(mob, attacker)
 		mob_ai_mythic.on_attacked(mob, attacker, 1)
 	end,
+
 	move = function(mob, target)
 		mob_ai_mythic.move(mob, target, 1)
 	end,
+
 	attack = function(mob, target)
 		mob_ai_mythic.attack(mob, target, 2)
 	end,
+
 	after_death = function(mob, attacker)
 		local targets = mob:getObjectsInMap(mob.m, BL_PC)
 		for i = 1, #targets do
@@ -620,15 +663,19 @@ new_years_boss3 = {
 	on_healed = function(mob, healer)
 		mob_ai_basic.on_healed(mob, healer)
 	end,
+
 	on_attacked = function(mob, attacker)
 		mob_ai_mythic.on_attacked(mob, attacker, 2)
 	end,
+
 	move = function(mob, target)
 		mob_ai_mythic.move(mob, target, 2)
 	end,
+
 	attack = function(mob, target)
 		mob_ai_mythic.attack(mob, target, 0)
 	end,
+
 	after_death = function(mob, attacker)
 		local targets = mob:getObjectsInMap(mob.m, BL_PC)
 		for i = 1, #targets do

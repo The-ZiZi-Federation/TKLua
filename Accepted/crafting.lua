@@ -8,8 +8,15 @@ crafting = {
 		if skill == "weaving" or skill == "gemcutting" or skill == "smelting" then
 			-- refining skills
 
-			local hasSpecialization = crafting.checkSpecializationLegend(player, skill)
-			local isAccomplished = crafting.checkSkillLevel(player, skill, "accomplished")
+			local hasSpecialization = crafting.checkSpecializationLegend(
+				player,
+				skill
+			)
+			local isAccomplished = crafting.checkSkillLevel(
+				player,
+				skill,
+				"accomplished"
+			)
 
 			if not hasSpecialization and isAccomplished then
 				-- if missing legend mark AND at the level of accomplished or better
@@ -46,6 +53,7 @@ crafting = {
 			end
 		end
 	end,
+
 	getSkillValue = function(player, skill)
 		local skillPointLevels = crafting.skillPointsPerLevel(skill)
 		local earnedSkillPoints = player.registry[skill]
@@ -59,6 +67,7 @@ crafting = {
 
 		return skillValue
 	end,
+
 	checkSkillLevel = function(player, skill, level)
 		local level = string.lower(level)
 		local skillPointLevels = crafting.skillPointsPerLevel(skill)
@@ -101,6 +110,7 @@ crafting = {
 			return false
 		end
 	end,
+
 	getSkillLevel = function(player, skill)
 		local skillPointLevels = crafting.skillPointsPerLevel(skill)
 		local earnedSkillPoints = player.registry[skill]
@@ -143,6 +153,7 @@ crafting = {
 			return
 		end
 	end,
+
 	skillPointsPerLevel = function(skill)
 		--NOVICE          0 (0)
 		--APPRENTICE      5 (5)
@@ -173,7 +184,6 @@ crafting = {
 				146419
 			}
 		elseif skill == "mining" then
-			--skillPointLevels = {0,632,4700,11511,22836,48151,75466,110636,10000000,20000000,40000000} NTK numbers
 			skillPointLevels = {
 				0,
 				95,
@@ -187,6 +197,8 @@ crafting = {
 				97613,
 				146420
 			}
+
+			--skillPointLevels = {0,632,4700,11511,22836,48151,75466,110636,10000000,20000000,40000000} NTK numbers
 		elseif skill == "woodworking" then
 			-- carpentry
 			skillPointLevels = {
@@ -401,6 +413,7 @@ crafting = {
 
 		return skillPointLevels
 	end,
+
 	addPoints = function(player, npc, skill, pts)
 		local t = {
 			graphic = convertGraphic(npc.look, "monster"),
@@ -435,12 +448,16 @@ crafting = {
 			player:dialogSeq(
 				{
 					t,
-					"Your " .. skill .. " skills are growing, you are now of " .. crafting.getSkillLevel(player, skill) .. " skill."
+					"Your " .. skill .. " skills are growing, you are now of " .. crafting.getSkillLevel(
+						player,
+						skill
+					) .. " skill."
 				},
 				0
 			)
 		end
 	end,
+
 	addMentalSkill = function(player, npc, skill)
 		local t = {
 			graphic = convertGraphic(npc.look, "monster"),
@@ -476,16 +493,12 @@ crafting = {
 		player:dialogSeq(
 			{
 				t,
-				"Know this: you can only know one mental craft at a time. If later you decide to abandon " ..
-					skill ..
-						" for another mental craft all of your " ..
-							skill .. " ability will be lost, even if you return to " .. skill .. "."
+				"Know this: you can only know one mental craft at a time. If later you decide to abandon " .. skill .. " for another mental craft all of your " .. skill .. " ability will be lost, even if you return to " .. skill .. "."
 			},
 			1
 		)
 
-		local choice =
-			player:menuSeq(
+		local choice = player:menuSeq(
 			"For " .. cost .. " gold, I will teach you the very basics of " .. skill .. ".",
 			{"Teach me.", "I'm not sure I want to be a " .. trade .. "."},
 			{}
@@ -493,7 +506,10 @@ crafting = {
 
 		if choice == 1 then
 			if player.money < cost then
-				player:dialogSeq({t, "You need to get " .. cost .. " gold first."}, 0)
+				player:dialogSeq(
+					{t, "You need to get " .. cost .. " gold first."},
+					0
+				)
 				return
 			end
 
@@ -502,11 +518,15 @@ crafting = {
 			crafting.addPoints(player, npc, skill, 1)
 			crafting.updateSkill(player, skill)
 
-			player:dialogSeq({t, "It is done, welcome to the world of " .. skill .. "."}, 1)
+			player:dialogSeq(
+				{t, "It is done, welcome to the world of " .. skill .. "."},
+				1
+			)
 		elseif choice == 2 then
 			return
 		end
 	end,
+
 	checkMentalSkill = function(player, npc, skill)
 		local t = {
 			graphic = convertGraphic(npc.look, "monster"),
@@ -521,23 +541,23 @@ crafting = {
 			player:dialogSeq(
 				{
 					t,
-					"You have already chosen a skill of this type, " ..
-						skill ..
-							". If you abandon it, you will FOREVER lose ALL skill that craft. Even if you return to it at a later time."
+					"You have already chosen a skill of this type, " .. skill .. ". If you abandon it, you will FOREVER lose ALL skill that craft. Even if you return to it at a later time."
 				},
 				1
 			)
 
-			local choice =
-				player:menuSeq(
+			local choice = player:menuSeq(
 				"Are you absolutely certain you want to abandon your trade?",
 				{"Yes, I'm entirely certain.", "I'm not sure."},
 				{}
 			)
 
 			if choice == 1 then
-				local confirm =
-					player:menuSeq("This is your last chance to turn back! Do you REALLY want to do this?", {"Yes.", "No."}, {})
+				local confirm = player:menuSeq(
+					"This is your last chance to turn back! Do you REALLY want to do this?",
+					{"Yes.", "No."},
+					{}
+				)
 
 				if confirm == 1 then
 					crafting.removeSkill(player, skill)
@@ -551,6 +571,7 @@ crafting = {
 			return
 		end
 	end,
+
 	updateSkill = function(player, skill)
 		-- used solely to add remove legend marks of skills while leveling them
 
@@ -636,19 +657,34 @@ crafting = {
 
 		if newLevelName == "Grand master" and player.registry["cft_gm_" .. trade] ~= 1 then
 			player.registry["cft_gm_" .. trade] = 1
-			broadcast(-1, "[CRAFTING]: Congratulations to our newest GRAND MASTER " .. trade .. " " .. player.name .. "!")
+			broadcast(
+				-1,
+				"[CRAFTING]: Congratulations to our newest GRAND MASTER " .. trade .. " " .. player.name .. "!"
+			)
 		end
 		if newLevelName == "Champion" and player.registry["cft_champion_" .. trade] ~= 1 then
 			player.registry["cft_champion_" .. trade] = 1
-			broadcast(-1, "[CRAFTING]: Congratulations to our newest CHAMPION " .. trade .. " " .. player.name .. "!")
+			broadcast(
+				-1,
+				"[CRAFTING]: Congratulations to our newest CHAMPION " .. trade .. " " .. player.name .. "!"
+			)
 		end
 		if newLevelName == "Legendary" and player.registry["cft_legendary_" .. trade] ~= 1 then
 			player.registry["cft_legendary_" .. trade] = 1
-			broadcast(-1, "[CRAFTING]: Congratulations to our newest LEGENDARY " .. trade .. " " .. player.name .. "!")
+			broadcast(
+				-1,
+				"[CRAFTING]: Congratulations to our newest LEGENDARY " .. trade .. " " .. player.name .. "!"
+			)
 		end
 		player:removeLegendbyName("recently_specialized_" .. trade)
-		player:addLegend(newLevelName .. " " .. trade, newLevel .. "_" .. trade, icon, 128)
+		player:addLegend(
+			newLevelName .. " " .. trade,
+			newLevel .. "_" .. trade,
+			icon,
+			128
+		)
 	end,
+
 	checkSkillLegend = function(player, skill)
 		local trade = ""
 		if skill == "woodworking" then
@@ -709,6 +745,7 @@ crafting = {
 
 		return hasLegend
 	end,
+
 	checkSkill = function(player, npc, skill)
 		local t = {
 			graphic = convertGraphic(npc.look, "monster"),
@@ -728,8 +765,7 @@ crafting = {
 				1
 			)
 
-			local choice =
-				player:menuSeq(
+			local choice = player:menuSeq(
 				"Are you absolutely certain you want to abandon your " .. skill .. " trade?",
 				{"Yes, I'm entirely certain.", "I'm not sure."},
 				{}
@@ -744,8 +780,7 @@ crafting = {
 					1
 				)
 
-				local confirm =
-					player:menuSeq(
+				local confirm = player:menuSeq(
 					"This is your last chance to turn back! Do you REALLY want to do this, and remove your " .. skill .. " skill?",
 					{"Yes.", "No."},
 					{}
@@ -753,7 +788,10 @@ crafting = {
 
 				if confirm == 1 then
 					crafting.removeSkill(player, skill)
-					player:dialogSeq({t, "You no longer have the skill of " .. skill}, 0)
+					player:dialogSeq(
+						{t, "You no longer have the skill of " .. skill},
+						0
+					)
 				elseif confirm == 2 then
 					return
 				end
@@ -763,6 +801,7 @@ crafting = {
 			return
 		end
 	end,
+
 	addSkill = function(player, npc, skill)
 		local t = {
 			graphic = convertGraphic(npc.look, "monster"),
@@ -826,16 +865,12 @@ crafting = {
 		player:dialogSeq(
 			{
 				t,
-				"Know this: you can only know one advanced craft at a time. If later you decide to abandon " ..
-					skill ..
-						" for another advanced craft all of your " ..
-							skill .. " ability will be lost, even if you return to " .. skill .. "."
+				"Know this: you can only know one advanced craft at a time. If later you decide to abandon " .. skill .. " for another advanced craft all of your " .. skill .. " ability will be lost, even if you return to " .. skill .. "."
 			},
 			1
 		)
 
-		local choice =
-			player:menuSeq(
+		local choice = player:menuSeq(
 			"For " .. cost .. " gold, I will teach you the very basics of " .. skill .. ".",
 			{"Teach me.", "I'm not sure I want to be a " .. trade .. "."},
 			{}
@@ -843,7 +878,10 @@ crafting = {
 
 		if choice == 1 then
 			if player.money < cost then
-				player:dialogSeq({t, "You need to get " .. cost .. " gold first."}, 0)
+				player:dialogSeq(
+					{t, "You need to get " .. cost .. " gold first."},
+					0
+				)
 				return
 			end
 
@@ -852,11 +890,15 @@ crafting = {
 			crafting.addPoints(player, npc, skill, 1)
 			crafting.updateSkill(player, skill)
 
-			player:dialogSeq({t, "It is done, welcome to the world of " .. skill .. "."}, 1)
+			player:dialogSeq(
+				{t, "It is done, welcome to the world of " .. skill .. "."},
+				1
+			)
 		elseif choice == 2 then
 			return
 		end
 	end,
+
 	removeSkill = function(player, skill)
 		local levels = {
 			"novice",
@@ -914,6 +956,7 @@ crafting = {
 
 		player.registry[skill] = 0
 	end,
+
 	checkSpecializationLegend = function(player, skill)
 		local hasLegend = false
 
@@ -923,6 +966,7 @@ crafting = {
 
 		return hasLegend
 	end,
+
 	removeSpecialization = function(player, skill)
 		local trade = ""
 
@@ -938,6 +982,7 @@ crafting = {
 		player:removeLegendbyName("specialized_in_" .. skill)
 		player:removeLegendbyName("recently_specialized_" .. trade)
 	end,
+
 	checkSpecialization = function(player, npc, skill)
 		local t = {
 			graphic = convertGraphic(npc.look, "monster"),
@@ -952,15 +997,12 @@ crafting = {
 			player:dialogSeq(
 				{
 					t,
-					"You have already specialized in " ..
-						skill ..
-							", another manufacturing skill. If you abandon it, you will lose ALL skill in that craft. Even if you return to it at a later time, you will have to begin anew."
+					"You have already specialized in " .. skill .. ", another manufacturing skill. If you abandon it, you will lose ALL skill in that craft. Even if you return to it at a later time, you will have to begin anew."
 				},
 				1
 			)
 
-			local choice =
-				player:menuSeq(
+			local choice = player:menuSeq(
 				"Are you absolutely certain you want to abandon your " .. skill .. " trade?",
 				{"Yes, I'm entirely certain.", "I'm not sure."},
 				{}
@@ -975,8 +1017,11 @@ crafting = {
 					1
 				)
 
-				local confirm =
-					player:menuSeq("This is your last chance to turn back! Do you REALLY want to do this?", {"Yes.", "No."}, {})
+				local confirm = player:menuSeq(
+					"This is your last chance to turn back! Do you REALLY want to do this?",
+					{"Yes.", "No."},
+					{}
+				)
 
 				if confirm == 1 then
 					crafting.removeSpecialization(player, skill)
@@ -990,6 +1035,7 @@ crafting = {
 			return
 		end
 	end,
+
 	addSpecialization = function(player, npc, skill)
 		local t = {
 			graphic = convertGraphic(npc.look, "monster"),
@@ -1041,8 +1087,7 @@ crafting = {
 			1
 		)
 
-		local choice =
-			player:menuSeq(
+		local choice = player:menuSeq(
 			"Are you willing to pay " .. cost .. " gold?",
 			{"Yes, I wish to become a " .. trade .. ".", "No thanks."},
 			{}
@@ -1050,20 +1095,37 @@ crafting = {
 
 		if choice == 1 then
 			if player.money < cost then
-				player:dialogSeq({t, "You need to get " .. cost .. " gold first."}, 0)
+				player:dialogSeq(
+					{t, "You need to get " .. cost .. " gold first."},
+					0
+				)
 				return
 			end
 
 			player:removeGold(cost)
 
-			player:addLegend("Specialized in " .. skillName, "specialized_in_" .. skill, icon, 128)
-			player:addLegend("Recently specialized " .. trade, "recently_specialized_" .. trade, specicon, 128)
+			player:addLegend(
+				"Specialized in " .. skillName,
+				"specialized_in_" .. skill,
+				icon,
+				128
+			)
+			player:addLegend(
+				"Recently specialized " .. trade,
+				"recently_specialized_" .. trade,
+				specicon,
+				128
+			)
 
-			player:dialogSeq({t, "It is done, welcome to the world of " .. skillName .. "."}, 1)
+			player:dialogSeq(
+				{t, "It is done, welcome to the world of " .. skillName .. "."},
+				1
+			)
 		elseif choice == 2 then
 			return
 		end
 	end,
+
 	craftingDialog = function(player, npc, speech)
 		local t = {
 			graphic = convertGraphic(npc.look, "monster"),
@@ -1123,6 +1185,7 @@ crafting = {
 			cartography.craft(player, npc, speech)
 		end
 	end,
+
 	giveCraftingLoot = function(player, npc, skill, itemSuccess, itemSuccessAmts, itemFail, itemFailAmts, customMsg)
 		local msg = {
 			"You have failed in your attempt.",
@@ -1167,6 +1230,7 @@ crafting = {
 			player:dialogSeq({tFail, msg[1]}, 0)
 		end
 	end,
+
 	retrieveCraftingLoot = function(player, skill, items)
 		local chosenOne = "failed"
 		local itemReturn = {yname = chosenOne, graphic = 0, color = 0}
@@ -1251,6 +1315,7 @@ crafting = {
 
 		return itemReturn
 	end,
+
 	retrieveCraftingDialog = function(item_yname, skill)
 		if item_yname == nil then
 			return "failed"
@@ -1265,7 +1330,10 @@ crafting = {
 			if yname == "failed" or yname == "wood_scraps" then
 				craftingMsgReturn = "You have failed in your attempt."
 			elseif yname:match("quiver") then
-				craftingMsgReturn = "The arrows are of " .. itemDesc:gsub("^%l", string.upper) .. " quality."
+				craftingMsgReturn = "The arrows are of " .. itemDesc:gsub(
+					"^%l",
+					string.upper
+				) .. " quality."
 			elseif yname:match("supple") or yname:match("fine") then
 				craftingMsgReturn = "You have succeeded masterfully!"
 			else
@@ -1362,7 +1430,10 @@ crafting = {
 			if yname == "failed" then
 				craftingMsgReturn = "You were unsuccessful."
 			else
-				craftingMsgReturn = "The Garment is of " .. itemDesc:gsub("^%l", string.upper) .. " quality."
+				craftingMsgReturn = "The Garment is of " .. itemDesc:gsub(
+					"^%l",
+					string.upper
+				) .. " quality."
 			end
 			return craftingMsgReturn
 		elseif skill == "smelting" then
@@ -1382,7 +1453,10 @@ crafting = {
 			elseif yname:match("steel") then
 				craftingMsgReturn = "Your efforts are successful!"
 			else
-				craftingMsgReturn = "The darts are of " .. itemDesc:gsub("^%l", string.upper) .. " quality."
+				craftingMsgReturn = "The darts are of " .. itemDesc:gsub(
+					"^%l",
+					string.upper
+				) .. " quality."
 			end
 			return craftingMsgReturn
 		elseif skill == "chef" then

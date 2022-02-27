@@ -6,6 +6,7 @@ spin = {
 			target:setDuration("spin", duration)
 		end
 	end,
+
 	while_cast_500 = function(player)
 		player.side = player.side + 1
 
@@ -14,5 +15,5 @@ spin = {
 		end
 
 		player:sendSide()
-	end
+	end,
 }

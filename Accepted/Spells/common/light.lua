@@ -1,12 +1,6 @@
 light = {
-	on_learn = function(player)
-		player.registry["light"] = 1
-	end,
-	on_forget = function(player)
-		player.registry["light"] = 0
-	end,
 	cast = function(player, target)
-		local magicCost = player.maxMagic * .1
+		local magicCost = player.maxMagic *.1
 		local duration = 300000
 		local aether = 150000
 		local anim = 135
@@ -23,6 +17,7 @@ light = {
 			alreadyCast(player)
 			return
 		end
+
 		--if target.blType == BL_MOB or target.state == 1 then invalidTarget(player) return end
 
 		if target.blType == BL_PC then
@@ -40,10 +35,12 @@ light = {
 			end
 		end
 	end,
+
 	while_cast_250 = function(player)
 		local anim = 135
 		player:sendAnimation(anim)
 	end,
+
 	requirements = function(player)
 		local level = 5
 		local item = {0}
@@ -53,7 +50,7 @@ light = {
 			txt = txt .. "" .. amounts[i] .. " " .. Item(item[i]).name .. "\n"
 		end
 
-		local desc = {"A spell to light the way for you and your party.", txt}
+		local desc = "A spell to light your path."
 		return level, item, amounts, desc
 	end
 }

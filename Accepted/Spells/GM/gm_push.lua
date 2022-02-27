@@ -1,6 +1,9 @@
 gm_push = {
 	cast = function(player)
-		local pc, mob = getTargetFacing(player, BL_PC), getTargetFacing(player, BL_MOB)
+		local pc, mob = getTargetFacing(player, BL_PC), getTargetFacing(
+			player,
+			BL_MOB
+		)
 
 		player:sendAction(3, 20)
 		player:sendFrontAnimation(191, player.side, 1)
@@ -14,6 +17,7 @@ gm_push = {
 			end
 		end
 	end,
+
 	canCast = function(player, block)
 		if block.registry["can_be_push"] > 0 then
 			if player.ID ~= 2 then
@@ -34,6 +38,7 @@ gm_push = {
 			end
 		end
 	end,
+
 	while_cast_fast = function(player)
 		player:sendAnimationXY(397, player.x, player.y)
 
@@ -79,9 +84,11 @@ gm_push = {
 			end
 		end
 	end,
+
 	while_cast_250 = function(player)
 		gm_push.while_cast_fast(player)
 	end,
+
 	uncast = function(player)
 		for i = 0, 3 do
 			player.registry["gm_push" .. i] = 0
