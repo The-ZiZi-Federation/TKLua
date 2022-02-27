@@ -2,51 +2,51 @@ local _waypointsRegistry = "waypoints"
 local _defaultWaypoints = "|kugnae|buya|nagnang|mythic_nexus|"
 
 local _waypoints = {
-	{
+    {
 		id = "clan",
 		label = "Clan",
 		description = "Your clan is an awesome clan.",
-		keywords = {"clan"},
+        keywords = {"clan"},
 		includeOnMaps = {}, -- Include this waypoint when the player is on one of these maps (high priority)
 		excludeOnMap = -1, -- Exclude this waypoint when the player is on this map (medium priority)
-		excludeInRegion = -1, -- Exclude this waypoint when the player is in this region (low priority)
+        excludeInRegion = -1, -- Exclude this waypoint when the player is in this region (low priority)
 		costFactor = 1,
-		map = 0,
-		x = 50,
-		y = 150
-	},
+        map = 0,
+        x = 50,
+        y = 150
+    },
 	{
 		id = "kugnae",
-		label = "Kugnae",
-		description = "Kugnae is rustic and wonderful.",
-		keywords = {"kugnae", "koguryo"},
+        label = "Kugnae",
+        description = "Kugnae is rustic and wonderful.",
+        keywords = {"kugnae", "koguryo"},
 		includeOnMaps = {1013, 1027, 1025},
 		excludeOnMap = -1,
-		excludeInRegion = 0,
+        excludeInRegion = 0,
 		costFactor = 1,
-		map = 0,
-		x = 50,
-		y = 150
-	},
+        map = 0,
+        x = 50,
+        y = 150
+    },
 	{
 		id = "buya",
 		label = "Buya",
-		description = "Buya is great and powerful.",
+        description = "Buya is great and powerful.",
 		keywords = {"buya"},
-		includeOnMaps = {1122, 1031, 522},
+        includeOnMaps = {1122, 1031, 522},
 		excludeOnMap = -1,
-		excludeInRegion = 1,
+        excludeInRegion = 1,
 		costFactor = 1,
-		map = 330,
-		x = 39,
-		y = 105
+        map = 330,
+        x = 39,
+        y = 105
 	},
-	{
+    {
 		id = "nagnang",
 		label = "Nagnang",
 		description = "Nagnang is powerful and rich.",
 		keywords = {"nagnang"},
-		includeOnMaps = {},
+        includeOnMaps = {},
 		excludeOnMap = -1,
 		excludeInRegion = 3,
 		costFactor = 1,
@@ -54,12 +54,12 @@ local _waypoints = {
 		x = 122,
 		y = 133
 	},
-	{
+    {
 		id = "mythic_nexus",
 		label = "Mythic Nexus",
 		description = "Powerful creatures dwell in the Mythic Nexus.",
 		keywords = {"mythic"},
-		includeOnMaps = {},
+        includeOnMaps = {},
 		excludeOnMap = 41,
 		excludeInRegion = -1,
 		costFactor = 2,
@@ -67,12 +67,12 @@ local _waypoints = {
 		x = 30,
 		y = 11
 	},
-	{
+    {
 		id = "hamgyong_nam_do",
 		label = "Hamgyong Nam-Do",
 		description = "Hamgyong Nam-Do is home to the ogres.",
 		keywords = {"hamgyong", "hamgyong nam-do", "nogh", "ogre"},
-		includeOnMaps = {},
+        includeOnMaps = {},
 		excludeOnMap = 114,
 		excludeInRegion = -1,
 		costFactor = 3,
@@ -80,12 +80,12 @@ local _waypoints = {
 		x = 13,
 		y = 7
 	},
-	{
+    {
 		id = "forest_crossroads",
 		label = "Forest Crossroads",
 		description = "The Forest Crossroads are infested with chittering insects.",
 		keywords = {"forest", "crossroads", "forest crossroads", "mantis"},
-		includeOnMaps = {},
+        includeOnMaps = {},
 		excludeOnMap = 522,
 		excludeInRegion = -1,
 		costFactor = 4,
@@ -93,12 +93,12 @@ local _waypoints = {
 		x = 15,
 		y = 16
 	},
-	{
+    {
 		id = "islets",
 		label = "Islets",
 		description = "The Islets are quiet and peaceful.",
 		keywords = {"islets", "noxhil"},
-		includeOnMaps = {},
+        includeOnMaps = {},
 		excludeOnMap = 1008,
 		excludeInRegion = -1,
 		costFactor = 2,
@@ -106,12 +106,12 @@ local _waypoints = {
 		x = 17,
 		y = 147
 	},
-	{
+    {
 		id = "hausson",
 		label = "Hausson",
 		description = "Hausson is a remote island village.",
 		keywords = {"hausson"},
-		includeOnMaps = {},
+        includeOnMaps = {},
 		excludeOnMap = 1027,
 		excludeInRegion = -1,
 		costFactor = 3,
@@ -119,12 +119,12 @@ local _waypoints = {
 		x = 64,
 		y = 46
 	},
-	{
+    {
 		id = "dae_shore",
 		label = "Dae Shore",
 		description = "Dae Shore is an idyllic shoreline.",
 		keywords = {"dae", "dae shore"},
-		includeOnMaps = {},
+        includeOnMaps = {},
 		excludeOnMap = 1025,
 		excludeInRegion = -1,
 		costFactor = 2,
@@ -132,12 +132,12 @@ local _waypoints = {
 		x = 16,
 		y = 30
 	},
-	{
+    {
 		id = "kamings_encampment",
 		label = "KaMing's Encampment",
 		description = "KaMing's Encampment is the refuge of the Sonhi.",
 		keywords = {"kaming", "kaming's encampment", "sonhi"},
-		includeOnMaps = {},
+        includeOnMaps = {},
 		excludeOnMap = 3800,
 		excludeInRegion = -1,
 		costFactor = 2,
@@ -145,12 +145,12 @@ local _waypoints = {
 		x = 30,
 		y = 46
 	},
-	{
+    {
 		id = "northern_pass",
 		label = "Northern Pass",
 		description = "The Northern Pass connects distant regions.",
 		keywords = {"north", "northern pass"},
-		includeOnMaps = {},
+        includeOnMaps = {},
 		excludeOnMap = 1013,
 		excludeInRegion = -1,
 		costFactor = 2,
@@ -158,12 +158,12 @@ local _waypoints = {
 		x = 44,
 		y = 10
 	},
-	{
+    {
 		id = "arctic_village",
 		label = "Arctic Village",
 		description = "The Arctic Village is frozen and desolate.",
 		keywords = {"arctic", "arctic village"},
-		includeOnMaps = {},
+        includeOnMaps = {},
 		excludeOnMap = 3812,
 		excludeInRegion = -1,
 		costFactor = 4,
@@ -171,12 +171,12 @@ local _waypoints = {
 		x = 24,
 		y = 20
 	},
-	{
+    {
 		id = "sanhae",
 		label = "Sanhae",
 		description = "Sanhae is quiet and peaceful.",
 		keywords = {"sanhae"},
-		includeOnMaps = {},
+        includeOnMaps = {},
 		excludeOnMap = 1122,
 		excludeInRegion = -1,
 		costFactor = 3,
@@ -184,12 +184,12 @@ local _waypoints = {
 		x = 24,
 		y = 31
 	},
-	{
+    {
 		id = "wilderness",
 		label = "Wilderness",
 		description = "The Wilderness is expansive and full of resources.",
 		keywords = {"wild", "wilderness", "rotah"},
-		includeOnMaps = {},
+        includeOnMaps = {},
 		excludeOnMap = 1002,
 		excludeInRegion = -1,
 		costFactor = 2,
@@ -197,12 +197,12 @@ local _waypoints = {
 		x = 207,
 		y = 141
 	},
-	{
+    {
 		id = "sel",
 		label = "Sel",
 		description = "Sel is a master of gemcutting and jewelry.",
 		keywords = {"sel", "gem"},
-		includeOnMaps = {},
+        includeOnMaps = {},
 		excludeOnMap = -1,
 		excludeInRegion = -1,
 		costFactor = 3,
@@ -210,12 +210,12 @@ local _waypoints = {
 		x = 46,
 		y = 42
 	},
-	{
+    {
 		id = "splinter",
 		label = "Splinter",
 		description = "Splinter is a master of woodwork.",
 		keywords = {"splinter", "wood"},
-		includeOnMaps = {},
+        includeOnMaps = {},
 		excludeOnMap = -1,
 		excludeInRegion = -1,
 		costFactor = 3,
@@ -223,12 +223,12 @@ local _waypoints = {
 		x = 136,
 		y = 189
 	},
-	{
+    {
 		id = "thane",
 		label = "Thane",
 		description = "Thane is a master of mining.",
 		keywords = {"thane", "mine", "mining"},
-		includeOnMaps = {},
+        includeOnMaps = {},
 		excludeOnMap = -1,
 		excludeInRegion = -1,
 		costFactor = 3,
@@ -236,12 +236,12 @@ local _waypoints = {
 		x = 185,
 		y = 22
 	},
-	{
+    {
 		id = "yon",
 		label = "Yon",
 		description = "Yon is a master of weaving.",
 		keywords = {"yon", "weave"},
-		includeOnMaps = {},
+        includeOnMaps = {},
 		excludeOnMap = -1,
 		excludeInRegion = -1,
 		costFactor = 3,
@@ -249,12 +249,12 @@ local _waypoints = {
 		x = 44,
 		y = 32
 	},
-	{
+    {
 		id = "zephyr",
 		label = "Zephyr",
 		description = "Zephyr scribes atop a great mountain.",
 		keywords = {"zephyr", "scribe"},
-		includeOnMaps = {},
+        includeOnMaps = {},
 		excludeOnMap = -1,
 		excludeInRegion = -1,
 		costFactor = 5,
@@ -262,12 +262,12 @@ local _waypoints = {
 		x = 9,
 		y = 8
 	},
-	{
+    {
 		id = "museum",
 		label = "Museum",
 		description = "Yon is a master of weaving.",
 		keywords = {"museum"},
-		includeOnMaps = {},
+        includeOnMaps = {},
 		excludeOnMap = -1,
 		excludeInRegion = -1,
 		costFactor = 2,
@@ -290,33 +290,33 @@ local _shouldIncludeWaypoint = function(player, waypoint)
 	local map = player.m
 	local includeOnMaps = waypoint.includeOnMaps
 
-	for i = 1, #includeOnMaps do
+    for i = 1, #includeOnMaps do
 		if (map == waypoint.includeOnMaps[i]) then
-			return true
-		end
-	end
+            return true
+        end
+    end
 
 	if (map == waypoint.excludeOnMap) then
-		return false
-	end
+        return false
+    end
 
 	if (player.region == waypoint.excludeInRegion) then
-		return false
+        return false
 	end
 
-	return true
+    return true
 end
 
 local _getWaypoints = function(player)
-	local waypointsString = player.registryString[_waypointsRegistry]
+    local waypointsString = player.registryString[_waypointsRegistry]
 
-	if (waypointsString == "") then
-		waypointsString = _defaultWaypoints
-		player.registryString[_waypointsRegistry] = _defaultWaypoints
-		player:forceSave()
-	end
+    if (waypointsString == "") then
+        waypointsString = _defaultWaypoints
+        player.registryString[_waypointsRegistry] = _defaultWaypoints
+        player:forceSave()
+    end
 
-	local waypoints = {}
+    local waypoints = {}
 
 	-- @TODO: Add clan waypoint
 
@@ -329,7 +329,7 @@ local _getWaypoints = function(player)
 		end
 	end
 
-	return waypoints
+    return waypoints
 end
 
 local _getFare = function(player, waypoint)
@@ -345,8 +345,7 @@ local _transport = function(player, waypoint)
 		return
 	end
 
-	local choice =
-		player:menuSeq(
+	local choice = player:menuSeq(
 		waypoint.description .. "\n\nThe fare is " .. Tools.formatNumber(fare) .. " coins.\nDo you wish to travel there?",
 		{"Yes!", "No"},
 		{}
@@ -373,15 +372,9 @@ Waypoint = {
 
 		local cost = 11000 + 1875 * (waypoint.costFactor - 1) * (1 + waypoint.costFactor / 10)
 
-		player:dialogSeq(
-			{
-				"Waypoints allow you to quickly travel across great distances. A small fee is required for each use of this service."
-			},
-			1
-		)
+		player:dialogSeq({"Waypoints allow you to quickly travel across great distances. A small fee is required for each use of this service."}, 1)
 
-		local choice =
-			player:menuSeq(
+		local choice = player:menuSeq(
 			Tools.formatNumber(cost) .. " coins are required to establish a waypoint here.\n\nDo you wish to proceed?",
 			{"Yes", "No"},
 			{}
@@ -406,14 +399,9 @@ Waypoint = {
 		player.registryString[_waypointsRegistry] = player.registryString[_waypointsRegistry] .. waypointId .. "|"
 		player:forceSave()
 
-		player:dialogSeq(
-			{
-				"It is done. Say 'transport' or '" ..
-					waypoint.keywords[1] .. "' to any innkeeper whenever you would like to return here."
-			},
-			0
-		)
+		player:dialogSeq({"It is done. Say 'transport' or '" .. waypoint.keywords[1] .. "' to any innkeeper whenever you would like to return here."}, 0)
 	end,
+
 	click = function(player, npc)
 		Tools.configureDialog(player, npc)
 		local waypoints = _getWaypoints(player)
@@ -423,12 +411,17 @@ Waypoint = {
 			table.insert(waypointLabels, waypoints[i].label)
 		end
 
-		local choice = player:menuSeq("Where do you wish to travel?", waypointLabels, {})
+		local choice = player:menuSeq(
+			"Where do you wish to travel?",
+			waypointLabels,
+			{}
+		)
 
 		local waypoint = waypoints[choice]
 
 		_transport(player, waypoint)
 	end,
+
 	isEnabled = function(player, waypointId)
 		local enabledWaypoints = player.registryString[_waypointsRegistry]
 
@@ -442,6 +435,7 @@ Waypoint = {
 
 		return false
 	end,
+
 	onSayClick = function(player, npc)
 		-- Prevent duplicate processing in rooms that contain two NPCs with the Transport function
 		if (npc.yname ~= "InnNpc2") then

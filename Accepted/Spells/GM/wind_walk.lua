@@ -12,6 +12,7 @@ wind_walk = {
 			end
 		end
 	end,
+
 	move = function(mob, target)
 		local moved = true
 		local c1, c2 = math.random(0, 20), math.random(0, 10)
@@ -44,6 +45,7 @@ wind_walk = {
 			end
 		end
 	end,
+
 	attack = function(mob, target)
 		local moved = true
 
@@ -66,13 +68,16 @@ wind_walk = {
 			end
 		end
 	end,
+
 	on_attacked = function(mob, attacker)
 		mob:removeHealth(mob.health)
 		mob:playSound(73)
 	end,
+
 	before_death = function(mob)
 		mob:sendAnimationXY(292, mob.x, mob.y)
 	end,
+
 	cast = function(player)
 		local same = {}
 		local pc = player:getObjectsInMap(player.m, BL_PC)
@@ -123,6 +128,7 @@ wind_walk = {
 			end
 		end
 	end,
+
 	while_cast = function(block, caster)
 		if caster ~= nil then
 			local target = block:getBlock(caster.attacker)
@@ -134,11 +140,13 @@ wind_walk = {
 			end
 		end
 	end,
+
 	uncast = function(block)
 		block:sendAnimationXY(292, block.x, block.y)
 		block:playSound(73)
 		block:removeHealth(block.health)
 	end,
+
 	swing = function(player)
 		local mob = player:getObjectsInMap(player.m, BL_MOB)
 
@@ -156,6 +164,7 @@ wind_walk = {
 			end
 		end
 	end,
+
 	say = function(player)
 		local speech = string.lower(player.speech)
 		local mob = player:getObjectsInMap(player.m, BL_MOB)
@@ -172,22 +181,21 @@ wind_walk = {
 			end
 		end
 	end,
-	click = async(
-		function(player, mob)
-			local owner = mob:getBlock(mob.owner)
-			local healthCost = player.health * .5
 
-			if owner == nil then
-				return
-			else
-				if mob.owner == player.ID then
-					swap(player, mob)
-					player.side = mob.side
-					player.health = player.health - healthCost
-					player:sendStatus()
-					player:sendSide()
-				end
+	click = async(function(player, mob)
+		local owner = mob:getBlock(mob.owner)
+		local healthCost = player.health *.5
+
+		if owner == nil then
+			return
+		else
+			if mob.owner == player.ID then
+				swap(player, mob)
+				player.side = mob.side
+				player.health = player.health - healthCost
+				player:sendStatus()
+				player:sendSide()
 			end
 		end
-	)
+	end)
 }

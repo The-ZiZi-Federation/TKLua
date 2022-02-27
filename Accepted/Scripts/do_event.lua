@@ -198,7 +198,12 @@ faceAway = function(block1, thirdparam)
 		local block2 = {}
 		if (side1 == 0) then
 			--up
-			block2tab = block1:getObjectsInCell(block1.m, block1.x, block1.y - 1, BL_PC)
+			block2tab = block1:getObjectsInCell(
+				block1.m,
+				block1.x,
+				block1.y - 1,
+				BL_PC
+			)
 			if (#block2tab > 0) then
 				block2 = block2tab[#block2tab]
 			else
@@ -207,7 +212,12 @@ faceAway = function(block1, thirdparam)
 			block2.side = 0
 		elseif (side1 == 1) then
 			--right
-			block2tab = block1:getObjectsInCell(block1.m, block1.x + 1, block1.y, BL_PC)
+			block2tab = block1:getObjectsInCell(
+				block1.m,
+				block1.x + 1,
+				block1.y,
+				BL_PC
+			)
 			if (#block2tab > 0) then
 				block2 = block2tab[#block2tab]
 			else
@@ -216,7 +226,12 @@ faceAway = function(block1, thirdparam)
 			block2.side = 1
 		elseif (side1 == 2) then
 			--down
-			block2tab = block1:getObjectsInCell(block1.m, block1.x, block1.y + 1, BL_PC)
+			block2tab = block1:getObjectsInCell(
+				block1.m,
+				block1.x,
+				block1.y + 1,
+				BL_PC
+			)
 			if (#block2tab > 0) then
 				block2 = block2tab[#block2tab]
 			else
@@ -225,7 +240,12 @@ faceAway = function(block1, thirdparam)
 			block2.side = 2
 		elseif (side1 == 3) then
 			--left
-			block2tab = block1:getObjectsInCell(block1.m, block1.x - 1, block1.y, BL_PC)
+			block2tab = block1:getObjectsInCell(
+				block1.m,
+				block1.x - 1,
+				block1.y,
+				BL_PC
+			)
 			if (#block2tab > 0) then
 				block2 = block2tab[#block2tab]
 			else
@@ -263,17 +283,62 @@ canPush = function(block, target, push)
 	end
 
 	if (block.side == 0) then
-		local checkPCNorth = block:getObjectsInCell(block.m, block.x, block.y - 2, BL_PC)
-		local checkMobNorth = block:getObjectsInCell(block.m, block.x, block.y - 2, BL_MOB)
-		local checkNPCNorth = block:getObjectsInCell(block.m, block.x, block.y - 2, BL_NPC)
+		local checkPCNorth = block:getObjectsInCell(
+			block.m,
+			block.x,
+			block.y - 2,
+			BL_PC
+		)
+		local checkMobNorth = block:getObjectsInCell(
+			block.m,
+			block.x,
+			block.y - 2,
+			BL_MOB
+		)
+		local checkNPCNorth = block:getObjectsInCell(
+			block.m,
+			block.x,
+			block.y - 2,
+			BL_NPC
+		)
 
-		local checkPCEast = block:getObjectsInCell(block.m, block.x + 1, block.y - 1, BL_PC)
-		local checkMobEast = block:getObjectsInCell(block.m, block.x + 1, block.y - 1, BL_MOB)
-		local checkNPCEast = block:getObjectsInCell(block.m, block.x + 1, block.y - 1, BL_NPC)
+		local checkPCEast = block:getObjectsInCell(
+			block.m,
+			block.x + 1,
+			block.y - 1,
+			BL_PC
+		)
+		local checkMobEast = block:getObjectsInCell(
+			block.m,
+			block.x + 1,
+			block.y - 1,
+			BL_MOB
+		)
+		local checkNPCEast = block:getObjectsInCell(
+			block.m,
+			block.x + 1,
+			block.y - 1,
+			BL_NPC
+		)
 
-		local checkPCWest = block:getObjectsInCell(block.m, block.x - 1, block.y - 1, BL_PC)
-		local checkMobWest = block:getObjectsInCell(block.m, block.x - 1, block.y - 1, BL_MOB)
-		local checkNPCWest = block:getObjectsInCell(block.m, block.x - 1, block.y - 1, BL_NPC)
+		local checkPCWest = block:getObjectsInCell(
+			block.m,
+			block.x - 1,
+			block.y - 1,
+			BL_PC
+		)
+		local checkMobWest = block:getObjectsInCell(
+			block.m,
+			block.x - 1,
+			block.y - 1,
+			BL_MOB
+		)
+		local checkNPCWest = block:getObjectsInCell(
+			block.m,
+			block.x - 1,
+			block.y - 1,
+			BL_NPC
+		)
 
 		if (#checkNPCNorth > 0) then
 			i = 0
@@ -355,34 +420,43 @@ canPush = function(block, target, push)
 			end
 		end
 
-		if
-			(block.y - 2 > 0 and #checkPCNorth + #checkMobNorth + #checkNPCNorth == 0 and
-				block:objectCanMove(block.x, block.y - 2, 0) == true and
-				getPass(block.m, block.x, block.y - 2) == 0 and
-				not getWarp(block.m, block.x, block.y - 2))
-		 then
+		if (block.y - 2 > 0 and #checkPCNorth + #checkMobNorth + #checkNPCNorth == 0 and block:objectCanMove(
+			block.x,
+			block.y - 2,
+			0
+		) == true and getPass(block.m, block.x, block.y - 2) == 0 and not getWarp(
+			block.m,
+			block.x,
+			block.y - 2
+		)) then
 			if (push == nil) then
 				target:warp(block.m, block.x, block.y - 2)
 			else
 				return true
 			end
-		elseif
-			(block.x + 1 <= block.xmax and #checkPCEast + #checkMobEast + #checkNPCEast == 0 and
-				block:objectCanMove(block.x + 1, block.y - 1, 1) == true and
-				getPass(block.m, block.x + 1, block.y - 1) == 0 and
-				not getWarp(block.m, block.x + 1, block.y - 1))
-		 then
+		elseif (block.x + 1 <= block.xmax and #checkPCEast + #checkMobEast + #checkNPCEast == 0 and block:objectCanMove(
+			block.x + 1,
+			block.y - 1,
+			1
+		) == true and getPass(block.m, block.x + 1, block.y - 1) == 0 and not getWarp(
+			block.m,
+			block.x + 1,
+			block.y - 1
+		)) then
 			if (push == nil) then
 				target:warp(block.m, block.x + 1, block.y - 1)
 			else
 				return true
 			end
-		elseif
-			(block.x - 1 > 0 and #checkPCWest + #checkMobWest + #checkNPCWest == 0 and
-				block:objectCanMove(block.x - 1, block.y - 1, 3) == true and
-				getPass(block.m, block.x - 1, block.y - 1) == 0 and
-				not getWarp(block.m, block.x - 1, block.y - 1))
-		 then
+		elseif (block.x - 1 > 0 and #checkPCWest + #checkMobWest + #checkNPCWest == 0 and block:objectCanMove(
+			block.x - 1,
+			block.y - 1,
+			3
+		) == true and getPass(block.m, block.x - 1, block.y - 1) == 0 and not getWarp(
+			block.m,
+			block.x - 1,
+			block.y - 1
+		)) then
 			if (push == nil) then
 				target:warp(block.m, block.x - 1, block.y - 1)
 			else
@@ -392,17 +466,62 @@ canPush = function(block, target, push)
 			return false
 		end
 	elseif (block.side == 1) then
-		local checkPCEast = block:getObjectsInCell(block.m, block.x + 2, block.y, BL_PC)
-		local checkMobEast = block:getObjectsInCell(block.m, block.x + 2, block.y, BL_MOB)
-		local checkNPCEast = block:getObjectsInCell(block.m, block.x + 2, block.y, BL_NPC)
+		local checkPCEast = block:getObjectsInCell(
+			block.m,
+			block.x + 2,
+			block.y,
+			BL_PC
+		)
+		local checkMobEast = block:getObjectsInCell(
+			block.m,
+			block.x + 2,
+			block.y,
+			BL_MOB
+		)
+		local checkNPCEast = block:getObjectsInCell(
+			block.m,
+			block.x + 2,
+			block.y,
+			BL_NPC
+		)
 
-		local checkPCNorth = block:getObjectsInCell(block.m, block.x + 1, block.y - 1, BL_PC)
-		local checkMobNorth = block:getObjectsInCell(block.m, block.x + 1, block.y - 1, BL_MOB)
-		local checkNPCNorth = block:getObjectsInCell(block.m, block.x + 1, block.y - 1, BL_NPC)
+		local checkPCNorth = block:getObjectsInCell(
+			block.m,
+			block.x + 1,
+			block.y - 1,
+			BL_PC
+		)
+		local checkMobNorth = block:getObjectsInCell(
+			block.m,
+			block.x + 1,
+			block.y - 1,
+			BL_MOB
+		)
+		local checkNPCNorth = block:getObjectsInCell(
+			block.m,
+			block.x + 1,
+			block.y - 1,
+			BL_NPC
+		)
 
-		local checkPCSouth = block:getObjectsInCell(block.m, block.x + 1, block.y + 1, BL_PC)
-		local checkMobSouth = block:getObjectsInCell(block.m, block.x + 1, block.y + 1, BL_MOB)
-		local checkNPCSouth = block:getObjectsInCell(block.m, block.x + 1, block.y + 1, BL_NPC)
+		local checkPCSouth = block:getObjectsInCell(
+			block.m,
+			block.x + 1,
+			block.y + 1,
+			BL_PC
+		)
+		local checkMobSouth = block:getObjectsInCell(
+			block.m,
+			block.x + 1,
+			block.y + 1,
+			BL_MOB
+		)
+		local checkNPCSouth = block:getObjectsInCell(
+			block.m,
+			block.x + 1,
+			block.y + 1,
+			BL_NPC
+		)
 
 		if (#checkNPCNorth > 0) then
 			i = 0
@@ -484,34 +603,43 @@ canPush = function(block, target, push)
 			end
 		end
 
-		if
-			(block.x + 2 <= block.xmax and #checkPCEast + #checkMobEast + #checkNPCEast == 0 and
-				block:objectCanMove(block.x + 2, block.y, 1) == true and
-				getPass(block.m, block.x + 2, block.y) == 0 and
-				not getWarp(block.m, block.x + 2, block.y))
-		 then
+		if (block.x + 2 <= block.xmax and #checkPCEast + #checkMobEast + #checkNPCEast == 0 and block:objectCanMove(
+			block.x + 2,
+			block.y,
+			1
+		) == true and getPass(block.m, block.x + 2, block.y) == 0 and not getWarp(
+			block.m,
+			block.x + 2,
+			block.y
+		)) then
 			if (push == nil) then
 				target:warp(block.m, block.x + 2, block.y)
 			else
 				return true
 			end
-		elseif
-			(block.y - 1 > 0 and #checkPCNorth + #checkMobNorth + #checkNPCNorth == 0 and
-				block:objectCanMove(block.x + 1, block.y - 1, 0) == true and
-				getPass(block.m, block.x + 1, block.y - 1) == 0 and
-				not getWarp(block.m, block.x + 1, block.y - 1))
-		 then
+		elseif (block.y - 1 > 0 and #checkPCNorth + #checkMobNorth + #checkNPCNorth == 0 and block:objectCanMove(
+			block.x + 1,
+			block.y - 1,
+			0
+		) == true and getPass(block.m, block.x + 1, block.y - 1) == 0 and not getWarp(
+			block.m,
+			block.x + 1,
+			block.y - 1
+		)) then
 			if (push == nil) then
 				target:warp(block.m, block.x + 1, block.y - 1)
 			else
 				return true
 			end
-		elseif
-			(block.y + 1 <= block.ymax and #checkPCSouth + #checkMobSouth + #checkNPCSouth == 0 and
-				block:objectCanMove(block.x + 1, block.y + 1, 2) == true and
-				getPass(block.m, block.x + 1, block.y + 1) == 0 and
-				not getWarp(block.m, block.x + 1, block.y + 1))
-		 then
+		elseif (block.y + 1 <= block.ymax and #checkPCSouth + #checkMobSouth + #checkNPCSouth == 0 and block:objectCanMove(
+			block.x + 1,
+			block.y + 1,
+			2
+		) == true and getPass(block.m, block.x + 1, block.y + 1) == 0 and not getWarp(
+			block.m,
+			block.x + 1,
+			block.y + 1
+		)) then
 			if (push == nil) then
 				target:warp(block.m, block.x + 1, block.y + 1)
 			else
@@ -521,17 +649,62 @@ canPush = function(block, target, push)
 			return false
 		end
 	elseif (block.side == 2) then
-		local checkPCSouth = block:getObjectsInCell(block.m, block.x, block.y + 2, BL_PC)
-		local checkMobSouth = block:getObjectsInCell(block.m, block.x, block.y + 2, BL_MOB)
-		local checkNPCSouth = block:getObjectsInCell(block.m, block.x, block.y + 2, BL_NPC)
+		local checkPCSouth = block:getObjectsInCell(
+			block.m,
+			block.x,
+			block.y + 2,
+			BL_PC
+		)
+		local checkMobSouth = block:getObjectsInCell(
+			block.m,
+			block.x,
+			block.y + 2,
+			BL_MOB
+		)
+		local checkNPCSouth = block:getObjectsInCell(
+			block.m,
+			block.x,
+			block.y + 2,
+			BL_NPC
+		)
 
-		local checkPCEast = block:getObjectsInCell(block.m, block.x + 1, block.y + 1, BL_PC)
-		local checkMobEast = block:getObjectsInCell(block.m, block.x + 1, block.y + 1, BL_MOB)
-		local checkNPCEast = block:getObjectsInCell(block.m, block.x + 1, block.y + 1, BL_NPC)
+		local checkPCEast = block:getObjectsInCell(
+			block.m,
+			block.x + 1,
+			block.y + 1,
+			BL_PC
+		)
+		local checkMobEast = block:getObjectsInCell(
+			block.m,
+			block.x + 1,
+			block.y + 1,
+			BL_MOB
+		)
+		local checkNPCEast = block:getObjectsInCell(
+			block.m,
+			block.x + 1,
+			block.y + 1,
+			BL_NPC
+		)
 
-		local checkPCWest = block:getObjectsInCell(block.m, block.x - 1, block.y + 1, BL_PC)
-		local checkMobWest = block:getObjectsInCell(block.m, block.x - 1, block.y + 1, BL_MOB)
-		local checkNPCWest = block:getObjectsInCell(block.m, block.x - 1, block.y + 1, BL_NPC)
+		local checkPCWest = block:getObjectsInCell(
+			block.m,
+			block.x - 1,
+			block.y + 1,
+			BL_PC
+		)
+		local checkMobWest = block:getObjectsInCell(
+			block.m,
+			block.x - 1,
+			block.y + 1,
+			BL_MOB
+		)
+		local checkNPCWest = block:getObjectsInCell(
+			block.m,
+			block.x - 1,
+			block.y + 1,
+			BL_NPC
+		)
 
 		if (#checkNPCSouth > 0) then
 			i = 0
@@ -613,34 +786,43 @@ canPush = function(block, target, push)
 			end
 		end
 
-		if
-			(block.y + 2 <= block.ymax and #checkPCSouth + #checkMobSouth + #checkNPCSouth == 0 and
-				block:objectCanMove(block.x, block.y + 2, 2) == true and
-				getPass(block.m, block.x, block.y + 2) == 0 and
-				not getWarp(block.m, block.x, block.y + 2))
-		 then
+		if (block.y + 2 <= block.ymax and #checkPCSouth + #checkMobSouth + #checkNPCSouth == 0 and block:objectCanMove(
+			block.x,
+			block.y + 2,
+			2
+		) == true and getPass(block.m, block.x, block.y + 2) == 0 and not getWarp(
+			block.m,
+			block.x,
+			block.y + 2
+		)) then
 			if (push == nil) then
 				target:warp(block.m, block.x, block.y + 2)
 			else
 				return true
 			end
-		elseif
-			(block.x + 1 <= block.xmax and #checkPCEast + #checkMobEast + #checkNPCEast == 0 and
-				block:objectCanMove(block.x + 1, block.y + 1, 1) == true and
-				getPass(block.m, block.x + 1, block.y + 1) == 0 and
-				not getWarp(block.m, block.x + 1, block.y + 1))
-		 then
+		elseif (block.x + 1 <= block.xmax and #checkPCEast + #checkMobEast + #checkNPCEast == 0 and block:objectCanMove(
+			block.x + 1,
+			block.y + 1,
+			1
+		) == true and getPass(block.m, block.x + 1, block.y + 1) == 0 and not getWarp(
+			block.m,
+			block.x + 1,
+			block.y + 1
+		)) then
 			if (push == nil) then
 				target:warp(block.m, block.x + 1, block.y + 1)
 			else
 				return true
 			end
-		elseif
-			(block.x - 1 > 0 and #checkPCWest + #checkMobWest + #checkNPCWest == 0 and
-				block:objectCanMove(block.x - 1, block.y + 1, 3) == true and
-				getPass(block.m, block.x - 1, block.y + 1) == 0 and
-				not getWarp(block.m, block.x - 1, block.y + 1))
-		 then
+		elseif (block.x - 1 > 0 and #checkPCWest + #checkMobWest + #checkNPCWest == 0 and block:objectCanMove(
+			block.x - 1,
+			block.y + 1,
+			3
+		) == true and getPass(block.m, block.x - 1, block.y + 1) == 0 and not getWarp(
+			block.m,
+			block.x - 1,
+			block.y + 1
+		)) then
 			if (push == nil) then
 				target:warp(block.m, block.x - 1, block.y + 1)
 			else
@@ -650,17 +832,62 @@ canPush = function(block, target, push)
 			return false
 		end
 	elseif (block.side == 3) then
-		local checkPCWest = block:getObjectsInCell(block.m, block.x - 2, block.y, BL_PC)
-		local checkMobWest = block:getObjectsInCell(block.m, block.x - 2, block.y, BL_MOB)
-		local checkNPCWest = block:getObjectsInCell(block.m, block.x - 2, block.y, BL_NPC)
+		local checkPCWest = block:getObjectsInCell(
+			block.m,
+			block.x - 2,
+			block.y,
+			BL_PC
+		)
+		local checkMobWest = block:getObjectsInCell(
+			block.m,
+			block.x - 2,
+			block.y,
+			BL_MOB
+		)
+		local checkNPCWest = block:getObjectsInCell(
+			block.m,
+			block.x - 2,
+			block.y,
+			BL_NPC
+		)
 
-		local checkPCNorth = block:getObjectsInCell(block.m, block.x - 1, block.y - 1, BL_PC)
-		local checkMobNorth = block:getObjectsInCell(block.m, block.x - 1, block.y - 1, BL_MOB)
-		local checkNPCNorth = block:getObjectsInCell(block.m, block.x - 1, block.y - 1, BL_NPC)
+		local checkPCNorth = block:getObjectsInCell(
+			block.m,
+			block.x - 1,
+			block.y - 1,
+			BL_PC
+		)
+		local checkMobNorth = block:getObjectsInCell(
+			block.m,
+			block.x - 1,
+			block.y - 1,
+			BL_MOB
+		)
+		local checkNPCNorth = block:getObjectsInCell(
+			block.m,
+			block.x - 1,
+			block.y - 1,
+			BL_NPC
+		)
 
-		local checkPCSouth = block:getObjectsInCell(block.m, block.x - 1, block.y + 1, BL_PC)
-		local checkMobSouth = block:getObjectsInCell(block.m, block.x - 1, block.y + 1, BL_MOB)
-		local checkNPCSouth = block:getObjectsInCell(block.m, block.x - 1, block.y + 1, BL_NPC)
+		local checkPCSouth = block:getObjectsInCell(
+			block.m,
+			block.x - 1,
+			block.y + 1,
+			BL_PC
+		)
+		local checkMobSouth = block:getObjectsInCell(
+			block.m,
+			block.x - 1,
+			block.y + 1,
+			BL_MOB
+		)
+		local checkNPCSouth = block:getObjectsInCell(
+			block.m,
+			block.x - 1,
+			block.y + 1,
+			BL_NPC
+		)
 
 		if (#checkNPCNorth > 0) then
 			i = 0
@@ -742,34 +969,43 @@ canPush = function(block, target, push)
 			end
 		end
 
-		if
-			(block.x - 2 > 0 and #checkPCWest + #checkMobWest + #checkNPCWest == 0 and
-				block:objectCanMove(block.x - 2, block.y, 3) == true and
-				getPass(block.m, block.x - 2, block.y) == 0 and
-				not getWarp(block.m, block.x - 2, block.y))
-		 then
+		if (block.x - 2 > 0 and #checkPCWest + #checkMobWest + #checkNPCWest == 0 and block:objectCanMove(
+			block.x - 2,
+			block.y,
+			3
+		) == true and getPass(block.m, block.x - 2, block.y) == 0 and not getWarp(
+			block.m,
+			block.x - 2,
+			block.y
+		)) then
 			if (push == nil) then
 				target:warp(block.m, block.x - 2, block.y)
 			else
 				return true
 			end
-		elseif
-			(block.y - 1 > 0 and #checkPCNorth + #checkMobNorth + #checkNPCNorth == 0 and
-				block:objectCanMove(block.x - 1, block.y - 1, 0) == true and
-				getPass(block.m, block.x - 1, block.y - 1) == 0 and
-				not getWarp(block.m, block.x - 1, block.y - 1))
-		 then
+		elseif (block.y - 1 > 0 and #checkPCNorth + #checkMobNorth + #checkNPCNorth == 0 and block:objectCanMove(
+			block.x - 1,
+			block.y - 1,
+			0
+		) == true and getPass(block.m, block.x - 1, block.y - 1) == 0 and not getWarp(
+			block.m,
+			block.x - 1,
+			block.y - 1
+		)) then
 			if (push == nil) then
 				target:warp(block.m, block.x - 1, block.y - 1)
 			else
 				return true
 			end
-		elseif
-			(block.y + 1 <= block.ymax and #checkPCSouth + #checkMobSouth + #checkNPCSouth == 0 and
-				block:objectCanMove(block.x - 1, block.y + 1, 2) == true and
-				getPass(block.m, block.x - 1, block.y + 1) == 0 and
-				not getWarp(block.m, block.x - 1, block.y + 1))
-		 then
+		elseif (block.y + 1 <= block.ymax and #checkPCSouth + #checkMobSouth + #checkNPCSouth == 0 and block:objectCanMove(
+			block.x - 1,
+			block.y + 1,
+			2
+		) == true and getPass(block.m, block.x - 1, block.y + 1) == 0 and not getWarp(
+			block.m,
+			block.x - 1,
+			block.y + 1
+		)) then
 			if (push == nil) then
 				target:warp(block.m, block.x - 1, block.y + 1)
 			else
@@ -788,7 +1024,7 @@ canAmbush = function(block, target, ambush)
 	if (target.yname == "man_shik") then
 		return
 	end
-
+	
 	if (block.spell == 0) then
 		return
 	end
@@ -827,14 +1063,14 @@ canAmbush = function(block, target, ambush)
 	for i = 1, #destinationOffsets, 1 do
 		local destination = {x = target.x + destinationOffsets[i].x, y = target.y + destinationOffsets[i].y}
 		local obstacleCount = GetAmbushObstacles(block, target, destination)
-
+	
 		if (obstacleCount == 0 and CanMoveToDestination(block, target, destination)) then
 			if (ambush == nil) then
 				block.side = destinationSides[i]
 				block:sendSide()
 				block:warp(target.m, destination.x, destination.y)
 			end
-
+			
 			return true
 		end
 	end
@@ -867,7 +1103,7 @@ GetAmbushObstacles = function(block, target, destination)
 	return obstacleCount
 end
 
-CanMoveToDestination = function(block, target, destination)
+CanMoveToDestination = function (block, target, destination)
 	-- if destination is off the map
 	if (destination.x < 0 or destination.y < 0 or destination.x > block.xmax or destination.y > block.ymax) then
 		return false
@@ -894,10 +1130,30 @@ CanMoveToDestination = function(block, target, destination)
 end
 
 fourPush = function(block, blockType)
-	local blocksNorth = block:getObjectsInCell(block.m, block.x, block.y - 1, blockType)
-	local blocksEast = block:getObjectsInCell(block.m, block.x + 1, block.y, blockType)
-	local blocksWest = block:getObjectsInCell(block.m, block.x - 1, block.y, blockType)
-	local blocksSouth = block:getObjectsInCell(block.m, block.x, block.y + 1, blockType)
+	local blocksNorth = block:getObjectsInCell(
+		block.m,
+		block.x,
+		block.y - 1,
+		blockType
+	)
+	local blocksEast = block:getObjectsInCell(
+		block.m,
+		block.x + 1,
+		block.y,
+		blockType
+	)
+	local blocksWest = block:getObjectsInCell(
+		block.m,
+		block.x - 1,
+		block.y,
+		blockType
+	)
+	local blocksSouth = block:getObjectsInCell(
+		block.m,
+		block.x,
+		block.y + 1,
+		blockType
+	)
 	local side = block.side
 
 	if (#blocksNorth > 0) then
@@ -935,6 +1191,9 @@ roomExpTotal = function(block, room, minutes)
 		end
 	end
 
-	expectedPotential = maxPotential * .65
-	block:talk(0, "Room: " .. room .. " Max: " .. maxPotential .. " Expected: " .. expectedPotential)
+	expectedPotential = maxPotential *.65
+	block:talk(
+		0,
+		"Room: " .. room .. " Max: " .. maxPotential .. " Expected: " .. expectedPotential
+	)
 end

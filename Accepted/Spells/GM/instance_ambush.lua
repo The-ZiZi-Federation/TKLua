@@ -6,5 +6,5 @@ instance_ambush = {
 		else
 			player:warp(player.m, player.x + 1, player.y)
 		end
-	end
+	end,
 }

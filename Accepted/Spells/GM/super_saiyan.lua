@@ -15,12 +15,15 @@ super_saiyan = {
 		player.gfxFaceATC = 26
 		player:updateState()
 	end,
+
 	while_cast = function(player)
 		player:sendAnimation(349)
 	end,
+
 	while_cast_250 = function(player)
 		player:sendAnimation(509)
 	end,
+
 	uncast = function(player)
 		player.gfxClone = 0
 		player:updateState()

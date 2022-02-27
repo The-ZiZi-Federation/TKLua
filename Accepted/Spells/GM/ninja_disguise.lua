@@ -22,6 +22,7 @@ ninja_disguise = {
 		player:sendAnimation(anim)
 		player:setDuration("ninja_disguise", 30000)
 	end,
+
 	uncast = function(player)
 		local anim = 292
 
@@ -53,6 +54,7 @@ ninja_swap = {
 		player:setDuration("ninja_swap", 30000)
 		target:setDuration("ninja_swap", 30000)
 	end,
+
 	uncast = function(player)
 		local anim = 292
 

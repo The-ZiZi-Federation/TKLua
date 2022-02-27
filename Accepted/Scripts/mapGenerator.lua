@@ -29,9 +29,24 @@ mapGenerator = {
 					0,
 					0
 				)
-				local objs, tiles, passabilities = mapGenerator.copyMap(tempmap, 0, 0, 32, 32)
+				local objs, tiles, passabilities = mapGenerator.copyMap(
+					tempmap,
+					0,
+					0,
+					32,
+					32
+				)
 
-				mapGenerator.writeMap(mapid, minX, minY, maxX, maxX, objs, tiles, passabilities)
+				mapGenerator.writeMap(
+					mapid,
+					minX,
+					minY,
+					maxX,
+					maxX,
+					objs,
+					tiles,
+					passabilities
+				)
 
 				minX = minX + 32
 				maxX = maxX + 32
@@ -45,6 +60,7 @@ mapGenerator = {
 			end
 		end
 	end,
+
 	copyMap = function(mapid, minX, minY, maxX, maxY)
 		local objs = {}
 		local tiles = {}
@@ -70,6 +86,7 @@ mapGenerator = {
 
 		return objs, tiles, passabilities
 	end,
+
 	writeMap = function(mapid, minX, minY, maxX, maxY, objs, tiles, passabilities)
 		local x = minX
 		local y = minY
@@ -86,6 +103,7 @@ mapGenerator = {
 			x = x + 1
 		end
 	end,
+
 	clearMap = function(mapid)
 		for i = 0, getMapXMax(mapid) do
 			for j = 0, getMapYMax(mapid) do

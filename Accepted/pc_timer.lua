@@ -27,12 +27,14 @@ pc_timer = {
 			pc_timer.hour(player)
 		end
 	end,
+
 	advice = function(player)
 		if (player.timerTick % 1800 == 0) then
 			-- 15mins
 			player:msg(99, "" .. advice[math.random(#advice)], player.ID)
 		end
 	end,
+
 	halfsecond = function(player)
 		if (player.registry["see_warps"] == 1) then
 			warpGlow(player)
@@ -40,6 +42,7 @@ pc_timer = {
 
 		player:regen()
 	end,
+
 	second = function(player)
 		local seconds = math.floor(player.timerTick / 2)
 		questtracker.displayquest(player)
@@ -57,6 +60,7 @@ pc_timer = {
 
 		BeachWarNpc.playerCore(player)
 	end,
+
 	fivesecond = function(player)
 		player:afkCheckDoorBlock(player)
 
@@ -75,12 +79,15 @@ pc_timer = {
 	]]
 		--
 	end,
+
 	minute = function(player)
 		--local minutes = math.floor(player.timerTick/120)
 	end,
+
 	hour = function(player)
 		--local hours = math.floor(player.timerTick/7200)
 	end,
+
 	display_timer = function(player)
 		--Executes when a display timer finishes.
 		--player:talk(2, "Beep beep, beep beep...")

@@ -1,22 +1,21 @@
 barber = {
-	click = async(
-		function(player, npc)
-			local npcer = math.random(51, 450)
-			local bot = NPC(npcer)
-			local t = {
-				graphic = convertGraphic(npc.look, "monster"),
-				color = npc.lookColor
-			}
-			player.npcGraphic = t.graphic
-			player.npcColor = t.color
-			player.dialogType = 2
+	click = async(function(player, npc)
+		local npcer = math.random(51, 450)
+		local bot = NPC(npcer)
+		local t = {
+			graphic = convertGraphic(npc.look, "monster"),
+			color = npc.lookColor
+		}
+		player.npcGraphic = t.graphic
+		player.npcColor = t.color
+		player.dialogType = 2
 
-			clone.equip(player, bot)
-			player.lastClick = bot.ID
+		clone.equip(player, bot)
+		player.lastClick = bot.ID
 
-			hair2.option(player, bot)
-		end
-	),
+		hair2.option(player, bot)
+	end),
+
 	browse = function(player, npc, type)
 		local type = string.lower(type)
 		local opts = {"Next", "OK", "Prev"}
@@ -24,19 +23,13 @@ barber = {
 		local val, valC, look, color = 0, 0, 0, 0
 
 		if type == "Hair Style" then
-			x, val, valC, look, color =
-				"Hair",
-				npc.gfxHair,
-				npc.gfxHairC,
-				player.registry["hair_look"],
-				player.registry["hair_color"]
+			x, val, valC, look, color = "Hair", npc.gfxHair, npc.gfxHairC, player.registry[
+				"hair_look"
+			], player.registry["hair_color"]
 		elseif type == "Face Surgery" then
-			x, val, valC, look, color =
-				"Face",
-				npc.gfxFace,
-				npc.gfxFaceC,
-				player.registry["face_look"],
-				player.registry["face_color"]
+			x, val, valC, look, color = "Face", npc.gfxFace, npc.gfxFaceC, player.registry[
+				"face_look"
+			], player.registry["face_color"]
 		end
 
 		if player.registry["face_look"] == 0 then
@@ -66,7 +59,10 @@ barber = {
 						npc.gfxHair = npc.gfxHair + 1
 					end
 					npc:updateState()
-					npc:talk(1, "Hair: " .. npc.gfxHair .. "(" .. npc.gfxHairC .. ")")
+					npc:talk(
+						1,
+						"Hair: " .. npc.gfxHair .. "(" .. npc.gfxHairC .. ")"
+					)
 				elseif type == "Face Surgery" then
 					if npc.gfxFace > 238 then
 						npc.gfxFace = 200
@@ -74,7 +70,10 @@ barber = {
 						npc.gfxFace = npc.gfxFace + 1
 					end
 					npc:updateState()
-					npc:talk(1, "Face: " .. npc.gfxFace .. "(" .. npc.gfxFaceC .. ")")
+					npc:talk(
+						1,
+						"Face: " .. npc.gfxFace .. "(" .. npc.gfxFaceC .. ")"
+					)
 				end
 
 				barber.browse(player, npc, type)
@@ -83,18 +82,28 @@ barber = {
 					if player.registry["hair_look"] < 0 then
 						player.registry["hair_look"] = 129
 					else
-						player.registry["hair_look"] = player.registry["hair_look"] - 1
+						player.registry["hair_look"] = player.registry[
+							"hair_look"
+						] - 1
 					end
 					npc.gfxHairC = player.registry["hair_color"]
-					npc:talk(1, "Hair: " .. npc.gfxHair .. "(" .. npc.gfxHairC .. ")")
+					npc:talk(
+						1,
+						"Hair: " .. npc.gfxHair .. "(" .. npc.gfxHairC .. ")"
+					)
 				elseif type == "Face Surgery" then
 					if player.registry["face_look"] < 200 then
 						player.registry["face_look"] = 238
 					else
-						player.registry["face_look"] = player.registry["face_look"] - 1
+						player.registry["face_look"] = player.registry[
+							"face_look"
+						] - 1
 					end
 					npc.gfxFaceC = player.registry["face_color"]
-					npc:talk(1, "Face: " .. npc.gfxFace .. "(" .. npc.gfxFaceC .. ")")
+					npc:talk(
+						1,
+						"Face: " .. npc.gfxFace .. "(" .. npc.gfxFaceC .. ")"
+					)
 				end
 				barber.browse(player, npc, type)
 			end
@@ -131,6 +140,7 @@ hair2 = {
 			player:sendMinitext("Done!!")
 		end
 	end,
+
 	browse = function(player, npc)
 		player.dialogType = 2
 		local opts = {"Next >>", "Options", "<< Previous"}
@@ -143,7 +153,9 @@ hair2 = {
 				else
 					npc.gfxHair = npc.gfxHair + 1
 				end
-			elseif player.registry["hair_style"] == 0 and player.registry["hair_color"] == 1 then
+			elseif player.registry["hair_style"] == 0 and player.registry[
+				"hair_color"
+			] == 1 then
 				npc.gfxHairC = npc.gfxHairC + 1
 			end
 			hair2.browse(player, npc)
@@ -156,7 +168,9 @@ hair2 = {
 				else
 					npc.gfxHair = npc.gfxHair - 1
 				end
-			elseif player.registry["hair_style"] == 0 and player.registry["hair_color"] == 1 then
+			elseif player.registry["hair_style"] == 0 and player.registry[
+				"hair_color"
+			] == 1 then
 				npc.gfxHairC = npc.gfxHairC - 1
 			end
 			hair2.browse(player, npc)

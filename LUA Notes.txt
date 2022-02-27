@@ -5,7 +5,6 @@ Returning a value from another function can contain any value, if a block is ret
 
 To make a mob not give exp make 'mob.attacker = 0' during the on_death function of a mob's AI.
 
-
 CoM has 364 days
 91 days per season
 4 seasons

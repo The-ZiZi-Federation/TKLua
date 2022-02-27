@@ -14,9 +14,11 @@ gfx_switch = {
 		end
 		player:updateState()
 	end,
+
 	while_cast = function(player)
 		player.gfxClone = 1
 	end,
+
 	uncast = function(player)
 		player.gfxClone = 0
 		player:updateState()

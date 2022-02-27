@@ -6,6 +6,7 @@ snake_spell = {
 			target:setDuration("snake_spell", duration)
 		end
 	end,
+
 	while_cast_500 = function(player)
 		local x = player.registry["snake_x"]
 		local y = player.registry["snake_y"]
@@ -36,8 +37,9 @@ snake_spell = {
 
 		player:sendAnimationXY(228, x, y)
 	end,
+
 	uncast = function(player)
 		player.registry["snake_x"] = 0
 		player.registry["snake_y"] = 0
-	end
+	end,
 }

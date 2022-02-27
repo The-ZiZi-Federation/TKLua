@@ -7,21 +7,21 @@ magicDamage = function(block, target, func)
 	end
 
 	if (block.blType == BL_PC) then
-		local weaponDamage =
-			math.floor(
-			mathRandom(block.minDam / 3, block.maxDam / 3, 1000) + mathRandom(block.minDam / 3, block.maxDam / 3, 1000) +
-				mathRandom(block.minDam / 3, block.maxDam / 3, 1000)
-		)
+		local weaponDamage = math.floor(mathRandom(block.minDam / 3, block.maxDam / 3, 1000) + mathRandom(
+			block.minDam / 3,
+			block.maxDam / 3,
+			1000
+		) + mathRandom(block.minDam / 3, block.maxDam / 3, 1000))
 
 		baseDamage = baseDamage * block.fury
 		weaponDamage = weaponDamage * block.enchant
 		finalDamage = (baseDamage + weaponDamage) * block.rage * block.invis
 	elseif (block.blType == BL_MOB) then
-		local weaponDamage =
-			math.floor(
-			mathRandom(block.minDam / 3, block.maxDam / 3, 1000) + mathRandom(block.minDam / 3, block.maxDam / 3, 1000) +
-				mathRandom(block.minDam / 3, block.maxDam / 3, 1000)
-		)
+		local weaponDamage = math.floor(mathRandom(block.minDam / 3, block.maxDam / 3, 1000) + mathRandom(
+			block.minDam / 3,
+			block.maxDam / 3,
+			1000
+		) + mathRandom(block.minDam / 3, block.maxDam / 3, 1000))
 
 		finalDamage = (baseDamage + weaponDamage) * block.invis
 	end
@@ -137,12 +137,7 @@ magicDamage = function(block, target, func)
 			end
 		end
 
-		if
-			(target.blType == BL_MOB or (block.blType == BL_MOB and (block.owner == 0 or block.owner >= 1073741823)) or
-				(block.blType == BL_PC and block:canPK(target) == true) or
-				(block.blType == BL_MOB and block.owner > 0 and block.owner < 1073741823 and
-					Player(block.owner):canPK(target) == true))
-		 then
+		if (target.blType == BL_MOB or (block.blType == BL_MOB and (block.owner == 0 or block.owner >= 1073741823)) or (block.blType == BL_PC and block:canPK(target) == true) or (block.blType == BL_MOB and block.owner > 0 and block.owner < 1073741823 and Player(block.owner):canPK(target) == true)) then
 			target.attacker = block.ID
 			target:deductArmor(block.critChance)
 

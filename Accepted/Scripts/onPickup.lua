@@ -5,7 +5,12 @@ onPickUp = function(player)
 		local goldFound = false
 		local itemFound = 0
 
-		groundItems = player:getObjectsInCell(player.m, player.x, player.y, BL_ITEM)
+		groundItems = player:getObjectsInCell(
+			player.m,
+			player.x,
+			player.y,
+			BL_ITEM
+		)
 
 		if #groundItems > 0 then
 			for i = 1, #groundItems do
@@ -41,7 +46,12 @@ onPickUp = function(player)
 	---------multi item pickup (shift+comma)---------------------------------------------------------------
 
 	if player.pickUpType == 1 then
-		groundItems = player:getObjectsInCell(player.m, player.x, player.y, BL_ITEM)
+		groundItems = player:getObjectsInCell(
+			player.m,
+			player.x,
+			player.y,
+			BL_ITEM
+		)
 
 		if #groundItems > 0 then
 			for i = 1, #groundItems do
@@ -54,7 +64,11 @@ onPickUp = function(player)
 				elseif groundItems[i].id > 3 then
 					--If it is not coins
 					if player:canLoot(groundItems[i]) then
-						characterLog.pickUpWrite(player, groundItems[i], groundItems[i].amount)
+						characterLog.pickUpWrite(
+							player,
+							groundItems[i],
+							groundItems[i].amount
+						)
 						player:pickUp(groundItems[i].ID)
 					end
 				end
@@ -65,25 +79,115 @@ onPickUp = function(player)
 	---------area item pickup (control+comma)---------------------------------------------------------------
 
 	if player.pickUpType == 3 then
-		local groundItem1 = player:getObjectsInCell(player.m, player.x, player.y, BL_ITEM)
-		local groundItem2 = player:getObjectsInCell(player.m, player.x - 1, player.y, BL_ITEM)
-		local groundItem3 = player:getObjectsInCell(player.m, player.x + 1, player.y, BL_ITEM)
-		local groundItem4 = player:getObjectsInCell(player.m, player.x, player.y - 1, BL_ITEM)
-		local groundItem5 = player:getObjectsInCell(player.m, player.x, player.y + 1, BL_ITEM)
-		local groundItem6 = player:getObjectsInCell(player.m, player.x - 1, player.y - 1, BL_ITEM)
-		local groundItem7 = player:getObjectsInCell(player.m, player.x - 1, player.y + 1, BL_ITEM)
-		local groundItem8 = player:getObjectsInCell(player.m, player.x + 1, player.y - 1, BL_ITEM)
-		local groundItem9 = player:getObjectsInCell(player.m, player.x + 1, player.y + 1, BL_ITEM)
+		local groundItem1 = player:getObjectsInCell(
+			player.m,
+			player.x,
+			player.y,
+			BL_ITEM
+		)
+		local groundItem2 = player:getObjectsInCell(
+			player.m,
+			player.x - 1,
+			player.y,
+			BL_ITEM
+		)
+		local groundItem3 = player:getObjectsInCell(
+			player.m,
+			player.x + 1,
+			player.y,
+			BL_ITEM
+		)
+		local groundItem4 = player:getObjectsInCell(
+			player.m,
+			player.x,
+			player.y - 1,
+			BL_ITEM
+		)
+		local groundItem5 = player:getObjectsInCell(
+			player.m,
+			player.x,
+			player.y + 1,
+			BL_ITEM
+		)
+		local groundItem6 = player:getObjectsInCell(
+			player.m,
+			player.x - 1,
+			player.y - 1,
+			BL_ITEM
+		)
+		local groundItem7 = player:getObjectsInCell(
+			player.m,
+			player.x - 1,
+			player.y + 1,
+			BL_ITEM
+		)
+		local groundItem8 = player:getObjectsInCell(
+			player.m,
+			player.x + 1,
+			player.y - 1,
+			BL_ITEM
+		)
+		local groundItem9 = player:getObjectsInCell(
+			player.m,
+			player.x + 1,
+			player.y + 1,
+			BL_ITEM
+		)
 
-		local surroundingPC1 = player:getObjectsInCell(player.m, player.x, player.y, BL_PC)
-		local surroundingPC2 = player:getObjectsInCell(player.m, player.x - 1, player.y, BL_PC)
-		local surroundingPC3 = player:getObjectsInCell(player.m, player.x + 1, player.y, BL_PC)
-		local surroundingPC4 = player:getObjectsInCell(player.m, player.x, player.y - 1, BL_PC)
-		local surroundingPC5 = player:getObjectsInCell(player.m, player.x, player.y + 1, BL_PC)
-		local surroundingPC6 = player:getObjectsInCell(player.m, player.x - 1, player.y - 1, BL_PC)
-		local surroundingPC7 = player:getObjectsInCell(player.m, player.x - 1, player.y + 1, BL_PC)
-		local surroundingPC8 = player:getObjectsInCell(player.m, player.x + 1, player.y - 1, BL_PC)
-		local surroundingPC9 = player:getObjectsInCell(player.m, player.x + 1, player.y + 1, BL_PC)
+		local surroundingPC1 = player:getObjectsInCell(
+			player.m,
+			player.x,
+			player.y,
+			BL_PC
+		)
+		local surroundingPC2 = player:getObjectsInCell(
+			player.m,
+			player.x - 1,
+			player.y,
+			BL_PC
+		)
+		local surroundingPC3 = player:getObjectsInCell(
+			player.m,
+			player.x + 1,
+			player.y,
+			BL_PC
+		)
+		local surroundingPC4 = player:getObjectsInCell(
+			player.m,
+			player.x,
+			player.y - 1,
+			BL_PC
+		)
+		local surroundingPC5 = player:getObjectsInCell(
+			player.m,
+			player.x,
+			player.y + 1,
+			BL_PC
+		)
+		local surroundingPC6 = player:getObjectsInCell(
+			player.m,
+			player.x - 1,
+			player.y - 1,
+			BL_PC
+		)
+		local surroundingPC7 = player:getObjectsInCell(
+			player.m,
+			player.x - 1,
+			player.y + 1,
+			BL_PC
+		)
+		local surroundingPC8 = player:getObjectsInCell(
+			player.m,
+			player.x + 1,
+			player.y - 1,
+			BL_PC
+		)
+		local surroundingPC9 = player:getObjectsInCell(
+			player.m,
+			player.x + 1,
+			player.y + 1,
+			BL_PC
+		)
 
 		if #groundItem1 > 0 then
 			for i = 1, #groundItem1 do
@@ -98,7 +202,11 @@ onPickUp = function(player)
 					--If it is an item
 					if player:canLoot(groundItem1[i]) then
 						--if it is not cursed
-						characterLog.pickUpWrite(player, groundItem1[i], groundItem1[i].amount)
+						characterLog.pickUpWrite(
+							player,
+							groundItem1[i],
+							groundItem1[i].amount
+						)
 						player:pickUp(groundItem1[i].ID)
 					end
 				end
@@ -118,7 +226,11 @@ onPickUp = function(player)
 					--If it is an item
 					if player:canLoot(groundItem2[i]) and #surroundingPC2 == 0 then
 						--if it is not cursed
-						characterLog.pickUpWrite(player, groundItem2[i], groundItem2[i].amount)
+						characterLog.pickUpWrite(
+							player,
+							groundItem2[i],
+							groundItem2[i].amount
+						)
 						player:pickUp(groundItem2[i].ID)
 					end
 				end
@@ -138,7 +250,11 @@ onPickUp = function(player)
 					--If it is an item
 					if player:canLoot(groundItem3[i]) and #surroundingPC3 == 0 then
 						--if it is not cursed
-						characterLog.pickUpWrite(player, groundItem3[i], groundItem3[i].amount)
+						characterLog.pickUpWrite(
+							player,
+							groundItem3[i],
+							groundItem3[i].amount
+						)
 						player:pickUp(groundItem3[i].ID)
 					end
 				end
@@ -158,7 +274,11 @@ onPickUp = function(player)
 					--If it is an item
 					if player:canLoot(groundItem4[i]) and #surroundingPC4 == 0 then
 						--if it is not cursed
-						characterLog.pickUpWrite(player, groundItem4[i], groundItem4[i].amount)
+						characterLog.pickUpWrite(
+							player,
+							groundItem4[i],
+							groundItem4[i].amount
+						)
 						player:pickUp(groundItem4[i].ID)
 					end
 				end
@@ -178,7 +298,11 @@ onPickUp = function(player)
 					--If it is an item
 					if player:canLoot(groundItem5[i]) and #surroundingPC5 == 0 then
 						--if it is not cursed
-						characterLog.pickUpWrite(player, groundItem5[i], groundItem5[i].amount)
+						characterLog.pickUpWrite(
+							player,
+							groundItem5[i],
+							groundItem5[i].amount
+						)
 						player:pickUp(groundItem5[i].ID)
 					end
 				end
@@ -198,7 +322,11 @@ onPickUp = function(player)
 					--If it is an item
 					if player:canLoot(groundItem6[i]) and #surroundingPC6 == 0 then
 						--if it is not cursed
-						characterLog.pickUpWrite(player, groundItem6[i], groundItem6[i].amount)
+						characterLog.pickUpWrite(
+							player,
+							groundItem6[i],
+							groundItem6[i].amount
+						)
 						player:pickUp(groundItem6[i].ID)
 					end
 				end
@@ -218,7 +346,11 @@ onPickUp = function(player)
 					--If it is an item
 					if player:canLoot(groundItem7[i]) and #surroundingPC7 == 0 then
 						--if it is not cursed
-						characterLog.pickUpWrite(player, groundItem7[i], groundItem7[i].amount)
+						characterLog.pickUpWrite(
+							player,
+							groundItem7[i],
+							groundItem7[i].amount
+						)
 						player:pickUp(groundItem7[i].ID)
 					end
 				end
@@ -238,7 +370,11 @@ onPickUp = function(player)
 					--If it is an item
 					if player:canLoot(groundItem8[i]) and #surroundingPC8 == 0 then
 						--if it is not cursed
-						characterLog.pickUpWrite(player, groundItem8[i], groundItem8[i].amount)
+						characterLog.pickUpWrite(
+							player,
+							groundItem8[i],
+							groundItem8[i].amount
+						)
 						player:pickUp(groundItem8[i].ID)
 					end
 				end
@@ -258,7 +394,11 @@ onPickUp = function(player)
 					--If it is an item
 					if player:canLoot(groundItem9[i]) and #surroundingPC9 == 0 then
 						--if it is not cursed
-						characterLog.pickUpWrite(player, groundItem9[i], groundItem9[i].amount)
+						characterLog.pickUpWrite(
+							player,
+							groundItem9[i],
+							groundItem9[i].amount
+						)
 						player:pickUp(groundItem9[i].ID)
 					end
 				end

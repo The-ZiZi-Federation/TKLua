@@ -1,51 +1,30 @@
 duel_request = {
-	click = function(player, npc)
-		local sender = Player(player.registry["duel_req_from"])
-
-		if sender == nil then
-			if player:hasDuration("duel_request") then
-				player:setDuration("duel_request", 0)
-			end
-			return
-		else
-			if player.m == sender.m then
-				if sender.gfxClone == 0 then
-					clone.equip(sender, npc)
-				else
-					clone.gfx(sender, npc)
-				end
-				npc.gfxClone = 1
-				player.lastClick = npc.ID
-				player.dialogType = 2
-				local opts = {sender.name .. "'s Info", "Accept", "Decline"}
-				menu =
-					player:menuString("<b>[Duel]\n\nYou have a duel request from " .. sender.name .. "!\n\nChoose your decision", opts)
-
-				if menu ~= nil then
-					if not player:hasDuration("duel_request") then
-						player:msg(4, "[DUEL] This request is expired!", player.ID)
-						return
-					else
-						if menu == sender.name .. "'s Info" then
-							characterInfo(player, sender)
-						elseif menu == "Accept" then
-							duel_request.accept(player, sender)
-						elseif menu == "Decline" then
-							player:setDuration("duel_request", 0)
-						end
-					end
-				end
-			end
-		end
+	click = function(player, target)
+		target.registry["duel_initiator"] = player.ID
+		target:freeAsync()
+		duel_request.ask(target)
 	end,
-	while_cast_slow = function(player)
-	end,
-	uncast = function(player)
-		local sender = Player(player.registry["duel_req_from"])
 
-		if sender ~= nil then
-			sender:sendAnimation(246)
-			player:msg(4, "[DUEL] " .. player.name .. " has decline your request !", sender.ID)
+	ask = async(function(player)
+		local initiator = Player(player.registry["duel_initiator"])
+
+		local choice = player:menuString(
+			initiator.name .. " would like to duel with you. Accept?",
+			{"Yes", "No"},
+			{}
+		)
+
+		if choice == "Yes" then
+			initiator:msg(
+				0,
+				player.name .. " has accepted your duel request. Duel will begin in 30 seconds.",
+				initiator.ID
+			)
+			player:msg(
+				0,
+				"You have accepted " .. initiator.name .. "'s request to duel. The duel will begin in 30 seconds.",
+				player.ID
+			)
 		end
-	end
+	end)
 }
